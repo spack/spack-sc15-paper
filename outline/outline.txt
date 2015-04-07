@@ -1,0 +1,58 @@
+Introduction
+====================
+
+i. Abstract.
+
+I. Intro (1 pg)
+	- Why do supercomputing centers need this?
+
+	- specs
+		- describe concisely
+		- query installed stuff
+		- modules require standardized set of names (no order)
+
+	- flexibility (managing combinatoric configuration space)
+
+	- RPATHs instead of (or in addition to) modules
+		- pkgs work as built when run
+		- spack means there is no module incantation required
+
+	- code teams can build own libs & stacks
+
+	- Contributions:
+		1. Flexible mechanism for specifying and querying config space (spec)
+		2. Implementation of this in spack
+		3. 3 detailed use cases outlining our experiences at LLNL
+			a. combinatoric versions
+			b. multi-version python installation
+			c. site-specific and user-specific policies
+
+II. Motivation / Related Work (1 pg)
+	1. Common practice .5 pgs
+	2. Related work .5 pgs
+
+III. Implementation (3.5 pgs)
+	1. Specs
+	2. Virtual Deps
+	3. Concretization
+	4. Install environment
+		- Compiler wrappers & RPATHs
+		- potential for auto-module generation
+
+IV. Use cases
+	1. combinatoric installation
+		- gperftools (combinatoric nightmare) (compilers x versions)
+		- mpileaks (compiler x version x MPI x mpi version)
+	2. Python support
+	3. Putting things together for the end user
+		- Site installs and policies
+		- views
+		- customizable defaults
+		- site-specific policies
+			- prefer mvapich, compiler, version
+	4. Same thing for user install
+		- user can build his own entire stack without site support
+		- user can point to site installs or build entire stack
+
+		
+V. Conclusion
