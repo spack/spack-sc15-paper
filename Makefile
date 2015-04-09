@@ -1,12 +1,11 @@
-TEX_NAME=paper
+name=paper
 
-.PHONY: $(TEX_NAME).pdf clean
-
-all: $(TEX_NAME).pdf
-
-$(TEX_NAME).pdf:
-	latexmk -lualatex $(TEX_NAME).tex
+$(name).pdf: *.tex *.cls *.bib
+	pdflatex $(name)
+	bibtex $(name)
+	pdflatex $(name)
+	pdflatex $(name)
 
 clean:
-	latexmk -C $(TEX_NAME).tex
+	rm -f *.out *.aux *.toc *.log *.bbl *.blg $(name).pdf
 	rm -f *.ent *.synctex.gz
