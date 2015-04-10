@@ -4,3 +4,4 @@
 *.blg
 *.aux
 paper.pdf
+*.synctex.gz
