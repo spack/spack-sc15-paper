@@ -22,3 +22,34 @@
 
 \subsubsection{Potential for auto-generation of modules (with deps)}
 	\todo{.5 page}
+
+\begin{verbatim}
+module disadvantages:
+	- lmod solves a lot of problems
+	- not on all systems
+		- users often run from just a path.
+		- not guaranteed that LD_LIBRARY_PATH, etc will
+		  be set correctly.
+
+- Lmod assumes build & submit environment must match
+	- users often have NO IDEA what environment a package
+	  was built with
+	- multiple apps may be built with different stacks
+	- combining them in a workflow is difficult with modules
+		(need to know right incantation)
+
+	- TACC implements a rather complicated mapping back to
+	    the build env (Lmod CheckExec)
+	
+
+- Spack solves the matrix problem mentioned in the Lmod
+    presentation (slide 98)
+	- hierarchy is nasty -- every branch represents a
+	  greedy choice
+	- might NEED a specific version of ONE dependency
+	  that is not supported in the tree
+	  => SPACK!
+
+- libmesh
+	- boost, petsc, trilinos, grvy, etc.
+\end{verbatim}

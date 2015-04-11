@@ -16,6 +16,30 @@
 \begin{verbatim}
 - Why do supercomputing centers need this?
 
+
+- Build space on HPC machines is exponential
+	- each new variable multiplies number of build combinations
+	- complicated by the ABI.
+	- often need a new version on demand
+		- cannot just build it.
+
+	- need tools that can sample space.
+		
+	- users cannot navigate space, and cumbersome to specify all details
+	- users often only care about a subset of constraints and just want things
+		built.
+	- users need to run code again later, but don't remember complex module
+		setup -- dynamic settings lead to user support calls and difficulties.
+	
+	
+	- install procedure is different between users and admins
+		- duplicated effort
+		- need reusable package file.
+
+	
+	
+	
+
 	- specs
 		- describe concisely
 		- query installed stuff
