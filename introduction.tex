@@ -3,62 +3,69 @@
 \section{Introduction}
 \label{sec:intro}
 
-\todo{1 page}
+The Livermore Computing (LC) facility at Lawrence Livermore National Laboratory
+(LLNL) supports around 2,500 users on 25 different clusters, ranging 
+in size from a 1.6 teraflop, 256-core cluster to to the
+20 petaflop, 1.6 million-core Sequoia machine, currently ranked first and
+third on the Graph500~\cite{graph500} and Top500~\cite{top500}
+lists, respectively.
+%
+%The massively parallel simulations that run on LC machines support
+%U.S. Department of Energy missions across a range of scientific domains, 
+%including nuclear physics, material science, climate science, mechanical 
+%engineering, geophysics, seismology, and stockpile stewardship.
+%
+The simulations that run on these machines are very complex; some
+depend on specific versions of over 50 dependency libraries.
+They require specific compilers, build options and MPI implementations to
+achieve the best performance, and users may run several
+different such codes in the same environment as part of larger 
+scientific workflows.
 
+To support the diverse needs of applications, administrators and application
+developers 
+frequently build, install, and support many different configurations
+of math and physics libraries, as well as other software.
+Frequently, applications must be rebuilt to fix bugs and to support
+new versions of the OS, MPI, compilers, and other dependencies.
+Unfortunately, building scientific software is notoriously complex, with
+immature build systems that are difficult to adapt to new
+machines~\cite{dubois+:comp-sci-eng,hoste+:pyhpc12,wilson+:corr}.
+Worse, the space of required builds grows combinatorically
+with each new configuration parameter. As a result, LLNL staff
+spend countless hours dealing with build and deployment issues.
 
+Existing package management tools can automate some aspects of the build 
+process~\cite{bsdports,digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,homebrew,hoste+:pyhpc12,macports,thiruvathukal:gentoo04}.
+For the most part, these systems focus on keeping a single, stable set of 
+packages up to date, and they do not handle installation of multiple
+versions or configurations.  Those that {\it do} handle multiple configurations
+typically require that package files be created for each combination of 
+options~ \cite{digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,hoste+:pyhpc12}, 
+leading to a profusion of files and maintenance issues.
+To our knowledge, no existing tool allows new configurations to be composed
+and assembled on demand.  Some allow limited forms of 
+composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but they
+have limited dependency management capabilities, and they still burden
+users with combinatoric naming and version management.
 
+In this paper, we describe our experiences with the {\it Spack} package manager,
+which we have developed at LLNL to manage increasing software complexity.
+Specifically, this paper offers the following contributions:
+\begin{enumerate}
+\item A novel, recursive syntax for specifying, building, and querying
+      HPC packages in a large parameter space;
+\item A build methodology that ensures packages find their dependencies
+      regardless of users' environment; 
+\item Spack: An implementation of these concepts; and
+\item Three use cases detailing LLNL's use of Spack to rapidly compose
+      software configurations, manage Python installations, and implement
+      site-specific build policies.
+\end{enumerate}
 
-
-
-
-
-
-\begin{verbatim}
-- Why do supercomputing centers need this?
-
-
-- Build space on HPC machines is exponential
-	- each new variable multiplies number of build combinations
-	- complicated by the ABI.
-	- often need a new version on demand
-		- cannot just build it.
-
-	- need tools that can sample space.
-		
-	- users cannot navigate space, and cumbersome to specify all details
-	- users often only care about a subset of constraints and just want things
-		built.
-	- users need to run code again later, but don't remember complex module
-		setup -- dynamic settings lead to user support calls and difficulties.
-	
-	
-	- install procedure is different between users and admins
-		- duplicated effort
-		- need reusable package file.
-
-	
-	
-	
-
-	- specs
-		- describe concisely
-		- query installed stuff
-		- modules require standardized set of names (no order)
-
-	- flexibility (managing combinatoric configuration space)
-
-	- RPATHs instead of (or in addition to) modules
-		- pkgs work as built when run
-		- spack means there is no module incantation required
-
-	- code teams can build own libs & stacks
-
-	- Contributions:
-		1. Flexible mechanism for specifying and querying config space (spec)
-		2. Implementation of this in spack
-		3. 3 detailed use cases outlining our experiences at LLNL
-			a. combinatoric versions
-			b. multi-version python installation
-			c. site-specific and user-specific policies
-\end{verbatim}
-
+Spack is in active development at LLNL, and our use cases outline some of
+its first uses in our environment.  Spack solves a problem that is pervasive
+at large, multi-user HPC centers, and we believe that spack and our
+experiences with it can be applied at other HPC facilities to improve
+operational efficiency by simplifying the build and deployment of 
+bleeding-edge scientific software.

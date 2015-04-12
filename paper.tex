@@ -2,21 +2,29 @@
 % This is "sig-alternate.tex" V2.0 May 2012
 % This file should be compiled with V2.5 of "sig-alternate.cls" May 2012
 \documentclass{sig-alternate}
+%\documentclass{acm_proc_article-sp}
 
+\usepackage[numbers,sort]{natbib} % auto-sort citation by number
 \usepackage{xcolor}
+
+
+%
+% TODO items in red
+%
 \newcommand\todo[1]{\textcolor{red}{#1}}
 
 \begin{document}
+
 %
 % --- Author Metadata here ---
 %\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
-%\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
+%\CopyrightYear{20015} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
 \title{The Spack Package Manager:\\
 Bringing order to HPC software chaos
-\titlenote{This work was performed under the auspices of the U.S.
+\titlenote{\small This work was performed under the auspices of the U.S.
 Department of Energy by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.}}
 %\subtitle{}
 \numberofauthors{7}
@@ -40,9 +48,10 @@ Department of Energy by Lawrence Livermore National Laboratory under Contract DE
        \email{futral@llnl.gov}
 \and\\
 %
-\affaddr{Lawrence Livermore National Laboratory}\\
-\affaddr{Computation Directorate}\\
-\affaddr{Livermore, CA 94550}}
+\affaddr{Lawrence Livermore National Laboratory}
+%\affaddr{Computation Directorate}\\
+%\affaddr{Livermore, CA 94550}
+}
 
 \maketitle
 
@@ -58,8 +67,8 @@ Department of Energy by Lawrence Livermore National Laboratory under Contract DE
 
 %\terms{Theory}
 
-\keywords{package management, software configuration,
-high performance, parallel, system administration, build systems}
+%\keywords{package management, software configuration,
+%high performance, parallel, system administration, build systems}
 
 \input{introduction}
 \input{motivation}
@@ -69,7 +78,8 @@ high performance, parallel, system administration, build systems}
 \input{usecases}
 \input{conclusion}
 
-
+%\raggedright
+%\footnotesize
 \bibliographystyle{abbrv}
 \bibliography{paper}
 
