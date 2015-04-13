@@ -1,19 +1,67 @@
 %!TEX root = paper.tex
 
+%\begin{figure}
+%\includegraphics[width=\columnwidth]{figs/spack-find-output.pdf}
+%\end{figure}
+
 \section{The Spack Package Manager}
 \label{sec:implementation}
 
-\todo{.5 page overview}
+We have developed {\it Spack}, the Supercomputing PACKage manager, based on our
+software needs Lawrence Livermore National Laboratory.
+Spack solves the software matrix problem by allowing {\it parametric} builds.
+Each package in Spack is parameterized by its name, version, architecture, compiler, 
+compiler version, build options, and by its dependencies.
+Like other systems, Spack allows multiple build variants to be installed at once,
+but it provides novel, recursive {\it spec} syntax.  Specs are concise
+expressions for partially constrained software dependence graphs. The same
+spec syntax can be used on the command line to request new build 
+configurations, or to query installed packages over many dimensions.
 
+Spack borrows ideas from Nix to support multiple installations with 
+cryptographic hashes, but it goes further and provides a build environment
+that takes many burdens off of the package writer.  In particular, Spack uses
+compiler wrappers to automatically add {\tt RPATHs} for {\it all} dependencies
+to installed binaries, so that package authors do not have to.  Compiler
+wrappers also give the packager more control over the build: package authors
+can more easily port to new platforms by filtering compiler flags.
 
 \subsection{Spack Specs}
 	\todo{1 page}
-	
+
+%\begin{figure}
+%\begin{grammar}
+%  <spec-list> ::= \{ <spec> [ <dep-list> ] \}
+%  
+%  <dep-list>  ::= \{ `\textsf \textasciicircum' <spec> \}
+%
+%  <spec>      ::= <id> [ options ]
+%  
+%  <options>   ::= \{ `@' version-list | `+' <variant> \newline
+%                  | `-' <variant> ~~~| `~' <variant> \newline
+%                  | `\%' <compiler> ~| `=' <architecture> \}
+%                  
+%  <variant>      ::= <id>
+%
+%  <architecture> ::= <id>
+%
+%  <compiler>     ::= <id> [ <version-list> ]
+%
+%  <version-list> ::= <version> [ \{ `,' version \} ]
+%
+%  <version>      ::= <id> | <id> `:' | `:' <id> | <id> `:' <id>
+%
+%  <id>           ::= [A-Za-z0-9_][A-Za-z0-9_.-]*  
+%
+%\end{grammar}
+%\end{figure}
+
+
 \subsection{Versioned Virtual Dependencies}
 	\todo{.5 page}
 
 \subsection{Abstract \& Concrete Specs}
-	\todo{1 page}
+	\todo{.75 page}
 	
 \subsection{Install Environment}
 

@@ -4,11 +4,18 @@
 \documentclass{sig-alternate}
 %\documentclass{acm_proc_article-sp}
 
+%\PassOptionsToPackage{pdftex}{graphicx}
+\usepackage{graphviz}
+
 \usepackage[numbers,sort]{natbib} % auto-sort citation by number
-\usepackage{xcolor}
+\usepackage[pdftex]{xcolor}
 
 \usepackage[protrusion=true,expansion=true]{microtype}
 
+
+\usepackage{syntax}
+\grammarparsep 0pt
+\grammarindent 8em
 %
 % TODO items in red
 %
