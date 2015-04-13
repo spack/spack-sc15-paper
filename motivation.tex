@@ -159,8 +159,8 @@ is a package manager and an OS distribution that supports the installation of
 arbitrarily many software configurations.  As at most HPC sites, each package
 in Nix installed in a unique prefix, but in Nix, there is no human-readable
 naming convention.  Instead, Nix determines the prefix by hashing the package
-file and all of its dependencies.
-%
+file and along with its dependencies.
+
 Hashdist~\cite{hashdist} is a meta-build system and package manager for HPC.
 Like Nix, it uses cryptographic versioning, and it archives installations
 in a git repository so that they can be recalled on demand. 
@@ -169,41 +169,52 @@ Both Nix and hashdist use {\tt RPATHs} in their packages to ensure that
 libraries are found correctly. 
 
 The EasyBuild~\cite{hoste+:pyhpc12} tool is in production use at
-the University of Ghent.  It allows multiple versions to be installed at once,
-but it requires package authors to manage combinatoric package
-versioning. Rather than setting {\tt RPATHs}, it auto-generates module files
+the University of Ghent.  It allows multiple versions to be installed
+at once.  Rather than setting {\tt RPATHs}, it auto-generates module files
 to manage each package's environment, and it is closely coupled with 
-Lmod~\cite{geimer+:hust14}.  EasyBuild groups
-the compiler, MPI, FFT, and BLAS libraries together in a
-{\it toolchain}, providing limited package composability. 
+Lmod~\cite{geimer+:hust14}.  EasyBuild groups the compiler, MPI, FFT, and
+BLAS libraries together in a {\it toolchain}, which can be combined with
+any package file. This provides some degree of composability and
+separates compiler flags and MPI concerns from client packages.
+
 Smithy~\cite{digirolamo:smithy} is a similar tool in use at ORNL. It
 can generate module files, but it does not provide any 
 automated dependency management; it only checks whether a package's
 prerequisites have already been installed by the user.
 
-We observed a number of shortcomings in these existing systems. While the
-cryptographic versioning of Nix and Hashdist is appealing, it does not allow
-users to easily navigate the installed software or to find packages consistent
-with their own setup.  In fact, the only way to access software after it is built
-is to recall it by its hash. EasyBuild and Smithy address some of these problems
-by providing modules for the installed packages, but neither has a good system
-for managing the full space of combinatoric names.  EasyBuild attempts to do this by
-lumping versions of common packages together in a tooclhain, but the toolchains
-themselves have cryptic names like {\tt goolf} 
-(\textbf{g}cc, \textbf{o}penmpi, \textbf{o}penblas, \textbf{S}caLAPACK,
-\textbf{F}FTW), and their versions are meaningless. {\tt RPATH} handling, where
-provided, is left up to the package authors, and is not consistently enforced.
+\paragraph{Gaps in the state of the art}
+The cryptographic versioning of Nix and Hashdist is very flexible.  It versions
+the package {\it and} its dependency configuration, and can represent any
+configuration. However, there is no way for users to navigate or query
+software. The systems are in a sense ``write-only'':
+Nix does not even offer a way to ask for a package's dependencies.
+%
+EasyBuild and Smithy generate environment modules, which allow querying
+through their own interface. Naming in existing module systems, however, cannot
+handle combinatoric versions. The Lmod authors call this the
+``matrix problem``~\cite{mclay:lmod-tutorial}.
+
+%EasyBuild's attempts to version groups dependencies by adding versions to
+%toolchains, but the naming is difficult to understand.
+%. Compiler, MPI, and 
+%some library versions are lumped together, but the results is cryptic, e.g.
+%{\tt goolf} stands for ``gcc, openmpi, openblas, ScaLAPACK, FFTW'', and
+%its version is meaningless.
+
+Existing tools do not enforce {\tt RPATHs}, leaving them to package authors.
+This may lead to erroneous runs.
 
 The main limitation of existing tools is the lack of build {\it composability}.
-HPC configuration space is combinatoric, and realizing an arbitrary
-combination of compilers, MPI version, build options, and dependency versions
-requires tediously modifying many packages implementation.  
-No existing system parameterizes 
-package files to deal with this issue.  Indeed, the number of package files
-required for existing systems scales with the number of version {\it combinations},
-not the number of packages.  This quickly becomes unmanageable.  Indeed, EasyBuild
-maintains over 3,300 files for only 600 packages.  Other systems have similar
-issues but limit the number of supported configurations.
+The full set of package versions is combinatoric, and realizing an arbitrary
+combination of compiler, MPI version, build options, and dependency versions
+requires tediously modifying many package files.
+%
+Indeed, the number of package files required for existing systems scales with
+the number of version {\it combinations}, not the number of packages.
+This quickly becomes unmanageable.  As an example, the very flexible EasyBuild
+system has over 3,300 files for several permutations of only 600 packages. 
+Other systems have similar issues. A mechanism is needed to {\it parameterize}
+packages so that new builds can be {\it composed} on the fly.
 
 
 
