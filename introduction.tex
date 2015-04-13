@@ -35,7 +35,7 @@ Worse, the space of required builds grows combinatorically
 with each new configuration parameter. As a result, LLNL staff
 spend countless hours dealing with build and deployment issues.
 
-Existing package management tools can automate some aspects of the build 
+Existing package management tools automate parts of the build 
 process~\cite{bsdports,digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,homebrew,hoste+:pyhpc12,macports,thiruvathukal:gentoo04}.
 For the most part, these systems focus on keeping a single, stable set of 
 packages up to date, and they do not handle installation of multiple
@@ -45,9 +45,9 @@ options~ \cite{digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,hoste+
 leading to a profusion of files and maintenance issues.
 To our knowledge, no existing tool allows new configurations to be composed
 and assembled on demand.  Some allow limited forms of 
-composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but they
-have limited dependency management capabilities, and they still burden
-users with combinatoric naming and version management.
+composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but their
+dependency management is overly rigid, and they burden users with
+combinatoric installation naming and versioning.
 
 In this paper, we describe our experiences with the {\it Spack} package manager,
 which we have developed at LLNL to manage increasing software complexity.
@@ -56,7 +56,7 @@ Specifically, this paper offers the following contributions:
 \item A novel, recursive syntax for specifying, building, and querying
       HPC packages in a large parameter space;
 \item A build methodology that ensures packages find their dependencies
-      regardless of users' environment; 
+      regardless of users' environments; 
 \item Spack: An implementation of these concepts; and
 \item Three use cases detailing LLNL's use of Spack to rapidly compose
       software configurations, manage Python installations, and implement
@@ -64,8 +64,8 @@ Specifically, this paper offers the following contributions:
 \end{enumerate}
 
 Spack is in active development at LLNL, and our use cases outline some of
-its first uses in our environment.  Spack solves a problem that is pervasive
-at large, multi-user HPC centers, and we believe that spack and our
+its first uses in our environment.  Spack solves software problems that are
+pervasive at large, multi-user HPC centers, and we believe that our
 experiences with it can be applied at other HPC facilities to improve
 operational efficiency by simplifying the build and deployment of 
 bleeding-edge scientific software.

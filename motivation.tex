@@ -1,12 +1,217 @@
 %!TEX root = paper.tex
 
-\section{Motivation}
+\section{Common Practice}
 \label{sec:motivation}
 
-\subsection{Common software installation practices}
-\todo{.5 pages}
+This section describes existing tools for managing HPC 
+software and motivates the need for a system like Spack.
 
-\subsection{Related work}
-\todo{.5 pages}
+\paragraph{Meta-build Systems}
 
-\cite{hoste+:pyhpc12}
+{\it Meta-build systems} such as Contractor, WAF, and
+MixDown~\cite{amundson:contractor,epperly+:mixdown,nagy:waf} are closely
+related to package managers, but their focus is on ensuring that a single
+project builds correctly along with all of its dependencies.  They do not address
+larger, multi-user system administration issues such as versioning, naming
+conventions, rapid multi-configuration installation, or maintaining many
+divergent software stacks.
+
+\paragraph{Traditional package managers}
+Package managers automate the installation of complex sets of software packages.
+{\it Binary package managers} such as RPM, yum, and  
+APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
+operating system (OS) distributions, and they are used to ensure that dependencies
+are installed before packages that require them.
+These systems largely solve the problem of managing a single software
+stack, which works well for the baseline OS and drivers, which are 
+common to all applications on a system.
+However, they make the assumption that there is only a single version
+of each package, and most install packages in a single, inflexible location.
+To install multiple configurations, the user must create a custom, combinatoric
+naming scheme to avoid conflicts. They typically require root 
+privileges and do not optimize for specific hardware.
+
+{\it Port systems} such as Gentoo, BSD Ports, MacPorts, and 
+Homebrew~\cite{bsdports,groffen:gentoo-prefix,homebrew,macports,thiruvathukal:gentoo04}
+allow packages to be built on demand, but most suffer from 
+the same versioning and naming issues as traditional package managers.
+Some allow multiple versions to be installed in the same
+prefix~\cite{groffen:gentoo-prefix}, but again the burden is on package
+creators to manage conflicts. This restricts installations to only a few
+configurations.
+
+
+\paragraph{Virtual Machines and Containers}
+
+Packaging problems arise in HPC because a supercomputer's hardware, OS, and
+filesystem are shared by many users with different requirements.  The classic solution
+to this problem is to use virtual
+machines (VMs)~\cite{barham2003xen,rosenblum1999vmware,smith2005architecture}
+or lightweight virtualization techniques like Linux 
+containers~\cite{felter2014updated,merkel2014docker}. This model allows each user to 
+have her own environment with its own package manager, and it has been extremely 
+successful for servers at cloud data centers.  VMs typically have 
+near-native compute performance, but there are still major performance issues with
+low-level HPC network drivers.  VMs are not well supported on many
+non-Linux operating systems, an issue for the lightweight 
+kernels of bleeding-edge Blue Gene/Q and Cray machines. Security
+is another major concern: a profusion of VMs makes mandatory patching
+difficult when user's environments differ significantly from those of the facility.
+
+\begin{table*}\centering
+\begin{tabular}{|l|l|}
+\hline
+Site           & Naming Convention \\
+\hline
+\hline
+LLNL       & {\tt / usr / global / tools / \$arch / \$package / \$version} \\
+           & {\tt / usr / local~ / tools / \$package-\$compiler-\$build-\$version } \\
+\hline
+Oak Ridge~\cite{jones+:cug08}  & {\tt / \$arch / \$package / \$version / \$build} \\
+\hline
+TACC/Lmod~\cite{mclay:lmod-tutorial}& {\tt / \$compiler-\$comp\_version / \$mpi / \$mpi\_version / \$package / \$version} \\
+\hline
+\hline
+Spack default                  & {\tt / \$arch / \$compiler-\$comp\_version / \$package-\$version-\$options-\$hash} \\
+\hline
+\end{tabular}
+\caption{
+	Software organization of various HPC sites.
+	\label{tab:naming-conventions}
+}
+\end{table*}
+
+\paragraph{Manual and Semi-automated Installation}
+
+To cope with software diversity, many HPC sites use a combination of existing
+packages managers and either manual or semi-automated software installation.  
+For the baseline OS, it is common for sites to maintain traditional binary
+packages using the vendor's package manager.  LLNL maintains a Linux 
+distribution, CHAOS~\cite{chaos} for this purpose.
+
+For more specific builds, many sites adhere to detailed naming conventions
+that encode information in filesystem paths. A sampling of conventions
+at several sites is shown in Table~\ref{tab:naming-conventions}. At LLNL, the
+APT package manager is used for installs in the {\tt /usr/local/tools} 
+filesystem, and {\tt /usr/global/tools} is used for manual installs.
+ORNL uses hand installs but adheres to a strict scripting structure
+that can be used to reproduce each build~\cite{jones+:cug08}.
+TACC relies heavily on locally maintained RPMs for its software installs.
+
+Looking again at the conventions in Table~\ref{tab:naming-conventions},
+we see that most sites use some combination of architecture, compiler version,
+package name, package version, and a custom (up to the author, sometimes
+encoded) build identifier.  TACC and many other sites also include the MPI
+version in the path. None of these naming conventions is defined for
+the entire configuration space, and none defines a way to create new versions
+from arbitrary combinations of dependencies.  MPI is explicitly called out,
+but it is only one of many dependencies that go into a build.
+Sites have made a conscious choice to divide the directory hierarchy
+according to the most common software packages, but they ignore the rest.
+Frequently, desired configurations do not fit the local convention, and
+staff must install them in nonstandard locations.
+
+\paragraph{Environment Modules and RPATHs}
+
+Diverse software versions not only present problems for build and installation; 
+they also complicate the runtime environment. When run, an executable
+must determine the location of its dependency libraries, or it will fail to run.
+This is typically not a problem for statically linked executables, but modern
+operating systems make extensive use of dynamic linking, which has many 
+benefits for software tools and maintenance.
+By default, the dynamic loader on most systems is configured to search only
+system library paths such as {\tt /lib}, {\tt /usr/lib}, and
+{\tt /usr/local/lib}.  If binaries are installed to other locations, the
+{\it user} who runs the program must typically add dependency library paths to
+{\tt LD\_LIBRARY\_PATH} (or a similar environment variable on other OSes).
+Most HPC sites address this problem using {\it environment modules}, which allow
+users to dynamically ``load'' and ``unload'' settings for search paths like
+{\tt LD\_LIBRARY\_PATH}, {\tt PATH}, {\tt MANPATH}, etc.
+
+Environment modules date back to 1991, and there are many implementations 
+available~\cite{dotkit,furlani+:lisa91,furlani+:lisa96,mclay:lmod,mclay:lmod-tutorial}.
+The most advanced implementations, such as Lmod~\cite{mclay:lmod,mclay:lmod-tutorial},
+provide software hierarchies similar to the naming conventions in 
+Table\ref{tab:naming-conventions}, and they allow users to quickly load a software stack
+if they know which one is required.  TACC expects the user to run with the same
+environment that she built with~\cite{mclay:lmod-tutorial}.  But, at LC, the user is
+frequently not the builder of the application, and may not know the particular
+incantation required to load the its environment. Moreover, users frequently run more 
+than one application in the same job, each built by a separate team, and each with
+its own environment. Most LC users are used to running programs with
+specific paths; only 10\% use environment modules extensively.
+
+The alternative to per-user environment settings is to embed library search paths
+in installed binaries at compile time. When set this way, the search path is called
+an {\tt RPATH}. {\tt RPATHs} and environment modules are not mutually exclusive.
+Modules can still be used to set {\tt MANPATH}, {\tt PATH} and variables, but
+adding {\tt RPATHs} ensures that binaries will run correctly regardless of whether
+the right module is loaded. LC installs software with both {\tt RPATHs} and
+{\tt dotkit}~\cite{dotkit} modules.
+
+\paragraph{Modern Package Managers}
+
+Recently, a number of package managers have been developed to manage 
+multi-configuration builds.
+%
+Nix~\cite{dolstra+:icfp08,dolstra+:lisa04}
+is a package manager and an OS distribution that supports the installation of
+arbitrarily many software configurations.  As at most HPC sites, each package
+in Nix installed in a unique prefix, but in Nix, there is no human-readable
+naming convention.  Instead, Nix determines the prefix by hashing the package
+file and all of its dependencies.
+%
+Hashdist~\cite{hashdist} is a meta-build system and package manager for HPC.
+Like Nix, it uses cryptographic versioning, and it archives installations
+in a git repository so that they can be recalled on demand. 
+%
+Both Nix and hashdist use {\tt RPATHs} in their packages to ensure that
+libraries are found correctly. 
+
+The EasyBuild~\cite{hoste+:pyhpc12} tool is in production use at
+the University of Ghent.  It allows multiple versions to be installed at once,
+but it requires package authors to manage combinatoric package
+versioning. Rather than setting {\tt RPATHs}, it auto-generates module files
+to manage each package's environment, and it is closely coupled with 
+Lmod~\cite{geimer+:hust14}.  EasyBuild groups
+the compiler, MPI, FFT, and BLAS libraries together in a
+{\it toolchain}, providing limited package composability. 
+Smithy~\cite{digirolamo:smithy} is a similar tool in use at ORNL. It
+can generate module files, but it does not provide any 
+automated dependency management; it only checks whether a package's
+prerequisites have already been installed by the user.
+
+We observed a number of shortcomings in these existing systems. While the
+cryptographic versioning of Nix and Hashdist is appealing, it does not allow
+users to easily navigate the installed software or to find packages consistent
+with their own setup.  In fact, the only way to access software after it is built
+is to recall it by its hash. EasyBuild and Smithy address some of these problems
+by providing modules for the installed packages, but neither has a good system
+for managing the full space of combinatoric names.  EasyBuild attempts to do this by
+lumping versions of common packages together in a tooclhain, but the toolchains
+themselves have cryptic names like {\tt goolf} 
+(\textbf{g}cc, \textbf{o}penmpi, \textbf{o}penblas, \textbf{S}caLAPACK,
+\textbf{F}FTW), and their versions are meaningless. {\tt RPATH} handling, where
+provided, is left up to the package authors, and is not consistently enforced.
+
+The main limitation of existing tools is the lack of build {\it composability}.
+HPC configuration space is combinatoric, and realizing an arbitrary
+combination of compilers, MPI version, build options, and dependency versions
+requires tediously modifying many packages implementation.  
+No existing system parameterizes 
+package files to deal with this issue.  Indeed, the number of package files
+required for existing systems scales with the number of version {\it combinations},
+not the number of packages.  This quickly becomes unmanageable.  Indeed, EasyBuild
+maintains over 3,300 files for only 600 packages.  Other systems have similar
+issues but limit the number of supported configurations.
+
+
+
+
+
+
+
+
+
+
+
