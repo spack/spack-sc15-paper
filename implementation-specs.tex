@@ -103,16 +103,34 @@ built and installed a default configuration.  On the command line this would tak
 {\tt spack install mpileaks}
 \newline
 
-\noindent
-If the user cares to specify the desired verson of {\it mpileaks}, she can do so
-by supplying {\tt @<version>} (line 2). Versions can be precise (e.g. {\tt @4.5.1}) or 
-they can be ambiguous (e.g., @
+If the user wants more specificity, {\tt mpileaks} can be augmented with additional
+qualifiers.  Spack install will handle selecting a build configuration that satisfies
+the user's request.  We describe additional qualifiers below.
 
+{\bf Versions.}
+Versions are specified by supplying {\tt @<version>} after the package name (line 2). 
+Versions can be precise (e.g. {\tt @4.5.1}) or 
+they can be ambiguous (e.g., @4) or a colon-separated, inclusive range (e.g., @4.4:4.5.1),
+and Spack will pick an available compiler from the specified range.
+The package in Figure~\ref{fig:mpileaks} lists two ``safe'' versions with checksums, but
+in our experience users frequently want bleeding-edge versions.  Package managers
+frequently lag behind the latest releases. 
+Spack has a capability to extrapolate URLs from versions,
+using the package's {\tt url} attribute as a model\footnote{This works
+for packages with consistently named URLs}.  The user can request a specific
+version on the command line, even if it is unknown to Spack,
+and Spack will attempt to install it.  Spack also uses the same
+model to scrape webpages and find new versions as they become available.
+
+{\bf Compilers.}
 To specify the compiler (line 3), the user
 simply adds {\tt \%} followed by its name, and if a version {\it of the compiler} 
 is desired, the same {\tt @} syntax can be used.  Here, {\tt gcc} refers to the full
-gcc compiler suite: C, C++, Fortran 77, and Fortran 90 compilers.
+gcc compiler suite: C, C++, Fortran 77, and Fortran 90 compilers.  Spack can auto-detect
+compiler toolchains if they are in the user's PATH or they can be registered manually
+through a configuration file.
 
+{\bf Variants.}
 To handle build-time options like debug flags and optional components, spack
 allows named flags, or {\it variants} to be associated with packages.  
 In the example (line 4), {\tt mpileaks} can be built with a {\tt debug} option by
@@ -124,11 +142,13 @@ It would be violate our goal of conciseness, for example, to include detailed
 compiler flags in the spec syntax, but known sets of flags can be exported using
 named variants.
 
+{\bf Cross-compileation.}
 To support cross-compilation, Spack includes the platform in the package spec (line 5).
 Platforms begin with {\tt =} and take names like {\tt linux-ppc64} or {\tt bbq}.  They are
 specified per-package; this allows front-end tools to depend on their back-end measurement
 libraries with a {\it different} architecture on cross-compiled machines.
 
+{\bf Dependencies.}
 Lines 6 and 7 in the table show the key feature that enables Spack's flexibility.
 The user can specify all of the above information not only for the package being
 installed, but also for its {\it dependencies}.  To do this, the user needs only supply 
@@ -142,11 +162,7 @@ only its package name.  This frees the user from having to worry about DAG conne
 the user only needs to know that a package depends, somehow, indirectly on {\tt mvapich}
 to add this constrain
 uniquely identifies a dependency, and dependency constraints can be specified in any
- order.  
-
-
-
-
+order.  
 
 
 \subsubsection{Constraining dependencies}
@@ -157,16 +173,9 @@ uniquely identifies a dependency, and dependency constraints can be specified in
 
 \subsubsection{Version extrapolation}
 
-In our experience, however, users
-frequently want bleeding-edge versions, and package managers frequently lag 
-behind the latest releases.  Spack therefore has a capability to extrapolate
-the latest URL, using the {\tt url} attribute as a model\footnote{This works
-for consistently named URLs, and it can be specified per-version for packages
-with inconsistent naming.}.
-The user can ask for an unknown version on the command line and still
-successfully download and install it.  Spack can also uses the same model to
-scrape webpages and find new versions. 
-
-
 
 \subsubsection{Querying installed packages}
+
+
+
+
