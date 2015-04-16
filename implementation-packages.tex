@@ -20,12 +20,12 @@ packaging easier; it adds special directives such as {\tt depends\_on} and
 {\tt version} that add metadata to the class.
 
 Figure~\ref{fig:mpileaks} shows the package for \mpileaks, an LLNL-developed
-tool developed for finding leaks in MPI programs.
+tool for finding leaks in MPI programs.
 Inside the {\tt MpiLeaks} class, the package provides a text description
 and a homepage, as well as 
 a download URL.  Next, two {\tt version} directives identify known versions
 of the package, and MD5 checksums ensure they can be downloaded safely.
-Below this, three {\tt depends\_on}
+Below this, two {\tt depends\_on}
 directives indicate prerequisites that must be installed before \mpileaks.
 Last, each package defines an {\tt install()} method, which contains the
 commands used to build the package.  Spack's DSL allows shell
