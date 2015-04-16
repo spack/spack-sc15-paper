@@ -1,0 +1,12 @@
+
+digraph {
+    rankdir=LR;
+    node[shape=box,fontname=monaco,fontsize=10];
+
+//    mpi[color=red,penwidth=2]
+    mpileaks -> mpi
+    mpileaks -> callpath -> mpi
+    callpath -> dyninst
+    dyninst  -> libdwarf -> libelf
+    dyninst  -> libelf
+}

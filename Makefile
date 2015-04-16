@@ -1,11 +1,14 @@
-name=paper
+name = paper
+tex_args = -shell-escape
 
 $(name).pdf: *.tex *.cls *.bib
-	pdflatex $(name)
+	rm -f *Graph.pdf
+	pdflatex $(tex_args) $(name)
 	bibtex $(name)
-	pdflatex $(name)
-	pdflatex $(name)
+	pdflatex $(tex_args) $(name)
+	pdflatex $(tex_args) $(name)
 
 clean:
 	rm -f *.out *.aux *.toc *.log *.bbl *.blg $(name).pdf
-	rm -f *.ent *.synctex.gz
+	rm -f *.ent *.synctex.gz *.rai
+	rm -f *Graph.pdf *Graph.dot *Graph.log

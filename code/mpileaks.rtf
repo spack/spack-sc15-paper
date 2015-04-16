@@ -19,12 +19,10 @@
 \cf3      version(\cf6 \'911.1\'92\cf3 , \cf6 '4282eddb08ad8d36df15b06d4be38bcb'\cf3 ) \
                                                                               \cf4 \
 \cf3      depends_on(\cf6 "mpi"\cf3 )                                                                \cf4 \
-\cf3      depends_on(\cf6 "adept-utils"\cf3 )                                                        \cf4 \
 \cf3      depends_on(\cf6 "callpath"\cf3 )                                                           \cf4 \
 \cf3                                                                                      \cf4 \
 \cf3      \cf2 def\cf3  \cf8 install\cf3 (\cf2 self\cf3 , spec, prefix):                                                 \cf4 \
 \cf3          configure(\cf6 "--prefix="\cf3  + prefix,                                              \cf4 \
-\cf3                    \cf6 "--with-adept-utils="\cf3  + spec[\cf6 'adept-utils'\cf3 ].prefix,                \cf4 \
 \cf3                    \cf6 "--with-callpath="\cf3     + spec[\cf6 'callpath'\cf3 ].prefix)                      \cf4 \
 \cf2  \cf3          make()                                                                       \cf4 \
 \cf3           make(\cf6 "install"\cf3 )    \

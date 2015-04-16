@@ -1,0 +1,19 @@
+
+digraph {
+    rankdir=TB;
+    node[shape=box,fontname=monaco,fontsize=10];
+
+    mpileaks2[style=dashed]
+    callpath2[style=dashed]
+    openmpi[style=dashed]
+
+    mpileaks -> mpich
+    mpileaks -> callpath -> mpich
+    callpath -> dyninst
+    dyninst  -> libdwarf -> libelf
+    dyninst  -> libelf
+    mpileaks2 -> callpath2
+    mpileaks2 -> openmpi
+    callpath2 -> openmpi
+    callpath2 -> dyninst
+}

@@ -1,0 +1,18 @@
+
+digraph {
+    rankdir=LR;
+    node[shape=box,fontname=monaco,fontsize=10];
+
+    mpileaks [label=<mpileaks<font color="deepskyblue2">@2.3</font><br/><font color="red">gcc@4.7.3</font><br/><font color="purple">=linux-ppc64</font><br/>>]
+    callpath [label=<callpath<font color="deepskyblue2">@1.0</font><br/><font color="red">gcc@4.7.3</font><br/><font color="purple">=linux-ppc64</font><br/><font color="green4">+debug</font>>]
+    mpi [label=<mpich<font color="deepskyblue2">@3.0.4</font><br/><font color="red">gcc@4.7.3</font><br/><font color="purple">=linux-ppc64</font><br/>>]
+    dyninst [label=<dyninst<font color="deepskyblue2">@8.1.2</font><br/><font color="red">gcc@4.7.3</font><br/><font color="purple">=linux-ppc64</font><br/>>]
+    libelf [label=<libelf<font color="deepskyblue2">@0.8.11</font><br/><font color="red">gcc@4.7.3</font><br/><font color="purple">=linux-ppc64</font><br/>>]
+    libdwarf [label=<libdwarf<font color="deepskyblue2">@20130729</font><br/><font color="red">gcc@4.7.3</font><br/><font color="purple">=linux-ppc64</font><br/>>]
+
+    mpileaks -> mpi
+    mpileaks -> callpath -> mpi
+    callpath -> dyninst
+    dyninst  -> libdwarf -> libelf
+    dyninst  -> libelf
+}

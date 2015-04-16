@@ -3,15 +3,11 @@
 \section{Common Practice}
 \label{sec:motivation}
 
-This section describes existing tools for managing HPC 
-software and motivates the need for a system like Spack.
-
 \paragraph{Meta-build Systems}
-
 {\it Meta-build systems} such as Contractor, WAF, and
 MixDown~\cite{amundson:contractor,epperly+:mixdown,nagy:waf} are closely
 related to package managers, but their focus is on ensuring that a single
-project builds correctly along with all of its dependencies.  They do not address
+{\it project} builds correctly along with all of its dependencies.  They do not address
 larger, multi-user system administration issues such as versioning, naming
 conventions, rapid multi-configuration installation, or maintaining many
 divergent software stacks.
@@ -22,10 +18,10 @@ Package managers automate the installation of complex sets of software packages.
 APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
 operating system (OS) distributions, and they are used to ensure that dependencies
 are installed before packages that require them.
-These systems largely solve the problem of managing a single software
-stack, which works well for the baseline OS and drivers, which are 
+These tools largely solve the problem of managing a {\it single} software
+stack.  This works well for the baseline OS and drivers, which are 
 common to all applications on a system.
-However, they make the assumption that there is only a single version
+These tools make the assumption that there is only a single version
 of each package, and most install packages in a single, inflexible location.
 To install multiple configurations, the user must create a custom, combinatoric
 naming scheme to avoid conflicts. They typically require root 
@@ -33,7 +29,8 @@ privileges and do not optimize for specific hardware.
 
 {\it Port systems} such as Gentoo, BSD Ports, MacPorts, and 
 Homebrew~\cite{bsdports,groffen:gentoo-prefix,homebrew,macports,thiruvathukal:gentoo04}
-allow packages to be built on demand, but most suffer from 
+build packages from source instead of installing from a pre-built binary.
+Most existing port systems suffer from 
 the same versioning and naming issues as traditional package managers.
 Some allow multiple versions to be installed in the same
 prefix~\cite{groffen:gentoo-prefix}, but again the burden is on package
@@ -98,48 +95,43 @@ ORNL uses hand installs but adheres to a strict scripting structure
 that can be used to reproduce each build~\cite{jones+:cug08}.
 TACC relies heavily on locally maintained RPMs for its software installs.
 
-Looking again at the conventions in Table~\ref{tab:naming-conventions},
+From the conventions in Table~\ref{tab:naming-conventions},
 we see that most sites use some combination of architecture, compiler version,
 package name, package version, and a custom (up to the author, sometimes
-encoded) build identifier.  TACC and many other sites also include the MPI
-version in the path. None of these naming conventions is defined for
-the entire configuration space, and none defines a way to create new versions
-from arbitrary combinations of dependencies.  MPI is explicitly called out,
-but it is only one of many dependencies that go into a build.
-Sites have made a conscious choice to divide the directory hierarchy
-according to the most common software packages, but they ignore the rest.
-Frequently, desired configurations do not fit the local convention, and
-staff must install them in nonstandard locations.
+encoded) build identifier.  TACC and many other sites also explicitly
+include the MPI version in the path. MPI is explicitly called out
+because it is one of the most common software packages for HPC.
+However, it is only one of many dependencies that go into a build.
+None of these naming conventions covers the entire configuration
+space, and none has a way to represent, e.g., two builds that are identical
+save for the version of a particular dependency library.  In our experience
+at LLNL, naming conventions like these have not succeeded because there
+are more desired configurations than we can represent with a practical
+directory hierarchy. Staff frequently install nonconforming packages 
+in nonstandard locations with ambiguous names.
 
 \paragraph{Environment Modules and RPATHs}
 
 Diverse software versions not only present problems for build and installation; 
-they also complicate the runtime environment. When run, an executable
-must determine the location of its dependency libraries, or it will fail to run.
-This is typically not a problem for statically linked executables, but modern
-operating systems make extensive use of dynamic linking, which has many 
-benefits for software tools and maintenance.
+they also complicate the runtime environment. When launched, an executable
+must determine the location of its dependency libraries, or it will not run.
+Statically linked binaries do not have this issue, but modern
+operating systems make extensive use of dynamic linking.
 By default, the dynamic loader on most systems is configured to search only
 system library paths such as {\tt /lib}, {\tt /usr/lib}, and
 {\tt /usr/local/lib}.  If binaries are installed to other locations, the
 {\it user} who runs the program must typically add dependency library paths to
-{\tt LD\_LIBRARY\_PATH} (or a similar environment variable on other OSes).
-Most HPC sites address this problem using {\it environment modules}, which allow
-users to dynamically ``load'' and ``unload'' settings for search paths like
-{\tt LD\_LIBRARY\_PATH}, {\tt PATH}, {\tt MANPATH}, etc.
+{\tt LD\_LIBRARY\_PATH} (or a similar environment variable) so that the loader
+can find them.
 
-Environment modules date back to 1991, and there are many implementations 
+Many HPC sites address this problem using {\it environment modules}, which allow
+users to dynamically ``load'' and ``unload'' such settings using simple commands.
+Environment emerged in 1991, and there are many implementations 
 available~\cite{dotkit,furlani+:lisa91,furlani+:lisa96,mclay:lmod,mclay:lmod-tutorial}.
 The most advanced implementations, such as Lmod~\cite{mclay:lmod,mclay:lmod-tutorial},
 provide software hierarchies similar to the naming conventions in 
-Table\ref{tab:naming-conventions}, and they allow users to quickly load a software stack
-if they know which one is required.  TACC expects the user to run with the same
-environment that she built with~\cite{mclay:lmod-tutorial}.  But, at LC, the user is
-frequently not the builder of the application, and may not know the particular
-incantation required to load the its environment. Moreover, users frequently run more 
-than one application in the same job, each built by a separate team, and each with
-its own environment. Most LC users are used to running programs with
-specific paths; only 10\% use environment modules extensively.
+Table~\ref{tab:naming-conventions}. They allow users to quickly load a software stack
+if they know which one is required.
 
 The alternative to per-user environment settings is to embed library search paths
 in installed binaries at compile time. When set this way, the search path is called
@@ -201,8 +193,8 @@ handle combinatoric versions. The Lmod authors call this the
 %{\tt goolf} stands for ``gcc, openmpi, openblas, ScaLAPACK, FFTW'', and
 %its version is meaningless.
 
-Existing tools do not enforce {\tt RPATHs}, leaving them to package authors.
-This may lead to erroneous runs.
+%Existing tools do not enforce {\tt RPATHs}, leaving them to package authors.
+%This may lead to erroneous runs.
 
 The main limitation of existing tools is the lack of build {\it composability}.
 The full set of package versions is combinatoric, and realizing an arbitrary

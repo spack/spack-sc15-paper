@@ -1,0 +1,153 @@
+%!TEX root = paper.tex
+
+
+\subsection{Installation Environment}
+
+%{\bf Reproducibility.}
+%\paragraph{Reproducibility}
+Spack is intended to build a consistent HPC stack for our multi-user
+environment, and reproducible builds are one of our design goals.
+Experience at LLNL has shown that it is vexingly difficult to reproduce
+a build manually.
+%
+Many packages used at LLNL have a profusion of build options, and specifying them 
+correctly often requires tedious experimentation.  This is due to lack of
+build standards and to the diversity of HPC environments.  
+For example, in some packages that depend on the {\tt Silo} library,
+the {\tt ---with-silo} parameter takes a path to f{\tt Silo}'s prefix.
+In others, it takes the {\tt include} and {\tt lib} subdirectories,
+separated by a comma.
+The {\tt install()} method in Spack's package files allows us to record
+precise build incantations for later reuse.
+
+%{\bf Environment isolation.}
+\paragraph{Environment isolation}
+In addition to command line issues, we
+frequently encounter errors due to inconsistencies between the environment of
+the package installer and the package user.
+%
+For example, there are two versions of the {\tt libelf} library used by
+LLNL performance tools. One is distributed with RedHat Linux, but another
+publicly available version has the same API but an incompatible ABI.
+Failure to specify the right version at build time has caused many
+inexplicable crashes.
+%
+Spack manages the build environment by running {\tt install} invocation
+in a new process.  It helps packages find dependencies 
+correctly, by setting
+{\tt PATH}, {\tt PKG\_CONFIG\_PATH}, {\tt CMAKE\_PREFIX\_PATH}, and
+{\tt LD\_LIBRARY\_PATH} to include the dependencies of the current build.
+These variables are commonly used by build systems to locate dependencies,
+and setting them helps to ensure that incorrect libraries are not detected.
+The isolated build environment also gives package authors 
+free reign to set build-specific environment variables without interfering
+with other packages.
+
+
+%{\bf Compiler wrappers and RPATHs.}
+\paragraph{Compiler wrappers and RPATHs}
+Finding compilers at build time is not the only obstacle to reproducible
+behavior.  As mentioned in Section~\ref{sec:motivation}, it is also important
+for binaries to be able to find dependency libraries at {\it runtime}.
+One of the most frequent user errors at LC is improper library configuration.
+Users frequently do not know what libraries a package was built with, and 
+it is difficult for them to construct a suitable {\tt LD\_LIBRARY\_PATH} for
+a package that was built by someone else.  Because of frequent support calls,
+we typically add {\tt RPATHs} to public software installations, so that paths
+to dependencies are embedded in binaries and so that users do not have to know
+this information to run installed software correctly.
+
+Spack manages {\tt RPATH} settings and other build policies with
+{\it compiler wrappers}. 
+In each isolated {\tt install} environment, Spack sets the standard 
+environment variables
+{\tt CC}, {\tt CXX}, {\tt F77}, and {\tt FC} to point to its own compiler
+wrapper scripts.  These variables are used by most build systems to select
+C, C++, and Fortran compilers, so they are generally picked up 
+automatically\footnote{If builds do not respect {\tt CC}, {\tt CXX}, etc.,
+wrappers can typically be added as arguments or inserted into Makefiles
+by {\tt install}.}.
+When run, the wrappers insert include ({\tt -I}), library ({\tt -L}), and 
+{\tt RPATH} ({\tt -Wl,-rpath} or similar) flags into the argument list.
+These point to the {\tt include} and {\tt lib} directories of dependency
+library installations, where needed headers and libraries are typically located.
+After the modified argument list is constructed, the wrappers delegate it
+to the real compiler to execute.
+
+Spack's compiler wrappers have a number of useful effects.  First, they allow
+Spack to transparently parameterize the compiler for most builds. 
+Spack users to easily request a build with a new compiler swapped in.
+Second, they enforce the use of {\tt RPATHs} in
+installed binaries.  This causes applications built by Spack to run correctly
+{\it regardless of the environment}.  Third, because compiler wrappers add 
+header and library search paths for dependencies, header and library detection
+tests run by most build systems succeed automatically, {\it without}
+the need to use special arguments for nonstandard locations.  {\tt configure}
+commands in Spack's {\tt install} function can have fewer arguments, and can
+be written as they would be for system installs.  This reduces complexity
+for package maintainers and enforces consistent, reproducible
+build policies across packages.  Finally, because Spack has control over the 
+wrappers, package authors can programmatically filter the compiler flags
+used by software build systems, a useful last resort when porting to
+bleeding-edge platforms or new, esoteric compilers.
+
+\subsubsection{Environment Module Integration}
+	\todo{.5 page}
+
+TACC expects the user to run with the same
+environment that she built with~\cite{mclay:lmod-tutorial}.  
+
+
+But, at LC, the user is
+frequently not the builder of the application, and may not know the particular
+incantation required to load the its environment. Moreover, users frequently run more 
+than one application in the same job, each built by a separate team, and each with
+its own environment. Most LC users are used to running programs with
+specific paths; only 10\% use environment modules extensively.
+
+\begin{figure}\centering
+	\includegraphics[width=.6\linewidth]{specs/rpaths.pdf}
+	\newline
+	\verb|spack install mpileaks ^mpich|\newline
+	\verb|spack install mpileaks ^openmpi|
+	\caption{
+		Installing {\tt mpileaks} with MPICH (solid), then with OpenMPI (dashed).  The {\tt dyninst} subtree is
+		reused, but {\tt mpileaks} and {\tt callpath} must be rebuilt.
+	}
+\end{figure}
+
+
+
+
+
+\begin{verbatim}
+module disadvantages:
+	- lmod solves a lot of problems
+	- not on all systems
+		- users often run from just a path.
+		- not guaranteed that LD_LIBRARY_PATH, etc will
+		  be set correctly.
+
+- Lmod assumes build & submit environment must match
+	- users often have NO IDEA what environment a package
+	  was built with
+	- multiple apps may be built with different stacks
+	- combining them in a workflow is difficult with modules
+		(need to know right incantation)
+
+	- TACC implements a rather complicated mapping back to
+	    the build env (Lmod CheckExec)
+	
+
+- Spack solves the matrix problem mentioned in the Lmod
+    presentation (slide 98)
+	- hierarchy is nasty -- every branch represents a
+	  greedy choice
+	- might NEED a specific version of ONE dependency
+	  that is not supported in the tree
+	  => SPACK!
+
+- libmesh
+	- boost, petsc, trilinos, grvy, etc.
+\end{verbatim}
+

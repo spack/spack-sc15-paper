@@ -11,10 +11,11 @@ flexible scripting capabilities.
 Like some prior systems, Spack supports arbitrarily many software installations.
 It borrows ideas from Nix; packages are installed in their own prefixes,
 and configurations are managed using hashes.
-% 
-Spack adds several unique capabilities that are essential for HPC:
+
+\noindent
+Spack adds several essential capabilities for HPC:
 \begin{enumerate}
-\item {\bf Parametric builds} address the matrix problem:
+\item {\bf Parametric builds} address the combinatorial problem:
       Packages are parameterized by name, version, architecture, compiler, 
       options, and dependencies.
 \item To manage the configuration space, spack provides a novel, 
@@ -27,24 +28,11 @@ Spack adds several unique capabilities that are essential for HPC:
 
 
 \input{implementation-packages}
+\input{implementation-specs}
+\input{implementation-virtual-deps}
+\input{implementation-concretization}
 
-\subsection{Spack Specs}\label{sec:specs}
-
-  Specs are partial descriptions of full
-dependency graphs, but they are concise.  This allows a user to use
-only a few parameters to quickly identify a configuration to install,
-or to query existing installations and their dependencies.
+\input{implementation-environment}
 
 
-
-\todo{1 page}
-
-
-
-\subsection{Versioned Virtual Dependencies}
-	\todo{.5 page}
-
-\subsection{Abstract \& Concrete Specs}
-	\todo{.75 page}
-	
 
