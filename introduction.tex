@@ -15,11 +15,11 @@ lists, respectively.
 %including nuclear physics, material science, climate science, mechanical 
 %engineering, geophysics, seismology, and stockpile stewardship.
 %
-The simulations that run on these machines are very complex; some
-depend on specific versions of over 50 dependency libraries.
+The simulation software that runs on these machines is very complex; some
+codes depend on specific versions of over 50 dependency libraries.
 They require specific compilers, build options and MPI implementations to
 achieve the best performance, and users may run several
-different such codes in the same environment as part of larger 
+different codes in the same environment as part of larger 
 scientific workflows.
 
 To support the diverse needs of applications, administrators and application
@@ -47,7 +47,7 @@ To our knowledge, no existing tool allows new configurations to be composed
 and assembled on demand.  Some allow limited forms of 
 composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but their
 dependency management is overly rigid, and they burden users with
-combinatoric installation naming and versioning.
+the combinatoric problems of naming and versioning.
 
 In this paper, we describe our experiences with the {\it Spack} package manager,
 which we have developed at LLNL to manage increasing software complexity.
@@ -64,8 +64,8 @@ Specifically, this paper offers the following contributions:
 \end{enumerate}
 
 Spack is in active development at LLNL, and our use cases outline some of
-its first uses in our environment.  Spack solves software problems that are
-pervasive at large, multi-user HPC centers, and we believe that our
-experiences with it can be applied at other HPC facilities to improve
+its first applications in our environment.  Spack solves software problems 
+that are pervasive at large, multi-user HPC centers, and we believe that our
+experiences with it can be applied at other HPC facilities.  Spack improves
 operational efficiency by simplifying the build and deployment of 
 bleeding-edge scientific software.
