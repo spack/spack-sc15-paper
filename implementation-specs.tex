@@ -111,7 +111,7 @@ the user's request.  We describe additional qualifiers below.
 Versions are specified by supplying {\tt @<version>} after the package name (line 2). 
 Versions can be precise (e.g. {\tt @4.5.1}) or 
 they can be ambiguous (e.g., @4) or a colon-separated, inclusive range (e.g., @4.4:4.5.1),
-and Spack will pick an available compiler from the specified range.
+and Spack will pick an available version from the specified range.
 The package in Figure~\ref{fig:mpileaks} lists two ``safe'' versions with checksums, but
 in our experience users frequently want bleeding-edge versions.  Package managers
 frequently lag behind the latest releases. 
@@ -138,7 +138,7 @@ adding {\tt +debug}.  The option can be similarly disabled with {\tt -debug}.
 This allows package authors to provide package-specific build options without 
 having to extend Spack.  We use names for these to simplify the spec
 syntax, and to prevent Spack's configuration space from becoming too fine-grained.
-It would be violate our goal of conciseness, for example, to include detailed 
+It would violate our goal of conciseness, for example, to include detailed 
 compiler flags in the spec syntax, but known sets of flags can be exported using
 named variants.
 
@@ -160,7 +160,7 @@ As mentioned, Spack guarantees that there is only one version of any package in
 the spec DAG.  So, within the same DAG, each dependency can be uniquely identified by 
 only its package name.  This frees the user from having to worry about DAG connectivity;
 the user only needs to know that a package depends, somehow, indirectly on {\tt mvapich}
-to add this constrain
+to add this constraint
 uniquely identifies a dependency, and dependency constraints can be specified in any
 order.  
 

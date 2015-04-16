@@ -14,7 +14,7 @@ Many packages used at LLNL have a profusion of build options, and specifying the
 correctly often requires tedious experimentation.  This is due to lack of
 build standards and to the diversity of HPC environments.  
 For example, in some packages that depend on the {\tt Silo} library,
-the {\tt ---with-silo} parameter takes a path to {\tt Silo}'s prefix.
+the {\tt ---with-silo} parameter takes a path to {\tt Silo}'s installation prefix.
 In others, it takes the {\tt include} and {\tt lib} subdirectories,
 separated by a comma.
 The {\tt install()} method in Spack's package files allows us to record
@@ -22,23 +22,23 @@ precise build incantations for later reuse.
 
 %{\bf Environment isolation.}
 \paragraph{Environment isolation}
-In addition to command line issues, we
+In addition to command-line issues, we
 frequently encounter errors due to inconsistencies between the environment of
 the package installer and the package user.
 %
 For example, there are two versions of the {\tt libelf} library used by
-LLNL performance tools. One is distributed with RedHat Linux, but another
+LLNL performance tools. One is distributed with RedHat Linux, while another
 publicly available version has the same API but an incompatible ABI.
 Failure to specify the right version at build time has caused many
 inexplicable crashes.
 %
-Spack manages the build environment by running {\tt install} invocation
+Spack manages the build environment by running the {\tt install} invocation
 in a new process.  It helps packages find dependencies 
 correctly, by setting
 {\tt PATH}, {\tt PKG\_CONFIG\_PATH}, {\tt CMAKE\_PREFIX\_PATH}, and
 {\tt LD\_LIBRARY\_PATH} to include the dependencies of the current build.
 These variables are commonly used by build systems to locate dependencies,
-and setting them helps to ensure that incorrect libraries are not detected.
+and setting them helps to ensure that incorrect libraries are detected.
 The isolated build environment also gives package authors 
 free reign to set build-specific environment variables without interfering
 with other packages.
@@ -75,7 +75,7 @@ After the modified argument list is constructed, the wrappers delegate it
 to the real compiler to execute.
 
 Spack's compiler wrappers have a number of useful effects.  First, they allow
-Spack to transparently parameterize the compiler for most builds. 
+Spack to transparently parameterize the compiler for most builds and for
 Spack users to easily request a build with a new compiler swapped in.
 Second, they enforce the use of {\tt RPATHs} in
 installed binaries.  This causes applications built by Spack to run correctly
