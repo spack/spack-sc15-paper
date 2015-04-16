@@ -10,5 +10,5 @@ $(name).pdf: *.tex *.cls *.bib
 
 clean:
 	rm -f *.out *.aux *.toc *.log *.bbl *.blg $(name).pdf
-	rm -f *.ent *.synctex.gz *.rai
+	rm -f *.ent *.synctex.gz *.rai *.cpt
 	rm -f *Graph.pdf *Graph.dot *Graph.log
