@@ -5,12 +5,12 @@
 
 \paragraph{Meta-build Systems}
 {\it Meta-build systems} such as Contractor, WAF, and
-MixDown~\cite{amundson:contractor,epperly+:mixdown,nagy:waf} are closely
-related to package managers, but their focus is on ensuring that a single
-{\it project} builds correctly along with all of its dependencies.  They do not address
-larger, multi-user system administration issues such as versioning, naming
-conventions, rapid multi-configuration installation, or maintaining many
-divergent software stacks.
+MixDown~\cite{amundson:contractor,epperly+:mixdown,epperly+:mixdown-report,nagy:waf} are
+related to package managers, but they focus on ensuring that a single
+package builds correctly with its dependencies.  MixDown notably provides excellent
+features for ensuring consistent compiler flags in a build.
+However, these systems do not provide facilities to manage
+large package repositories or combinatoric versioning.
 
 \paragraph{Traditional package managers}
 Package managers automate the installation of complex sets of software packages.
