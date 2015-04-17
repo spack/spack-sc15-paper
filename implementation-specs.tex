@@ -243,46 +243,93 @@ like they take simple package names.  However, a package name is also a spec, an
 the same constraint syntax usable from the command line can be applied inside directives.
 So, the ROSE compiler can simply write:
 %
-\begin{lstlisting}
-depends_on(`boost@1.54.0')
-\end{lstlisting}
+\begin{minted}[fontsize=\scriptsize]{python}
+    depends_on('boost@1.54.0')
+\end{minted}
 %
 This constraint will be incorporated into the initial DAG node generated from
 the ROSE package.
 
-Spack also accepts spec syntax for conditionally patching packages.
-Spack offers a {\tt patch} directive that uses specs as predicates in an
-optional {\tt when} parameter.
-These concise directives in the Python package ensure that very specific patches
-are only applied to the Python source code when it is being built on Blue Gene/Q,
-with the appropriate compiler:
+Spack's {\tt patch} directive also accepts spec syntax as a predicates in an
+optional {\tt when} parameter.  For example, these concise directives in the 
+Python package ensure that specific patches are applied to the Python source
+code when it is being built on Blue Gene/Q, with the appropriate compiler:
 %
-\begin{lstlisting}
-patch(`python-bgq-xlc.patch',   when=`=bgq%xlc')
-patch(`python-bgq-clang.patch', when=`=bgq%clang')
-\end{lstlisting}
+\begin{minted}[fontsize=\scriptsize]{python}
+    patch('python-bgq-xlc.patch',   when='=bgq%xlc')
+    patch('python-bgq-clang.patch', when='=bgq%clang')
+\end{minted}
 %
-The {\tt when} clause is matched against the Python package's spec
-to determine whether the patch will be applied.
-
-Constraint tests can also be used directly within package source code.
-For example, in the {\tt install} method, packages can test the versions of dependencies
-using constraint syntax:
+Constraints in the {\tt when} clause are matched against the Python package spec.
+Outside of directives, constraints can be used directly
+with the {\tt spec} object in the {\tt install} method:
 %
-\begin{lstlisting}
-  if '' in spec:
-  elif '
-  '
-\end{lstlisting}
+\begin{minted}[fontsize=\scriptsize]{python}
+  def install(self, spec, prefix):
+      if spec.satisfies('%gcc'):
+          # Handle gcc
+      elif spec.satisfies('%xlc'):
+          # Handle XL compilers
+      ...
+\end{minted}
 %
-
 
 \subsubsection{Build specialization}
 
-In some cases, simple conditional logic
+In our experience maintaining packages at LLNL, we have sometimes had to change
+entire package build scripts due to large changes in the way certain packages build.
+This can be very cumbersome, and it is difficult to maintain both the old and new
+version of a build script, but we must if we want to keep installing older versions
+for users who rely on them.  
 
+\begin{figure}
+\begin{minted}[linenos,
+               numbersep=5pt,
+			   fontsize=\scriptsize,
+               frame=lines,
+               framesep=2mm]{python}
+class Dyninst(Package):
+    """"Dyninst binary instrumentation and analysis tool."""
+    url="http://www.paradyn.org/release8.1/DyninstAPI-8.1.1.tgz"
+    version('8.1.1', 'd1a04e995b7aa70960cd1d1fac8bd6ac')
+    depends_on("libelf")                                                                            
+    depends_on("libdwarf")                                                                          
+    depends_on("boost@1.42:")
+    
+    # default build version uses cmake                                                                        
+    def install(self, spec, prefix):
+        with working_dir('spack-build', create=True):                                               
+            cmake('..', *std_cmake_args)
+            make()                                                                                  
+            make("install")                                                                         
 
-In our experience maintaining packages over time, we have found tha
+    # when version is 8.1 or lower, use configure.                                                                                                    
+    @when('@:8.1')                                                                                  
+    def install(self, spec, prefix):                                                                
+        configure("--prefix=" + prefix)                                                             
+        make()                                                                                      
+        make("install")     
+\end{minted}
+\caption{
+    Specialized {\tt install} method in Dyninst. 
+	\label{fig:specialization}
+}
+\end{figure}
+
+For cases like this, Spack provides functionality that allows Python functions to have
+multiple definitions, with some specialized for particular configurations of the package.
+This allows us to have two separate implementations of {\tt install} or {\it any} method 
+in a package class. Figure~\ref{fig:specialization} shows how this is used in the Dyninst
+package.  The {\tt @when} directive is a Python decorator: a higher order function that 
+takes a function definition as a parameter and returns a new function to put in its place.
+Here, we replace the function with a callable multi-function dispatch object, and we 
+integrate the predicate check into the function dispatch mechanism.  Here, the
+{\tt when} condition is true when Dyninst is at version 8.1 or lower, and in those cases
+the package will use the {\tt configure}-based build.  By default if no predicate matches,
+{\tt install} will simply use the default CMake-based implementation. The simple {\tt @when}
+annotation allows us to maintain our old build code alongside the new version without 
+accumulating complex logic in a single {\tt install} function.
+
 
 
 
