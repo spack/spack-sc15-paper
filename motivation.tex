@@ -16,13 +16,13 @@ large package repositories or combinatoric versioning.
 Package managers automate the installation of complex sets of software packages.
 {\it Binary package managers} such as RPM, yum, and  
 APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
-operating system (OS) distributions, and they are used to ensure that dependencies
+OS distributions, and they are used to ensure that dependencies
 are installed before packages that require them.
 These tools largely solve the problem of managing a {\it single} software
-stack.  This works well for the baseline OS and drivers, which are 
+stack, which works well for the baseline OS and drivers, which are 
 common to all applications on a system.
-These tools make the assumption that there is only a single version
-of each package, and most install packages in a single, inflexible location.
+These tools assume that each package only has a single version
+and most of the tools install packages in a single, inflexible location.
 To install multiple configurations, the user must create a custom, combinatoric
 naming scheme to avoid conflicts. They typically require root 
 privileges and do not optimize for specific hardware.
@@ -34,26 +34,28 @@ Most existing port systems suffer from
 the same versioning and naming issues as traditional package managers.
 Some allow multiple versions to be installed in the same
 prefix~\cite{groffen:gentoo-prefix}, but again the burden is on package
-creators to manage conflicts. This restricts installations to only a few
-configurations.
+creators to manage conflicts. This burden effectively restricts installations 
+to few configurations.
 
 
 \paragraph{Virtual Machines and Containers}
 
 Packaging problems arise in HPC because a supercomputer's hardware, OS, and
-filesystem are shared by many users with different requirements.  The classic solution
-to this problem is to use virtual
+filesystem are shared by many users with different requirements.  The classic 
+solution to this problem is to use virtual
 machines (VMs)~\cite{barham2003xen,rosenblum1999vmware,smith2005architecture}
 or lightweight virtualization techniques like Linux 
-containers~\cite{felter2014updated,merkel2014docker}. This model allows each user to 
-have her own environment with its own package manager, and it has been extremely 
-successful for servers at cloud data centers.  VMs typically have 
-near-native compute performance, but there are still major performance issues with
-low-level HPC network drivers.  VMs are not well supported on many
+containers~\cite{felter2014updated,merkel2014docker}. This model allows each
+ user to have a personalized environment with its own package manager, and it 
+has been extremely successful for servers at cloud data centers. VMs typically
+have near-native compute performance but low-level HPC network drivers still 
+exhibit major performance issues. VMs are not well supported on many
 non-Linux operating systems, an issue for the lightweight 
 kernels of bleeding-edge Blue Gene/Q and Cray machines. Security
 is another major concern: a profusion of VMs makes mandatory patching
-difficult when user's environments differ significantly from those of the facility.
+difficult when user's environments differ significantly from those of 
+the facility. Perhaps most importantly, significant differences in
+versioning leaves the majority of the installation burden on end users.
 
 \begin{table*}\centering
 \begin{tabular}{|l|l|}
@@ -82,15 +84,16 @@ Spack default                  & {\tt / \$arch / \$compiler-\$comp\_version / \$
 
 To cope with software diversity, many HPC sites use a combination of existing
 packages managers and either manual or semi-automated software installation.  
-For the baseline OS, it is common for sites to maintain traditional binary
-packages using the vendor's package manager.  LLNL maintains a Linux 
+For the baseline OS, many sites maintain traditional binary
+packages using the vendor's package manager. LLNL maintains a Linux 
 distribution, CHAOS~\cite{chaos} for this purpose.
 
 For more specific builds, many sites adhere to detailed naming conventions
-that encode information in filesystem paths. A sampling of conventions
-at several sites is shown in Table~\ref{tab:naming-conventions}. At LLNL, the
-APT package manager is used for installs in the {\tt /usr/local/tools} 
-filesystem, and {\tt /usr/global/tools} is used for manual installs.
+that encode information in file system paths. 
+Table~\ref{tab:naming-conventions} shows a sampling of conventions
+at several sites. At LLNL, we use the APT package manager for installs 
+in the {\tt /usr/local/tools} file system; we use {\tt /usr/global/tools} 
+for manual installs.
 ORNL uses hand installs but adheres to a strict scripting structure
 that can be used to reproduce each build~\cite{jones+:cug08}.
 TACC relies heavily on locally maintained RPMs for its software installs.
@@ -105,41 +108,42 @@ However, it is only one of many dependencies that go into a build.
 None of these naming conventions covers the entire configuration
 space, and none has a way to represent, e.g., two builds that are identical
 save for the version of a particular dependency library.  In our experience
-at LLNL, naming conventions like these have not succeeded because there
-are more desired configurations than we can represent with a practical
+at LLNL, naming conventions like these have not succeeded because the full
+set of users want more configurations than we can represent with a practical
 directory hierarchy. Staff frequently install nonconforming packages 
 in nonstandard locations with ambiguous names.
 
 \paragraph{Environment Modules and RPATHs}
 
-Diverse software versions not only present problems for build and installation; 
+Diverse software versions not only present problems for build and installation;
 they also complicate the runtime environment. When launched, an executable
 must determine the location of its dependency libraries, or it will not run.
 Statically linked binaries do not have this issue, but modern
 operating systems make extensive use of dynamic linking.
 By default, the dynamic loader on most systems is configured to search only
 system library paths such as {\tt /lib}, {\tt /usr/lib}, and
-{\tt /usr/local/lib}.  If binaries are installed to other locations, the
-{\it user} who runs the program must typically add dependency library paths to
+{\tt /usr/local/lib}.  If binaries are installed in other locations, the
+{\it user} who runs the program (often not the user or staff member who
+installed the binary) must typically add dependency library paths to
 {\tt LD\_LIBRARY\_PATH} (or a similar environment variable) so that the loader
 can find them.
 
-Many HPC sites address this problem using {\it environment modules}, which allow
-users to dynamically ``load'' and ``unload'' such settings using simple commands.
-Environment emerged in 1991, and there are many implementations 
+Many HPC sites address this problem using {\it environment modules}, which 
+allow users to ``load'' and ``unload'' such settings dynamically using simple 
+commands. Environment emerged in 1991, and there are many implementations 
 available~\cite{dotkit,furlani+:lisa91,furlani+:lisa96,mclay:lmod,mclay:lmod-tutorial}.
 The most advanced implementations, such as Lmod~\cite{mclay:lmod,mclay:lmod-tutorial},
 provide software hierarchies similar to the naming conventions in 
-Table~\ref{tab:naming-conventions}. They allow users to quickly load a software stack
-if they know which one is required.
+Table~\ref{tab:naming-conventions}. They allow users to load a software stack
+quickly if they know which one is required.
 
-The alternative to per-user environment settings is to embed library search paths
-in installed binaries at compile time. When set this way, the search path is called
-an {\tt RPATH}. {\tt RPATHs} and environment modules are not mutually exclusive.
-Modules can still be used to set {\tt MANPATH}, {\tt PATH} and variables, but
-adding {\tt RPATHs} ensures that binaries will run correctly regardless of whether
-the right module is loaded. LC installs software with both {\tt RPATHs} and
-{\tt dotkit}~\cite{dotkit} modules.
+The alternative to per-user environment settings is to embed library search 
+paths in installed binaries at compile time. When set this way, the search 
+path is called an {\tt RPATH}. {\tt RPATHs} and environment modules are not 
+mutually exclusive. Modules can still be used to set {\tt MANPATH}, {\tt PATH}
+and variables, but adding {\tt RPATHs} ensures that binaries run correctly 
+regardless of whether the right module is loaded. LC installs software with 
+both {\tt RPATHs} and {\tt dotkit}~\cite{dotkit} modules.
 
 \paragraph{Modern Package Managers}
 
@@ -149,9 +153,9 @@ multi-configuration builds.
 Nix~\cite{dolstra+:icfp08,dolstra+:lisa04}
 is a package manager and an OS distribution that supports the installation of
 arbitrarily many software configurations.  As at most HPC sites, each package
-in Nix installed in a unique prefix, but in Nix, there is no human-readable
+in Nix is installed in a unique prefix, but Nix does not have a human-readable
 naming convention.  Instead, Nix determines the prefix by hashing the package
-file and along with its dependencies.
+file along with its dependencies.
 
 Hashdist~\cite{hashdist} is a meta-build system and package manager for HPC.
 Like Nix, it uses cryptographic versioning, and it archives installations
@@ -165,7 +169,7 @@ the University of Ghent.  It allows multiple versions to be installed
 at once.  Rather than setting {\tt RPATHs}, it auto-generates module files
 to manage each package's environment, and it is closely coupled with 
 Lmod~\cite{geimer+:hust14}.  EasyBuild groups the compiler, MPI, FFT, and
-BLAS libraries together in a {\it toolchain}, which can be combined with
+BLAS libraries together in a {\it toolchain} that can be combined with
 any package file. This provides some degree of composability and
 separates compiler flags and MPI concerns from client packages.
 
@@ -174,11 +178,11 @@ can generate module files, but it does not provide any
 automated dependency management; it only checks whether a package's
 prerequisites have already been installed by the user.
 
-\paragraph{Gaps in the state of the art}
-The cryptographic versioning of Nix and Hashdist is very flexible.  It versions
+\paragraph{Gaps in current common practice}
+The cryptographic versioning of Nix and Hashdist is very flexible. It versions
 the package {\it and} its dependency configuration, and can represent any
-configuration. However, there is no way for users to navigate or query
-software. The systems are in a sense ``write-only'':
+configuration. However, users cannot navigate or query the installed software.
+The systems are in a sense ``write-only'':
 Nix does not even offer a way to ask for a package's dependencies.
 %
 EasyBuild and Smithy generate environment modules, which allow querying
@@ -202,11 +206,11 @@ combination of compiler, MPI version, build options, and dependency versions
 requires tediously modifying many package files.
 %
 Indeed, the number of package files required for existing systems scales with
-the number of version {\it combinations}, not the number of packages.
-This quickly becomes unmanageable.  As an example, the very flexible EasyBuild
+the number of version {\it combinations}, not the number of packages, which.
+quickly becomes unmanageable.  As an example, the very flexible EasyBuild
 system has over 3,300 files for several permutations of only 600 packages. 
-Other systems have similar issues. A mechanism is needed to {\it parameterize}
-packages so that new builds can be {\it composed} on the fly.
+Other systems have similar issues. HPC sites need a mechanism to 
+{\it parameterize} packages so that new builds can be {\it composed} on the fly.
 
 
 
