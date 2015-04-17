@@ -1,18 +1,96 @@
 %!TEX root = paper.tex
 
-
 \subsection{Versioned Virtual Dependencies}
-	\todo{.5 page}
+
+\begin{figure}
+%
+\begin{subfigure}{\linewidth}
+	\begin{minted}[numbersep=5pt,
+	              fontsize=\scriptsize,
+	              frame=lines,
+                  framesep=2mm]{python}
+class Mvapich2(Package):    
+    provides('mpi@:2.2', when='@1.9')
+    provides('mpi@:3.0', when='@2.0')
+\end{minted}
+	\caption{%
+		{\tt mvapich2} provides {\tt mpi} interface with specific versions.
+		\label{fig:virtual-deps-provides}
+	}
+\end{subfigure}
+%
+\begin{subfigure}{\linewidth}
+	\begin{minted}[numbersep=5pt,
+	              fontsize=\scriptsize,
+	              frame=lines,
+                  framesep=2mm]{python}
+class Mpileaks(Package):    
+    depends_on('mpi')
+\end{minted}
+	\caption{%
+		{\tt mpileaks} depends on any MPI version.
+		\label{fig:virtual-deps-mpileaks}
+	}
+\end{subfigure}
+%
+\begin{subfigure}{\linewidth}
+	\begin{minted}[numbersep=5pt,
+	              fontsize=\scriptsize,
+	              frame=lines,
+                  framesep=2mm]{python}
+class Gerris(Package):
+    depends_on('mpi@2:')
+\end{minted}
+	\caption{%
+		Gerris CFD solver requires MPI at version 2 or higher.
+		\label{fig:virtual-deps-depends}
+	}
+\end{subfigure}
+%
+\caption{
+	Virtual dependencies.
+	\label{fig:virtual-deps}
+}
+\end{figure}
+
+Many libraries share a common source interface and can be interchanged for
+one another in a build.
+The archetypal example in HPC is the MPI interface, which has a number of
+open source implementations (MPICH, OpenMPI, MVAPICH, etc.) and vendor-specific
+implementations. An application that can be built with one MPI can generally be
+built with another.  BLAS implementations such as ATLAS, LAPACK-BLAS, MKL, etc.
+are another common example.
+
+At LLNL, we frequently need to build tools with many versions of MPI to support
+the many different applications that are run at our center.
+However, MPI has no ABI, so applications cannot simply be re-linked;
+they must be recompiled and reinstalled. 
+Complicating matters, the MPI interface is versioned, and some
+packages need later versions of MPI to run correctly.  Often, MPI
+{\it implementation} versions do not correspond obviously to MPI
+interface versions, and determining the right version of 
+MPI to pair with an application can be tedious and tricky.
+
+To allow rapid composition of libraries by interface, Spack supports
+{\it virtual dependencies}.  A virtual dependency is an abstract name
+representing a library interface or capability instead of a library 
+implementation.  Packages that need this capability need not depend on 
+a specific implementation; they can depend on the virtual name, for which
+the user or Spack can select an an implementation at build time.
+Other package managers support the notion of virtual dependencies, but Spack
+adds {\it versioning} to its interfaces.  This allows concepts like MPI
+interface versions and BLAS levels to be represented directly, and Spack can
+handle the details of managing complex constraints while the user focuses on 
+composing software.
+
+Figure~\ref{fig:virtual-deps-provides} shows how packages can provide
+virtual interfaces in Spack.  The spec syntax is used to concisely
+associate a range of {\tt mpi} versions (up to 2.2) with Mvapich version 1.9.
+In Figure~\ref{fig:virtual-deps-mpileaks}, we see that {\tt mpileaks} requires
+MPI but is unconstrained on version.  Since this spec satisfies the constraints in 
+the {\tt mvapich2} package, {\tt Mvapich2} can be used to satisfy the {\tt mpi}
+dependency in {\tt mpileaks}.  Similarly, the Gerris CFD library needs MPI
+at version 2 or higher -- either {\tt mvapich2} 1.9 or 2.0 can be used to satisfy
+this constrained dependency.
 
 
-{\bf Dependencies.}
-Lines 6 and 7 in the table show the key feature that enables Spack's flexibility.
-The user can specify all of the above information not only for the package being
-installed, but also for its {\it dependencies}.  To do this, the user needs only supply 
-\verb|^| and the dependency's name.  If we need to build a new version with a specific
-version of {\tt mvapich2}, we can simply add, e.g., \verb|^mvapich2@1.9|
-to the spec, and it will build with that MPI version instead of the default.
-This can also be done for multiple libraries in the same spec (line 7).  
-
-
-\subsubsection{Querying installed packages}

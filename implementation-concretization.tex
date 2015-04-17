@@ -4,6 +4,29 @@
 	\todo{.75 page}
 	
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\columnwidth]{specs/mpileaks-concrete.pdf}
+	\caption{
+		Concretized version of specs from Figure~\ref{fig:specs-mpileaks}.
+		\label{fig:specs-mpileaks-concrete}
+	}
+\end{figure}
+
+
+
+{\bf Dependencies.}
+Lines 6 and 7 in the table show the key feature that enables Spack's flexibility.
+The user can specify all of the above information not only for the package being
+installed, but also for its {\it dependencies}.  To do this, the user needs only supply 
+\verb|^| and the dependency's name.  If we need to build a new version with a specific
+version of {\tt mvapich2}, we can simply add, e.g., \verb|^mvapich2@1.9|
+to the spec, and it will build with that MPI version instead of the default.
+This can also be done for multiple libraries in the same spec (line 7).  
+
+
+
+
 Before it builds a package, Spack ensures the following conditions:
 \newline
 

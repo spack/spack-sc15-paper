@@ -1,32 +1,38 @@
 %!TEX root = paper.tex
 
-
 \begin{figure}
-	\subfigure[Spec for {\tt mpileaks}]{
+	\begin{subfigure}{\linewidth}
 		\centering
 		\includegraphics[width=\columnwidth]{specs/mpileaks.pdf}
-		\label{fig:specs-mpileaks}
-	}
-	\subfigure[{\tt mpileaks@2.3}]{
+		\caption{
+			Spec for {\tt mpileaks}
+			\label{fig:specs-mpileaks}
+		}
+	\end{subfigure}
+%
+	\begin{subfigure}{\linewidth}
 		\centering
 		\includegraphics[width=\columnwidth]{specs/mpileaks-version}
-		\label{fig:specs-mpileaks-version}
-	}
-	\subfigure[{\tt mpileaks@2.3 \^{}callpath@1.0+debug \^{}libelf@0.8.11}]{
+		\caption{
+			{\tt mpileaks@2.3}
+			\label{fig:specs-mpileaks-version}
+		}
+	\end{subfigure}
+%
+	\begin{subfigure}{\linewidth}
 		\centering
 		\includegraphics[width=\columnwidth]{specs/mpileaks-abstract.pdf}
-		\label{fig:specs-mpileaks-abstract}
-	}
-	\subfigure[Spec (b), concretized.]{
-		\centering
-		\includegraphics[width=\columnwidth]{specs/mpileaks-concrete.pdf}
-		\label{fig:specs-mpileaks-concrete}
-	}
+		\caption{
+			{\tt mpileaks@2.3 \^{}callpath@1.0+debug \^{}libelf@0.8.11}
+			\label{fig:specs-mpileaks-abstract}
+		}
+	\end{subfigure}
+%
 	\caption{
-		Specs for the {\tt mpileaks} package.
-		\label{fig:specs}
+		Constraints applied to {\tt mpileaks} specs.
 	}
 \end{figure}
+
 
 
 \subsection{Spack Specs}\label{sec:specs}
@@ -140,12 +146,13 @@ on the command line. The spec syntax is recursively defined to allow users to sp
 parameters on dependencies as well as on the root of the DAG.  The EBNF grammar we use
 to implement this in Spack is shown in Figure~\ref{fig:grammar}.
 
-We begin with an example.%Let us explain our syntax with an example.
+We begin with a simple example.
 Consider the case where a user wants to install the {\tt mpileaks} package, but knows
-nothing about its structure.  To install the package, the user writes:
+nothing about its structure.  To install the package, the user invokes the {\tt spack install}
+command:
 %
 \begin{minted}[fontsize=\scriptsize]{bash}
-$ spack install mpileaks
+    $ spack install mpileaks
 \end{minted}
 %
 Here, {\tt mpileaks} is the simplest possible spec---a single identifier.
@@ -159,7 +166,7 @@ Now, suppose the user wants a specific version of {\tt mpileaks}.  This can be r
 with a version constraint after the package name:
 %
 \begin{minted}[fontsize=\scriptsize]{bash}
-$ spack install mpileaks@2.3
+    $ spack install mpileaks@2.3
 \end{minted}
 %
 We see from Figure~\ref{fig:specs-mpileaks-version} that the specific version constraint is
@@ -174,7 +181,7 @@ the already built instead of building a new one.
 Figure~\ref{fig:specs-mpileaks-abstract} shows the recursive nature of spec syntax:
 %
 \begin{minted}[fontsize=\scriptsize]{bash}
-$ spack install mpileaks@2.3 ^callpath@1.0+debug ^libelf@0.8.11
+    $ spack install mpileaks@2.3 ^callpath@1.0+debug ^libelf@0.8.11
 \end{minted}
 %
 The caret (\verb|^|) denotes constraints for a particular dependency.  In the DAG,

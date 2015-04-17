@@ -4,54 +4,91 @@
 \documentclass{sig-alternate}
 %\documentclass{acm_proc_article-sp}
 
-\usepackage{listings}
-\lstset{
-  basicstyle=\scriptsize\ttfamily,
-}
-
+% ---------------------------------------------------------------
+% Cleaner terminal font (no more courier)
+% ---------------------------------------------------------------
 \usepackage[T1]{fontenc}
 \usepackage{inconsolata}
 
-%\usepackage{fontspec}
-%\setsansfont{Calibri}
-%\setmonofont{Consolas}
-
+% ---------------------------------------------------------------
+% minted: MUCH better syntax highlighted listing, using pygments.
+% Also add below skip settings to minted.
+% ---------------------------------------------------------------
 \usepackage{minted}
-
+\makeatletter
+\newlength\minted@belowskip
+\define@key{minted@opt}{belowskip}[\@topsepadd]
+{\setlength{\minted@belowskip}{#1}}
+\def\minted@endparenv{%
+  \addpenalty\@endparpenalty\addvspace\minted@belowskip\@endpetrue}
+\def\FV@EndList{%
+  \FV@ListProcessLastLine
+  \FV@EndListFrame
+  \minted@endparenv
+  \endgroup
+  \@endpetrue}
+\makeatother
+                                                                         
+% ---------------------------------------------------------------
+% Inline grammar (for EBNF)
+% ---------------------------------------------------------------
 \usepackage{syntax}
 \setlength{\grammarparsep}{0pt}
 \setlength{\grammarindent}{1.1in}
 
-\usepackage{subfigure}
-%\usepackage{subcaption}
-\usepackage{xspace}
-\usepackage[numbers,sort]{natbib} % auto-sort citation by number
-\usepackage{xcolor}
+% ---------------------------------------------------------------
+% Use subcaption instead of subfigure.  Subcaption allows
+% nested verbatim env (i.e. code), subfig doesn't.
+% ---------------------------------------------------------------
+\usepackage{subcaption}
+\captionsetup{labelfont=bf,
+		      textfont=bf,
+              singlelinecheck=off,
+              justification=centering}
+\captionsetup[sub]{labelfont=bf,
+		      textfont=normal,
+              singlelinecheck=off,
+              justification=centering}
+\setlength\abovecaptionskip{.2em}
+\setlength\belowcaptionskip{.6em}
 
+% ---------------------------------------------------------------
+% Automatically sort citations by number so that I don't have to.
+% ---------------------------------------------------------------
+\usepackage[numbers,sort]{natbib} 
+
+% ---------------------------------------------------------------
+% Optically straight margins - no more bad lines, better flow.
+% ---------------------------------------------------------------
 \usepackage[protrusion=true,expansion=true]{microtype}
 
+% ---------------------------------------------------------------
+% Other packages
+% ---------------------------------------------------------------
+\usepackage{xspace}
+\usepackage{xcolor}
+
+% ---------------------------------------------------------------
+% Custom commands
+% ---------------------------------------------------------------
+% red todos
+\newcommand\todo[1]{\textcolor{red}{#1}}   
+
+% convenience commands
 \newcommand{\mpileaks}{{\tt mpileaks}\xspace}
 \newcommand{\spec}{{\tt spec}\xspace}
 \newcommand{\prefix}{{\tt prefix}\xspace}
 
-%
-% TODO items in red
-%
-\newcommand\todo[1]{\textcolor{red}{#1}}
 
 \begin{document}
-
-%
-% --- Author Metadata here ---
-%\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
-%\CopyrightYear{20015} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
-%\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
-% --- End of Author Metadata ---
-
+% ---------------------------------------------------------------
+% Title
+% ---------------------------------------------------------------
 \title{The Spack Package Manager:\\
 Bringing order to HPC software chaos
-\titlenote{\small This work was performed under the auspices of the U.S.
-Department of Energy by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.}}
+\titlenote{\small This work was performed under the auspices 
+of the U.S. Department of Energy by Lawrence Livermore National 
+Laboratory under Contract DE-AC52-07NA27344.}}
 %\subtitle{}
 \numberofauthors{7}
 \author{
@@ -78,34 +115,27 @@ Department of Energy by Lawrence Livermore National Laboratory under Contract DE
 %\affaddr{Computation Directorate}\\
 %\affaddr{Livermore, CA 94550}
 }
-
 \maketitle
 
+% ---------------------------------------------------------------
+% Abstract
+% ---------------------------------------------------------------
 \begin{abstract}
 	\input{abstract}
 \end{abstract}
 
-
-% A category with the (minimum) three required fields
-%\category{H.4}{Information Systems Applications}{Miscellaneous}
-%A category including the fourth, optional field follows...
-%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
-
-%\terms{Theory}
-
-%\keywords{package management, software configuration,
-%high performance, parallel, system administration, build systems}
-
+% ---------------------------------------------------------------
+% Sections
+% ---------------------------------------------------------------
 \input{introduction}
 \input{motivation}
-
 \input{implementation}
-
 \input{usecases}
 \input{conclusion}
 
-%\raggedright
-%\footnotesize
+% ---------------------------------------------------------------
+% Bibliography
+% ---------------------------------------------------------------
 \bibliographystyle{abbrv}
 \bibliography{paper}
 
