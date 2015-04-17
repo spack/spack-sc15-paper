@@ -8,8 +8,7 @@ Spack makes it easy for package maintainers to create and organize package insta
 \subsection{Package Views}
 \label{sec:package-views}
 
-\todo{fill in citations below}
-While Spack can easily create a dozen installs of a package like MPILeaks across different compilers and MPI implementations, it can be difficult for an end-user to determine which of those dozen packages should be used with their application.  The module (cite) or dotkit (cite) package managers are commonly used on supercomputer systems to solve this problem, and Spack allows the package administrator to automatically create module and dotkit files for packages Spack installs.
+While Spack can easily create a dozen installs of a package like MPILeaks across different compilers and MPI implementations, it can be difficult for an end-user to determine which of those dozen packages should be used with their application.  As discussed in Section~\ref{sec:envmodule}, environment modules are commonly used on supercomputer systems to solve this problem, and Spack allows the package administrator to automatically create module and dotkit files for packages Spack installs.
 
 However, even when modules and dotkits are available many users will go directly through the filesystem to access package installs.  Spack installs packages into paths based on concretized specs, which is ideal for maintaining multiple package installations, but may be difficult for an end-user to navigate.  A version of MPILeaks, for example, may be installed in a location like {\tt spack/opt/chaos\_5\_x86\_64\_ib/ gcc@4.9.2/mpileaks@1.0-db465029}.
 

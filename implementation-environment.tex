@@ -75,7 +75,7 @@ After the modified argument list is constructed, the wrappers delegate it
 to the real compiler to execute.
 
 Spack's compiler wrappers have a number of useful effects.  First, they allow
-Spack to transparently parameterize the compiler for most builds and for
+Spack to transparently parametrize the compiler for most builds and for
 Spack users to easily request a build with a new compiler swapped in.
 Second, they enforce the use of {\tt RPATHs} in
 installed binaries.  This causes applications built by Spack to run correctly
@@ -92,18 +92,24 @@ used by software build systems, a useful last resort when porting to
 bleeding-edge platforms or new, esoteric compilers.
 
 \subsubsection{Environment Module Integration}
-	\todo{.5 page}
+\label{sec:envmodule}
+In addition to build-time environments, Spack can also assist in create run-time
+environments.  A package may need environment variables like {\tt PATH}, 
+{\tt LD_LIBRARY_PATH}, or {\tt MANPATH} set before they can be used.  Some users
+may prefer to manually point environment variables and paths at packages, and 
+Section~\ref{sec:package-views} discusses how Spack can assist those users.  
+As discussed in Section~\ref{sec:motivation}, many sites rely on environment 
+modules to set their runtime environment.  Spack can automatically create 
+dotkit~\cite{dotkit} and Module configuration files for its packages, allowing 
+users to setup their runtime environment using familiar systems.  
 
-TACC expects the user to run with the same
-environment that she built with~\cite{mclay:lmod-tutorial}.  
-
-
-But, at LC, the user is
-frequently not the builder of the application, and may not know the particular
-incantation required to load the its environment. Moreover, users frequently run more 
-than one application in the same job, each built by a separate team, and each with
-its own environment. Most LC users are used to running programs with
-specific paths; only 10\% use environment modules extensively.
+Future versions of Spack may also allow the creation of Lmod~\cite{mclay:lmod} 
+module files.  Lmod allows users to load packages using a heirarchy of module 
+load operations.  For example, a user might load a {\tt gcc} module and a 
+{\tt mvapich2} module, and a subsequent load of the {\tt MPILeaks} package would 
+load the appropriate version for that compiler and MPI implementation.  Spack 
+understands where packages would fit in the Lmod hierarchy, allowing it to create 
+Lmod module files.  
 
 \begin{figure}\centering
 	\includegraphics[width=.6\linewidth]{specs/rpaths.pdf}
@@ -116,38 +122,5 @@ specific paths; only 10\% use environment modules extensively.
 	}
 \end{figure}
 
-
-
-
-
-\begin{verbatim}
-module disadvantages:
-	- lmod solves a lot of problems
-	- not on all systems
-		- users often run from just a path.
-		- not guaranteed that LD_LIBRARY_PATH, etc will
-		  be set correctly.
-
-- Lmod assumes build & submit environment must match
-	- users often have NO IDEA what environment a package
-	  was built with
-	- multiple apps may be built with different stacks
-	- combining them in a workflow is difficult with modules
-		(need to know right incantation)
-
-	- TACC implements a rather complicated mapping back to
-	    the build env (Lmod CheckExec)
-	
-
-- Spack solves the matrix problem mentioned in the Lmod
-    presentation (slide 98)
-	- hierarchy is nasty -- every branch represents a
-	  greedy choice
-	- might NEED a specific version of ONE dependency
-	  that is not supported in the tree
-	  => SPACK!
-
-- libmesh
-	- boost, petsc, trilinos, grvy, etc.
 \end{verbatim}
 
