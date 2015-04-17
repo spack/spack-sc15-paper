@@ -1,6 +1,6 @@
 %!TEX root = paper.tex
 
-\subsection{Versioned Virtual Dependencies}
+\subsection{Versioned Virtual Dependencies}\label{sec:virtual}
 
 \begin{figure}
 %
@@ -92,5 +92,16 @@ the {\tt mvapich2} package, {\tt Mvapich2} can be used to satisfy the {\tt mpi}
 dependency in {\tt mpileaks}.  Similarly, the Gerris CFD library needs MPI
 at version 2 or higher -- either {\tt mvapich2} 1.9 or 2.0 can be used to satisfy
 this constrained dependency.
+
+
+%{\bf Dependencies.}
+%Lines 6 and 7 in the table show the key feature that enables Spack's flexibility.
+%The user can specify all of the above information not only for the package being
+%installed, but also for its {\it dependencies}.  To do this, the user needs only supply 
+%\verb|^| and the dependency's name.  If we need to build a new version with a specific
+%version of {\tt mvapich2}, we can simply add, e.g., \verb|^mvapich2@1.9|
+%to the spec, and it will build with that MPI version instead of the default.
+%This can also be done for multiple libraries in the same spec (line 7).  
+
 
 
