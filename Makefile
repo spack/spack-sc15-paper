@@ -2,7 +2,7 @@ name = paper
 tex_args = -shell-escape
 
 $(name).pdf: *.tex *.cls *.bib
-	rm -f *Graph.pdf
+	make clean
 	pdflatex $(tex_args) $(name)
 	bibtex $(name)
 	pdflatex $(tex_args) $(name)
