@@ -4,26 +4,26 @@
 \label{sec:implementation}
 Based on our experiences at LLNL, we have developed
 {\it Spack}, the Supercomputing PACKage manager.
-Spack is written in Python.  We chose Python because it is
-very widely used in the HPC community and because it provides
-flexible scripting capabilities. 
+Spack is written in Python.  We chose Python for its flexibility
+its wide use in the HPC community.
 %
-Like some prior systems, Spack supports arbitrarily many software installations.
-It borrows ideas from Nix; packages are installed in their own prefixes,
-and configurations are managed using hashes.
+Like prior systems, Spack supports an arbitrary number of software
+installations, and like Nix it can identify them with hashes.  Unlike any
+prior system, Spack provides a language to specify and manage the
+combinatorial space of HPC software configurations.
 
 \noindent
-Spack adds several essential capabilities for HPC:
+Spack has the following unique capabilities:
 \begin{enumerate}
-\item {\bf Parametric builds} address the combinatorial problem:
-      Packages are parameterized by name, version, architecture, compiler, 
-      options, and dependencies.
-\item To manage the configuration space, spack provides a novel, 
+\item Packages are {\bf parametrized}, allowing new builds to be composed
+      on the fly for different versions, architecture, compiler, options, 
+      and dependencies.
+\item To manage this large parameter space, spack provides a novel, 
       recursive {\bf spec syntax} for dependency graphs.
 \item Specs support versioned, ABI-incompatible interfaces like MPI through
       {\bf versioned virtual dependencies}.
-\item Spack builds with {\bf compiler wrappers} that reduce the burden of build
-      consistency on the package author.
+\item Spack builds with {\bf compiler wrappers} that enforce build
+      consistency and simplify package writing.
 \end{enumerate}
 
 

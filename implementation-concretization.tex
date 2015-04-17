@@ -4,3 +4,26 @@
 	\todo{.75 page}
 	
 
+Before it builds a package, Spack ensures the following conditions:
+\newline
+
+\begin{tabular}{l}
+(1) All dependencies are present in the DAG. \\
+(2) Parameters are set on all packages in the DAG. \\
+\end{tabular}\newline
+
+\noindent
+The install process then constructs a package object for each node in the spec DAG
+and traverses the DAG in a bottom-up fashion.  At each node, it invokes the package's
+{\tt install()} method, using a sub-DAG rooted at the package to be installed as the {\tt spec}
+parameter to {\tt install()}. Package maintainers are responsible for examining the spec's
+configuration and adjusting the build if necessary.
+
+
+In our experience, much complexity in build scripts arises from the need for the script to
+query the environment and determine how to build.  In spack, build scripts are free from this 
+concern, because the package author is guaranteed that a package's build spec is concrete
+by the time {\tt install()} is called. There is thus no need to perform complicated state checks,
+just to query the spec for its configuration.
+
+

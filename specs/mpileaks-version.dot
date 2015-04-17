@@ -4,8 +4,6 @@ digraph {
     node[shape=box,fontname=monaco,fontsize=10];
 
     mpileaks [label=<mpileaks<font color="deepskyblue2">@2.3</font>>]
-    callpath [label=<callpath<font color="deepskyblue2">@1.0</font><br/><font color="green4">+debug</font>>]
-    libelf   [label=<libelf<font color="deepskyblue2">@0.8.11</font>>]
 
     mpileaks -> mpi
     mpileaks -> callpath -> mpi

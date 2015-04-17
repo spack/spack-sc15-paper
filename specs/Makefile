@@ -1,6 +1,7 @@
 
 TARGETS = \
   mpileaks.pdf \
+  mpileaks-version.pdf \
   mpileaks-abstract.pdf \
   mpileaks-concrete.pdf \
   rpaths.pdf

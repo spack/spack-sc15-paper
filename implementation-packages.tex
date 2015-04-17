@@ -4,34 +4,59 @@
 
 %\subsubsection{Package Files}
 \begin{figure}
-	\includegraphics[width=\columnwidth]{code/mpileaks.pdf}
+\begin{minted}[linenos,
+               numbersep=5pt,
+			   fontsize=\scriptsize,
+               frame=lines,
+               framesep=2mm]{python}
+from spack import *
+
+class Mpileaks(Package):
+    """Tool to detect and report leaked MPI objects like
+       MPI_Requests and MPI_Datatypes."""
+
+    homepage = "https://github.com/hpc/mpileaks"
+    url = homepage + "/releases/download/v1.0/mpileaks-1.0.tar.gz"
+
+    version('1.0', '8838c574b39202a57d7c2d68692718aa')
+    version('1.1', '4282eddb08ad8d36df15b06d4be38bcb')
+
+    depends_on("mpi")
+    depends_on("callpath")
+
+    def install(self, spec, prefix):
+        configure("--prefix=" + prefix,
+                  "--with-callpath=" + spec['callpath'].prefix)
+         make()
+         make("install")
+\end{minted}
 	\caption{
 		Spack package for the {\tt mpileaks} tool.
 		\label{fig:mpileaks}
 	}
 \end{figure}
 
-In Spack, packages are build scripts that describe how to build software
-artifacts.  Each package is a class written in pure Python to describe
-{\it specific} build instructions, and it must extend the {\tt Package}
-base class, which implements the more general parts of the build process.
-Spack implements a simple, embedded domain-specific language (DSL) to make
-packaging easier; it adds special directives such as {\tt depends\_on} and
-{\tt version} that add metadata to the class.
+In Spack, packages are Python scripts that build software artifacts.  
+Each package is a class that extends a generic {\tt Package}
+base class.  {\tt Package} implements the bulk of the build process, but
+subclasses provide their own {\tt install()} method to handle the
+specifics of particular packages. Additionally,
+Spack implements an embedded domain-specific language (DSL).  It provides
+special directives such as {\tt depends\_on} and {\tt version} that add
+metadata to the package class.
 
-Figure~\ref{fig:mpileaks} shows the package for \mpileaks, an LLNL-developed
-tool for finding leaks in MPI programs.
-Inside the {\tt MpiLeaks} class, the package provides a text description
-and a homepage, as well as 
-a download URL.  Next, two {\tt version} directives identify known versions
-of the package, and MD5 checksums ensure they can be downloaded safely.
+Figure~\ref{fig:mpileaks} shows the package for \mpileaks, a tool developed
+at LLNL to find memory leaks in MPI programs.
+The {\tt MpiLeaks} class first provides simple metadata: a text description,
+a homepage, and a download URL.  
+Next, two {\tt version} directives identify known versions and provide
+MD5 checksums used to verify downloads.
 Below this, two {\tt depends\_on}
-directives indicate prerequisites that must be installed before \mpileaks.
-Last, each package defines an {\tt install()} method, which contains the
-commands used to build the package.  Spack's DSL allows shell
-commands to be invoked as Python functions. Here, the {\tt install()} 
-method invokes the familiar {\tt configure}, {\tt make}, and
-{\tt make install} build commands, as a shell script would.
+directives indicate prerequisite packages that must be installed before \mpileaks.
+Last, the {\tt install()} method contains the commands used to build
+the tool.  Spack's DSL allows shell commands to be invoked as Python functions,
+and the {\tt install()} method invokes {\tt configure},
+{\tt make}, and {\tt make install} commands as a shell script would.
 
 
 
