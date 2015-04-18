@@ -33,7 +33,7 @@ to Spack. Python modules now use the {\tt extends('python')} directive instead o
 Each module installs into its own prefix like any other package,
 and each module depends on a particular Python installation.
 Additionally, we added the capability to {\tt activate} and {\tt deactivate} an
-extension within its dependent Python installation.  When this happens, each file
+extension within its dependent Python installation.  During the activate operation, each file
 in the module prefix is symbolically linked into the Python installation prefix, as though it were
 directly installed within the Python instance. If any file conflict would arise from this operation,
 the activate operation fails and notifies the user.
