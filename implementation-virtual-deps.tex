@@ -32,7 +32,7 @@ built with another.  BLAS implementations such as ATLAS, LAPACK-BLAS, MKL, etc.
 are another common example.
 
 At LLNL, we frequently need to build tools with many versions of MPI to support
-the many different applications that are run at our center.
+the many different applications that run at our center.
 However, MPI has no ABI, so applications cannot simply be re-linked;
 they must be recompiled and reinstalled. 
 Complicating matters, the MPI interface is versioned, and some
@@ -55,8 +55,8 @@ composing software.
 
 Figure~\ref{fig:virtual-deps} shows how packages provide
 virtual interfaces in Spack.  The spec syntax is used to concisely
-associate ranges of {\tt mpi} versions {\tt mvapich2} and {\tt mpich}
-The {\tt mpileaks} package requires {\tt mpi} but it does not constrain the version.
+associate ranges of {\tt mpi} versions for the {\tt mvapich2} and {\tt mpich} packages.
+The {\tt mpileaks} package requires {\tt mpi}, but it does not constrain the version.
 Any version of {\tt mvapich2} or {\tt mpich} could be used to to satisfy the {\tt mpi}
 constraint. The Gerris CFD library, however, needs MPI version 2 or higher.  So any
 version except {\tt mpich} 1.x could be used to satisfy the constrained dependency.
