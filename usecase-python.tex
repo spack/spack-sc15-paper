@@ -3,6 +3,61 @@
 \subsection{Support for extensible languages}
 \label{sec:usecase-python}
 
+Python is becoming increasingly popular for HPC applications, 
+both due to its flexibility as a language and due to its excellent support
+for calling into native numerical code and achieving high performance. 
+Python applications frequently make native calls into functions in
+compiled numerical libraries like NumPy, FFTW, ATLAS, and other linear
+algebra libraries.
+
+LC maintains a number of Python installations for production application teams,
+and maintenance of these repositories has been increasingly complex for
+some time.  LC must maintain different Python installations containing different
+versions of Python modules for different code teams, and the modules must be able
+to make calls into optimized native libraries, for maximum performance.
+Python itself was easy to package with Spack; we built a package for it like any
+other and it compiled and ran
+
+
+they must also call into high performance math libraries. Python installations
+suffer from many of the environment problems we mentioned in Sections~\ref{env-rpath}.
+
+
+
+
+Python 
+
+
+ \cite{eby:setuptools}
+
+
+Python's package management 
+
+
+To support code teams using Python, LC maintains a number of 
+
+both for rapid prototyping 
+
+
+
+- LC maintains python installations for existing codes.
+
+- maintain separate instances for different code teams
+	- each code team needs to have particular python packages installed
+	- need fast builds of math libraries to go with python installs
+
+- model for python package installation doesn't really fit spack
+
+
+
+- implemented best of both worlds solution:
+	- combine spack's flexibility with python meta-package-manager convenience
+
+	- many other languages fit this model; could use it w/them.
+
+
+
+
 \todo{1 pg}
 
 \begin{verbatim}
