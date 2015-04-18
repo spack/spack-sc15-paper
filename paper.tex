@@ -53,6 +53,13 @@
 \setlength\abovecaptionskip{.2em}
 \setlength\belowcaptionskip{.6em}
 
+% ATM: pull in space between floats (figures, tables) and text
+%\setlength{\floatsep}{1\baselineskip}
+\setlength{\floatsep}{5pt}
+%\setlength{\textfloatsep}{1\baselineskip}
+\setlength{\textfloatsep}{5pt}
+\setlength{\intextsep}{1\baselineskip}
+
 % ---------------------------------------------------------------
 % Automatically sort citations by number so that I don't have to.
 % ---------------------------------------------------------------
@@ -126,6 +133,7 @@ Bringing order to HPC software chaos}
 % Sections
 % ---------------------------------------------------------------
 \input{introduction}
+\newpage
 \input{motivation}
 \input{implementation}
 \input{usecases}
