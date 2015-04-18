@@ -47,8 +47,9 @@ her {\tt install} function installs the package {\it into} the {\tt prefix},
 but Spack ensures that {\tt prefix} is computed in such a way that it is
 unique for every configuration of a package.  To further simplify 
 package implementation, Spack implements an embedded domain-specific
-language (DSL).  The DSL provides special directives such as {\tt depends\_on},
-{\tt version}, {\tt provides}, and {\tt patch} that add metadata
+language (DSL), similar to that of Homebrew~\cite{homebrew}.
+The DSL provides special directives such as {\tt depends\_on},
+{\tt version}, and {\tt provides} that add metadata
 to the package class.
 
 Figure~\ref{fig:mpileaks} shows the package for \mpileaks, a tool developed
