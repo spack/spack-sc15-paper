@@ -83,10 +83,10 @@ Spack default                  & {\tt / \$arch / \$compiler-\$comp\_version / \$
 \paragraph{Manual and Semi-automated Installation}
 
 To cope with software diversity, many HPC sites use a combination of existing
-packages managers and either manual or semi-automated software installation.  
+package managers and either manual or semi-automated software installation.  
 For the baseline OS, many sites maintain traditional binary
 packages using the vendor's package manager. LLNL maintains a Linux 
-distribution, CHAOS~\cite{chaos} for this purpose.
+distribution, CHAOS~\cite{chaos} for this purpose, which is managed by RPM.
 
 For more specific builds, many sites adhere to detailed naming conventions
 that encode information in file system paths. 
@@ -117,13 +117,14 @@ in nonstandard locations with ambiguous names.
 
 Diverse software versions not only present problems for build and installation;
 they also complicate the runtime environment. When launched, an executable
-must determine the location of its dependency libraries, or it will not run.
+must determine the location of its dependency libraries, or it will not run,
+or even worse, it may find the wrong dependencies and subtly produce incorrect results.
 Statically linked binaries do not have this issue, but modern
 operating systems make extensive use of dynamic linking.
 By default, the dynamic loader on most systems is configured to search only
 system library paths such as {\tt /lib}, {\tt /usr/lib}, and
 {\tt /usr/local/lib}.  If binaries are installed in other locations, the
-{\it user} who runs the program (often not the user or staff member who
+{\it user} who runs the program (often not the same person who
 installed the binary) must typically add dependency library paths to
 {\tt LD\_LIBRARY\_PATH} (or a similar environment variable) so that the loader
 can find them.
@@ -141,7 +142,7 @@ The alternative to per-user environment settings is to embed library search
 paths in installed binaries at compile time. When set this way, the search 
 path is called an {\tt RPATH}. {\tt RPATHs} and environment modules are not 
 mutually exclusive. Modules can still be used to set {\tt MANPATH}, {\tt PATH}
-and variables, but adding {\tt RPATHs} ensures that binaries run correctly 
+and other variables, but adding {\tt RPATHs} ensures that binaries run correctly 
 regardless of whether the right module is loaded. LC installs software with 
 both {\tt RPATHs} and {\tt dotkit}~\cite{dotkit} modules.
 
@@ -157,11 +158,11 @@ in Nix is installed in a unique prefix, but Nix does not have a human-readable
 naming convention.  Instead, Nix determines the prefix by hashing the package
 file along with its dependencies.
 
-Hashdist~\cite{hashdist} is a meta-build system and package manager for HPC.
+HashDist~\cite{hashdist} is a meta-build system and package manager for HPC.
 Like Nix, it uses cryptographic versioning, and it archives installations
 in a git repository so that they can be recalled on demand. 
 %
-Both Nix and hashdist use {\tt RPATHs} in their packages to ensure that
+Both Nix and HashDist use {\tt RPATHs} in their packages to ensure that
 libraries are found correctly. 
 
 The EasyBuild~\cite{hoste+:pyhpc12} tool is in production use at
@@ -179,14 +180,14 @@ automated dependency management; it only checks whether a package's
 prerequisites have already been installed by the user.
 
 \paragraph{Gaps in current common practice}
-The cryptographic versioning of Nix and Hashdist is very flexible. It versions
+The cryptographic versioning of Nix and HashDist is very flexible. It versions
 the package {\it and} its dependency configuration, and can represent any
 configuration. However, users cannot navigate or query the installed software.
 The systems are in a sense ``write-only'':
 Nix does not even offer a way to ask for a package's dependencies.
 %
 EasyBuild and Smithy generate environment modules, which allow querying
-through their own interface. Naming in existing module systems, however, cannot
+through their own interface. Naming schemes used in existing module systems, however, cannot
 handle combinatoric versions. The Lmod authors call this the
 ``matrix problem``~\cite{mclay:lmod-tutorial}.
 
@@ -206,7 +207,7 @@ combination of compiler, MPI version, build options, and dependency versions
 requires tediously modifying many package files.
 %
 Indeed, the number of package files required for existing systems scales with
-the number of version {\it combinations}, not the number of packages, which.
+the number of version {\it combinations}, not the number of packages, which
 quickly becomes unmanageable.  As an example, the very flexible EasyBuild
 system has over 3,300 files for several permutations of only 600 packages. 
 Other systems have similar issues. HPC sites need a mechanism to 
