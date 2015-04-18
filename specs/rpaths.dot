@@ -1,6 +1,6 @@
 
 digraph {
-    rankdir=TB;
+    rankdir=LR;
     node[shape=box,fontname=monaco,fontsize=10];
 
     mpileaks2[style=dashed]

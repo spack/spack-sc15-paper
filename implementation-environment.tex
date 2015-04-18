@@ -111,14 +111,4 @@ load the appropriate version for that compiler and MPI implementation.  Spack
 understands where packages would fit in the Lmod hierarchy, allowing it to create 
 Lmod module files.  
 
-\begin{figure}\centering
-	\includegraphics[width=.6\linewidth]{specs/rpaths.pdf}
-	\newline
-	\verb|spack install mpileaks ^mpich|\newline
-	\verb|spack install mpileaks ^openmpi|
-	\caption{
-		Installing {\tt mpileaks} with MPICH (solid), then with OpenMPI (dashed).  The {\tt dyninst} subtree is
-		reused, but {\tt mpileaks} and {\tt callpath} must be rebuilt.
-	}
-\end{figure}
 
