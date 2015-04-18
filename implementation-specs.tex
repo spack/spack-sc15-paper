@@ -38,22 +38,22 @@
 \subsection{Spack Specs}\label{sec:specs}
 
 Using the simple script in Figure~\ref{fig:mpileaks}, Spack can build many different
-versions and configurations of the {\tt mpileaks} package.  In traditional port systems, 
+versions and configurations of the {\tt mpileaks} package.  In traditional port systems,
 package code is structured to build a single version of a package, but in Spack, each
 package file is a {\it template} that can be built in many different ways.  The build is
-{\it parameterized} so that it can be configured many different ways.  
+{\it parameterized} so that it can be configured many different ways.
 Spack calls a single build configuration a {\it spec},
- and the {\tt spec} object passed to {\tt install()} 
+ and the {\tt spec} object passed to {\tt install()}
 is how the Spack system encapsulates build parameters for package authors.
 
 \subsubsection{Structure}
-To understand how specs work, consider the {\tt mpileaks} package structure.  
+To understand how specs work, consider the {\tt mpileaks} package structure.
 Metadata in the {\tt Mpileaks} class ({\tt version}, {\tt depends\_on}, etc.) describe
-its relationships with other packages.  There are two direct dependencies: 
+its relationships with other packages.  There are two direct dependencies:
 the {\tt callpath} library and {\tt mpi}.  Spack recursively inspects the class definitions
 for each dependency and constructs a graph of their relationships.  The result
 is a directed, acyclic graph (DAG) of dependencies\footnote{Spack currently disallows
-circular dependencies.}.  
+circular dependencies.}.
 %
 To guarantee a consistent build, and to avoid ABI incompatibility, the DAG
 is constructed so that there is only {\it one} version of any particular package.  Note
@@ -64,7 +64,7 @@ DAGs for {\tt mpileaks} are shown in Figure~\ref{fig:specs}.
 Each node is a package and has five configuration parameters that control
 how it will be built: 1) the package version, 2) the compiler to
 build with, 3) the compiler version, 4) named compile-time build options, or {\it variants},
-and 5) the target architecture.  
+and 5) the target architecture.
 
 
 \subsubsection{Configuration Complexity}
@@ -127,7 +127,7 @@ of the configuration space, without the complexity of remembering all of them.
 7&\small\verb|mpileaks @1.2:1.4 %gcc@4.7.5 -debug =bgq| \newline
       \verb|  ^callpath @1.1 %gcc@4.7.2| \newline
       \verb|  ^openmpi @1.4.7|                & \small%
-      {\tt mpileaks} at any version between 1.2 and 1.4 (inclusive), built with gcc 4.7.5, 
+      {\tt mpileaks} at any version between 1.2 and 1.4 (inclusive), built with gcc 4.7.5,
       without the debug option, for BG/Q, linked with {\tt callpath} version 1.1
       and building {\tt callpath} with {\tt gcc} version 4.7.2, linked with {\tt openmpi} version 1.4.7.    \\
 \hline
@@ -157,7 +157,7 @@ command:
 %
 Here, {\tt mpileaks} is the simplest possible spec---a single identifier.
 Spack parses it and converts it into the DAG shown in Figure~\ref{fig:specs-mpileaks}.
-Note that even though the spec contains no dependency information, it is still 
+Note that even though the spec contains no dependency information, it is still
 converted to a full DAG, based on the directives supplied in package files. Since there
 are no constraints on the nodes, Spack has considerable leeway for how to build the package,
 and we say that the package is {\it unconstrained}.
@@ -188,10 +188,10 @@ The caret (\verb|^|) denotes constraints for a particular dependency.  In the DA
 we now see that there are version constraints on {\tt callpath} and {\tt libelf},
 and that the user has asked for the debug variant of the {\tt callpath} library.
 
-Recall that Spack guarantees there will be only a single version of any package in 
-the spec DAG.  Therefore, within the same DAG, each dependency can be uniquely identified by 
+Recall that Spack guarantees there will be only a single version of any package in
+the spec DAG.  Therefore, within the same DAG, each dependency can be uniquely identified by
 only its package name.  The user does not have to think about DAG connectivity to add
-constraints.  She need only know that a package depends, somehow, on {\tt callpath}. 
+constraints.  She need only know that a package depends, somehow, on {\tt callpath}.
 For the same reason, the constraint order does not matter; dependency constraints
 can appear in arbitrary order.
 
@@ -201,12 +201,12 @@ notation to cover the rest of the HPC package parameter space.
 
 {\bf Versions.}
 The version constraint, denoted with {\tt @}, was already covered above. Versions
-can be precise ({\tt @2.5.1}) or denote a potentially open-ended 
+can be precise ({\tt @2.5.1}) or denote a potentially open-ended
 range ({\tt @2.5:}, {\tt @2.5:4.4}).
 
 The package in Figure~\ref{fig:mpileaks} lists two ``safe'' versions with checksums, but
 in our experience users frequently want bleeding-edge versions.  Package managers
-frequently lag behind the latest releases. 
+frequently lag behind the latest releases.
 Spack has a capability to extrapolate URLs from versions,
 using the package's {\tt url} attribute as a model\footnote{This works
 for packages with consistently named URLs}.  The user can request a specific
@@ -216,7 +216,7 @@ model to scrape webpages and find new versions as they become available.
 
 {\bf Compilers.}
 With a compiler constraint (shown on line 3) the user
-simply adds {\tt \%} followed by its name, along with an optional compiler version 
+simply adds {\tt \%} followed by its name, along with an optional compiler version
 specifier.  Spack compiler names, e.g. {\tt gcc}, refer to the full compiler {\it toolchain},
 i.e. the C, C++, Fortran 77, and Fortran 90 compilers.  Spack can auto-detect
 compiler toolchains if they are in the user's {\tt PATH} or they can be registered manually
@@ -229,7 +229,7 @@ so the {\tt mpileaks} package implementor must check the spec and handle the cas
 where debug is enabled ({\tt +debug}) and disabled (with {\tt -debug}
 or {\tt ~debug}).  The names simplify the versioning and prevent
 Spack's configuration space from becoming too fine-grained.
-It would violate our goal of conciseness, for example, to include detailed 
+It would violate our goal of conciseness, for example, to include detailed
 compiler flags in spec syntax, but known sets of flags can simply be named.
 
 {\bf Cross-compilation.}
@@ -258,7 +258,7 @@ This constraint will be incorporated into the initial DAG node generated from
 the ROSE package.
 
 Spack's {\tt patch} directive also accepts spec syntax as a predicate in an
-optional {\tt when} parameter.  For example, these concise directives in the 
+optional {\tt when} parameter.  For example, these concise directives in the
 Python package ensure that specific patches are applied to the Python source
 code when it is being built on Blue Gene/Q, with the appropriate compiler:
 %
@@ -287,73 +287,51 @@ In our experience maintaining packages at LLNL, we have sometimes had to change
 entire package build scripts due to large changes in the way certain packages build.
 This can be very cumbersome, and it is difficult to maintain both the old and new
 version of a build script, but we must if we want to keep installing older versions
-for users who rely on them.  
+for users who rely on them.
 
+
+%class Dyninst(Package):
+%    """"Dyninst binary instrumentation and analysis tool."""
+%    url="http://www.paradyn.org/release8.1/DyninstAPI-8.1.1.tgz"
+%    version('8.1.1', 'd1a04e995b7aa70960cd1d1fac8bd6ac')
+%    depends_on("libelf")
+%    depends_on("libdwarf")
+%    depends_on("boost@1.42:")
+%
 \begin{figure}
 \begin{minted}[linenos,
                numbersep=5pt,
 			   fontsize=\scriptsize,
                frame=lines,
                framesep=2mm]{python}
-class Dyninst(Package):
-    """"Dyninst binary instrumentation and analysis tool."""
-    url="http://www.paradyn.org/release8.1/DyninstAPI-8.1.1.tgz"
-    version('8.1.1', 'd1a04e995b7aa70960cd1d1fac8bd6ac')
-    depends_on("libelf")                                                                            
-    depends_on("libdwarf")                                                                          
-    depends_on("boost@1.42:")
-    
-    # default build version uses cmake                                                                        
-    def install(self, spec, prefix):
-        with working_dir('spack-build', create=True):                                               
+    def install(self, spec, prefix):  # default build uses cmake
+        with working_dir('spack-build', create=True):
             cmake('..', *std_cmake_args)
-            make()                                                                                  
-            make("install")                                                                         
+            make()
+            make("install")
 
-    # when version is 8.1 or lower, use configure.                                                                                                    
-    @when('@:8.1')                                                                                  
-    def install(self, spec, prefix):                                                                
-        configure("--prefix=" + prefix)                                                             
-        make()                                                                                      
-        make("install")     
+    @when('@:8.1')                    # <= 8.1 uses autotools
+    def install(self, spec, prefix):
+        configure("--prefix=" + prefix)
+        make()
+        make("install")
 \end{minted}
 \caption{
-    Specialized {\tt install} method in Dyninst. 
+    Specialized {\tt install} method in Dyninst.
 	\label{fig:specialization}
 }
 \end{figure}
 
 For cases like this, Spack provides functionality that allows Python functions to have
 multiple definitions, with some specialized for particular configurations of the package.
-This allows us to have two separate implementations of {\tt install} or {\it any} method 
+This allows us to have two separate implementations of {\tt install} or {\it any} method
 in a package class. Figure~\ref{fig:specialization} shows how this is used in the Dyninst
-package.  The {\tt @when} directive is a Python decorator: a higher order function that 
+package.  The {\tt @when} directive is a Python decorator: a higher order function that
 takes a function definition as a parameter and returns a new function to put in its place.
-We replace the function with a callable multi-function dispatch object, and we 
+We replace the function with a callable multi-function dispatch object, and we
 integrate the predicate check into the function dispatch mechanism.  Here, the
 {\tt when} condition is true when Dyninst is at version 8.1 or lower, and in those cases
 the package will use the {\tt configure}-based build.  By default if no predicate matches,
 {\tt install} will use the default CMake-based implementation. The simple {\tt @when}
-annotation allows us to maintain our old build code alongside the new version without 
+annotation allows us to maintain our old build code alongside the new version without
 accumulating complex logic in a single {\tt install} function.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

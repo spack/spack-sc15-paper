@@ -3,50 +3,20 @@
 \subsection{Versioned Virtual Dependencies}\label{sec:virtual}
 
 \begin{figure}
-%
-\begin{subfigure}{\linewidth}
 	\begin{minted}[numbersep=5pt,
 	              fontsize=\scriptsize,
 	              frame=lines,
                   framesep=2mm]{python}
-class Mvapich2(Package):    
-    provides('mpi@:2.2', when='@1.9')
-    provides('mpi@:3.0', when='@2.0')
+ # providers of mpi                       # mpi dependents
+ class Mvapich2(Package):                 class Mpileaks(Package):
+     provides('mpi@:2.2', when='@1.9')        depends_on('mpi')
+     provides('mpi@:3.0', when='@2.0')           ...
+     ...                                  class Gerris(Package):
+ class Mpich(Package):                        depends_on('mpi@2:')
+     provides('mpi@:3', when='@3:')           ...
+     provides('mpi@:1', when='@1:')
+     ...
 \end{minted}
-	\caption{%
-		{\tt mvapich2} provides {\tt mpi} interface with specific versions.
-		\label{fig:virtual-deps-provides}
-	}
-\end{subfigure}
-%
-\begin{subfigure}{\linewidth}
-	\begin{minted}[numbersep=5pt,
-	              fontsize=\scriptsize,
-	              frame=lines,
-                  framesep=2mm]{python}
-class Mpileaks(Package):    
-    depends_on('mpi')
-\end{minted}
-	\caption{%
-		{\tt mpileaks} depends on any MPI version.
-		\label{fig:virtual-deps-mpileaks}
-	}
-\end{subfigure}
-%
-\begin{subfigure}{\linewidth}
-	\begin{minted}[numbersep=5pt,
-	              fontsize=\scriptsize,
-	              frame=lines,
-                  framesep=2mm]{python}
-class Gerris(Package):
-    depends_on('mpi@2:')
-\end{minted}
-	\caption{%
-		Gerris CFD solver requires MPI at version 2 or higher.
-		\label{fig:virtual-deps-depends}
-	}
-\end{subfigure}
-%
 \caption{
 	Virtual dependencies.
 	\label{fig:virtual-deps}
@@ -83,15 +53,13 @@ interface versions and BLAS levels to be represented directly, and Spack can
 handle the details of managing complex constraints while the user focuses on 
 composing software.
 
-Figure~\ref{fig:virtual-deps-provides} shows how packages can provide
+Figure~\ref{fig:virtual-deps} shows how packages provide
 virtual interfaces in Spack.  The spec syntax is used to concisely
-associate a range of {\tt mpi} versions (up to 2.2) with Mvapich version 1.9.
-In Figure~\ref{fig:virtual-deps-mpileaks}, we see that {\tt mpileaks} requires
-MPI but is unconstrained on version.  Since this spec satisfies the constraints in 
-the {\tt mvapich2} package, {\tt Mvapich2} can be used to satisfy the {\tt mpi}
-dependency in {\tt mpileaks}.  Similarly, the Gerris CFD library needs MPI
-at version 2 or higher -- either {\tt mvapich2} 1.9 or 2.0 can be used to satisfy
-this constrained dependency.
+associate ranges of {\tt mpi} versions {\tt mvapich2} and {\tt mpich}
+The {\tt mpileaks} package requires {\tt mpi} but it does not constrain the version.
+Any version of {\tt mvapich2} or {\tt mpich} could be used to to satisfy the {\tt mpi}
+constraint. The Gerris CFD library, however, needs MPI version 2 or higher.  So any
+version except {\tt mpich} 1.x could be used to satisfy the constrained dependency.
 
 
 %{\bf Dependencies.}
