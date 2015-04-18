@@ -80,7 +80,7 @@ use of {\tt RPATHs} in
 installed binaries.  This causes applications built by Spack to run correctly
 {\it regardless of the environment}.  Third, because compiler wrappers add 
 header and library search paths for dependencies, header and library detection
-tests run by most build systems succeed automatically, {\it without}
+tests that are run by most build systems succeed automatically, {\it without}
 the need to use special arguments for nonstandard locations.  {\tt configure}
 commands in Spack's {\tt install} function can have fewer arguments, and can
 be written as they would be for system installs.  This reduces complexity
@@ -94,9 +94,9 @@ bleeding-edge platforms or new, esoteric compilers.
 \label{sec:envmodule}
 In addition to managing the build-time environment, Spack can assist in managing
 the run-time environment.  A package may need environment variables like {\tt PATH}, 
-{\tt LD_LIBRARY_PATH}, or {\tt MANPATH} set before they can be used.  
+{\tt LD_LIBRARY_PATH}, or {\tt MANPATH} set before it can be used.  
 As discussed in Section~\ref{sec:motivation}, many sites rely on environment 
-modules to set up the runtime environment.  Spack can automatically create simple
+modules to setup the runtime environment.  Spack can automatically create simple
 dotkit~\cite{dotkit} and Module configuration files for its packages, allowing 
 users to setup their runtime environment using familiar systems.  
 %
