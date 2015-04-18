@@ -5,8 +5,8 @@
 We have discussed Spack's internal software DAG model, and we have shown
 how the spec syntax can be used to quickly specify a partially constrained
 software DAG.  We say such a DAG is {\it abstract}, i.e. it could potentially describe
-more than one unique software configuration. Before Spack builds a spec, it
-must ensure the folioing conditions:
+more than one software configuration. Before Spack builds a spec, it
+must ensure the following conditions:
 \begin{enumerate}
 \item No package in the spec DAG is missing dependencies.
 \item No package in the spec DAG is virtual.
@@ -91,6 +91,7 @@ query the environment and disambiguate complex environment settings.  If the bui
 ill-defined, and the desired build configuration is often nonspecific, and it is these
 ambiguities that cause many build systems to fall over when faced with too many configuration
 options.
+
 
 In spack, build scripts are free from this concern, because the package author
 is guaranteed that a package's build spec is concrete at {\tt install()} time.
