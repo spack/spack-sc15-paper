@@ -84,7 +84,7 @@ of the configuration space, without the complexity of remembering all of them.
 \subsubsection{Spec Syntax}\label{sec:syntax}
 
 \begin{figure}
-\begin{grammar}
+\begin{grammar}\small
   <spec>         ::= <id> [ constraints ]
 
   <constraints>   ::= \{ `@' <version-list> | `+' <variant> \newline
@@ -137,7 +137,6 @@ of the configuration space, without the complexity of remembering all of them.
 	Spack build spec syntax examples and their meaning.
 	\label{tab:specs}
 }
-\vspace{-15pt}
 \end{table*}
 
 We have developed a syntax for specs that allows users to specify
@@ -201,7 +200,7 @@ simple to more complex. From these examples, we can see that Spack offers constr
 notation to cover the rest of the HPC package parameter space.
 
 {\bf Versions.}
-The version constraint, denoted with {\tt @}, was already covered above. Versions
+Version constraints, denoted with {\tt @}, were already covered above. Versions
 can be precise ({\tt @2.5.1}) or denote a range ({\tt @2.5:4.4}),
 which may be open-ended ({\tt @2.5:}).
 

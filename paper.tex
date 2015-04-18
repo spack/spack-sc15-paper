@@ -15,19 +15,19 @@
 % Also add below skip settings to minted.
 % ---------------------------------------------------------------
 \usepackage{minted}
-\makeatletter
-\newlength\minted@belowskip
-\define@key{minted@opt}{belowskip}[\@topsepadd]
-{\setlength{\minted@belowskip}{#1}}
-\def\minted@endparenv{%
-  \addpenalty\@endparpenalty\addvspace\minted@belowskip\@endpetrue}
-\def\FV@EndList{%
-  \FV@ListProcessLastLine
-  \FV@EndListFrame
-  \minted@endparenv
-  \endgroup
-  \@endpetrue}
-\makeatother
+%\makeatletter
+%\newlength\minted@belowskip
+%\define@key{minted@opt}{belowskip}[\@topsepadd]
+%{\setlength{\minted@belowskip}{#1}}
+%\def\minted@endparenv{%
+%  \addpenalty\@endparpenalty\addvspace\minted@belowskip\@endpetrue}
+%\def\FV@EndList{%
+%  \FV@ListProcessLastLine
+%  \FV@EndListFrame
+%  \minted@endparenv
+%  \endgroup
+%  \@endpetrue}
+%\makeatother
                                                                          
 % ---------------------------------------------------------------
 % Inline grammar (for EBNF)
@@ -55,10 +55,10 @@
 
 % ATM: pull in space between floats (figures, tables) and text
 %\setlength{\floatsep}{1\baselineskip}
-\setlength{\floatsep}{5pt}
+%\setlength{\floatsep}{5pt}
 %\setlength{\textfloatsep}{1\baselineskip}
-\setlength{\textfloatsep}{5pt}
-\setlength{\intextsep}{1\baselineskip}
+%\setlength{\textfloatsep}{5pt}
+%\setlength{\intextsep}{1\baselineskip}
 
 % ---------------------------------------------------------------
 % Automatically sort citations by number so that I don't have to.

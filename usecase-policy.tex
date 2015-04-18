@@ -15,12 +15,12 @@ how packages are built and installed at their site.
 \subsubsection{Package Views}
 \label{sec:package-views}
 
-While Spack can easily create a dozen installations of a package like {\tt mpileaks}
-for different compilers and MPI implementations,
-it can be difficult for an end-user to determine which of those dozen packages should be used with their application.
+While Spack can easily create many installations of a package like {\tt mpileaks}
+for different compilers and MPI implementations, end users may find Spack's directory layout
+confusing, and they may not be able to find the right libraries.
 As discussed in Section~\ref{sec:envmodule},
 environment modules are commonly used on supercomputer systems to solve this problem,
-and Spack allows the package administrator to automatically create module and dotkit files for packages that Spack installs.
+and Spack allows the package author to automatically create module and dotkit files for packages that Spack installs.
 
 However, even when modules and dotkits are available,
 many users will go directly through the filesystem to access package installs.
@@ -29,45 +29,45 @@ which is ideal for maintaining multiple package installations, but may be diffic
 A version of {\tt mpileaks}, for example, may be installed in a location like
 %
 \begin{minted}[fontsize=\small]{bash}
-    spack/opt/chaos_5_x86_64_ib/ gcc@4.9.2/mpileaks@1.0-db465029
+spack/opt/chaos_5_x86_64_ib/gcc@4.9.2/mpileaks@1.0-db465029
 \end{minted}
 %
 Spack thus allows the creation of views, which are a symbolic-link based directory layout of packages.
 Views provide a human-readable directory layout,
 which can be taylored to fit alongside existing directory layouts or used to create new layouts.
-For example, the above {\tt mpileaks} package may have a view that creates a symlink in
+For example, the above {\tt mpileaks} package may have a view that creates a link in
 {\tt /opt/mpileaks-1.0-openmpi} to the Spack installation of {\tt mpilleaks}.
-The same package install may be referenced by multiple symlinks and views,
-so the above package could also be symlinked from a more generic {\tt /opt/mpileaks-openmpi}
-symlink (which is useful for users who don't want to hardcode a specific version).
-Views can also be used to create symlinks to specific executables or libraries in an install,
-so a Spack-built {\tt gcc 4.9.2} install may have a view that creates symlinks from
+The same package install may be referenced by multiple links and views,
+so the above package could also be linked from a more generic {\tt /opt/mpileaks-openmpi}
+link (which is useful for users who don't want to hardcode a specific version).
+Views can also be used to create symbolic links to specific executables or libraries in an install,
+so a Spack-built {\tt gcc 4.9.2} install may have a view that creates links from
 {\tt /bin/gcc49} and {\tt /bin/g++49} to the appropriate {\tt gcc} and {\tt g++} executables.
 
-Views are configured through a {\tt spackconfig} file, which can be setup at a site-wide level or for individual users.
+Views are configured through a {\tt spackconfig} file, which can be set up at the site or user level.
 For each package or set of packages, the {\tt spackconfig} file contains rules
-describing the symlinks that should point into that package.
-The symlink names can be parameterized.
-For example, the above {\tt mpileaks} symlink might have been created by rule like
+describing the links that should point into that package.
+The link names can be parameterized.
+For example, the above {\tt mpileaks} symbolic link might have been created by a rule like:
 %
 \begin{minted}[fontsize=\small]{bash}
     /opt/${PACKAGE}-${VERSION}-${MPINAME}
 \end{minted}
 %
-When Spack installs or removes packages,
-symlinks are automaticaly created, deleted, or updated according to these rules.  
+On installation or removal,
+links are automatically created, deleted, or updated according to these rules.  
 
 Spack's views are a projection from a point in a high-dimension space
 (the concretized spec, which fully specifies all parameters) to point in a lower-dimension space
-(the symlink name, which may only specify a few parameters).
-Thus several package installations may map to the same symlink.
-For example, the above {\tt mpileaks} symlink could point to an {\tt mpileaks} compiled with
-{\tt gcc} or {\tt icc} -- the compiler parameter is not part of the symlink.
+(the link name, which may only specify a few parameters).
+Thus several package installations may map to the same link.
+For example, the above {\tt mpileaks} link could point to an {\tt mpileaks} compiled with
+{\tt gcc} or {\tt icc} -- the compiler parameter is not part of the link.
 To keep  package installations  consistent and reproducible,
-Spack has a well-defined mechanism for resolving conflicting symlinks.
+Spack has a well-defined mechanism for resolving conflicting links.
 Spack defines a sort order for packages, which arranges packages from ``most desired'' to ``least desired''.
-When a symlink could resolve to multiple package installations,
-Spack points the symlink at the most desired package.  
+When a symbolic link could resolve to multiple package installations,
+Spack points the link at the most desired package.  
 
 By default, Spack treats newer versions of packages compiled with newer compilers
 as more desirable than older packages built with older compilers.
@@ -82,10 +82,10 @@ These preferences could be stated by adding:
     compiler_order = icc,gcc@4.4.7
 \end{minted}
 %
-to the site's {\tt spackconfig} file, which would cause the ambigious {\tt mpileaks} symlink to point to an {\tt icc} installation.
+to the site's {\tt spackconfig} file, which would cause the ambigious {\tt mpileaks} link to point to an {\tt icc} installation.
 Any compiler left out of the compiler\_order setting is treated as less preferred than explicitly stated compilers.
 Spack can also be configured to treat specific package versions as more preferred than other versions,
-which can be useful if a new version is unstable and untested, and should not be advertised with symlinks.  
+which can be useful if a new version is unstable and untested, and should not be advertised with symbolic links.  
 
 
 By default, Spack stores its package files in a mainline repository that is present when users
@@ -96,7 +96,7 @@ mainline less stable, it can actually make sharing code between sites more diffi
 
 To support our own private packages, and to support those of LLNL code teams, Spack allows the creation of site-specific variants of packages.  Via the {\tt spackconfig} file, users can specify additional search directories for finding additional {\tt Package} classes.
 %
-The additional packages are like the {\tt mpileaks} package shown in Figure~\ref{fig:mpileaks}.  However, the extension packages can extend from not only {\tt Package}, but also any of Spack's built-in packages.   Custom packages can inherit from and replace the Spack's default packages, allowing sites to either tweak or completely replace Spack's build recipes.  To continue the previous example, a site can write a {\tt LocalSpindle} Python class, which inherits from Spack's {\tt Spindle} class.  {\tt LocalSpindle} may simply add additional configure flags to the {\tt Spindle} class, while leaving the dependencies and most of the build instructions from its parent class.  To keep builds deterministic and reproducable, Spack also tracks which {\tt Package} class drove a specific build. 
+The additional packages are like the {\tt mpileaks} package shown in Figure~\ref{fig:mpileaks}.  However, the extension packages can extend from not only {\tt Package}, but also any of Spack's built-in packages.   Custom packages can inherit from and replace the Spack's default packages, allowing sites to either tweak or completely replace Spack's build recipes.  To continue the previous example, a site can write a {\tt LocalSpindle} Python class, which inherits from Spack's {\tt Spindle} class.  {\tt LocalSpindle} may simply add additional configure flags to the {\tt Spindle} class, while leaving the dependencies and most of the build instructions from its parent class.  For reproducibility, Spack also tracks the {\tt Package} class that drove a specific build. 
 
 
 
