@@ -14,10 +14,10 @@ Many packages used at LLNL have a profusion of build options, and specifying the
 correctly often requires tedious experimentation.  This is due to lack of
 build standards and to the diversity of HPC environments.  
 For example, in some packages that depend on the {\tt Silo} library,
-the {\tt ---with-silo} parameter takes a path to {\tt Silo}'s installation prefix.
+the \verb|--with-silo| parameter takes a path to {\tt Silo}'s installation prefix.
 In others, it takes the {\tt include} and {\tt lib} subdirectories,
 separated by a comma.
-The {\tt install()} method in Spack's package files allows us to record
+The {\tt install} method in Spack's package files allows us to record
 precise build incantations for later reuse.
 
 %{\bf Environment isolation.}
@@ -30,15 +30,15 @@ For example, there are two versions of the {\tt libelf} library used by
 LLNL performance tools. One is distributed with RedHat Linux, while another
 publicly available version has the same API but an incompatible ABI.
 Failure to specify the right version at build time has caused many
-inexplicable crashes.
+unexpected crashes.
 %
-Spack manages the build environment by running the {\tt install} invocation
+Spack manages the build environment by running each {\tt install} invocation
 in a new process.  It helps packages find dependencies 
 correctly, by setting
 {\tt PATH}, {\tt PKG\_CONFIG\_PATH}, {\tt CMAKE\_PREFIX\_PATH}, and
 {\tt LD\_LIBRARY\_PATH} to include the dependencies of the current build.
 These variables are commonly used by build systems to locate dependencies,
-and setting them helps to ensure that incorrect libraries are detected.
+and setting them helps to ensure that correct libraries are detected.
 The isolated build environment also gives package authors 
 free reign to set build-specific environment variables without interfering
 with other packages.
@@ -65,19 +65,18 @@ environment variables
 wrapper scripts.  These variables are used by most build systems to select
 C, C++, and Fortran compilers, so they are generally picked up 
 automatically\footnote{If builds do not respect {\tt CC}, {\tt CXX}, etc.,
-wrappers can typically be added as arguments or inserted into Makefiles
+wrappers can be added as arguments or inserted into Makefiles
 by {\tt install}.}.
 When run, the wrappers insert include ({\tt -I}), library ({\tt -L}), and 
 {\tt RPATH} ({\tt -Wl,-rpath} or similar) flags into the argument list.
 These point to the {\tt include} and {\tt lib} directories of dependency
-library installations, where needed headers and libraries are typically located.
-After the modified argument list is constructed, the wrappers delegate it
-to the real compiler to execute.
+library installations, where needed headers and libraries are located.
+The wrappers then invoke the real compiler with the modified arguments.
 
 Spack's compiler wrappers have a number of useful effects.  First, they allow
-Spack to transparently parametrize the compiler for most builds and for
-Spack users to easily request a build with a new compiler swapped in.
-Second, they enforce the use of {\tt RPATHs} in
+Spack to transparently switch compilers in most builds.  This is how
+compiler options like {\tt \%gcc} are implemented.  Second, they enforce the
+use of {\tt RPATHs} in
 installed binaries.  This causes applications built by Spack to run correctly
 {\it regardless of the environment}.  Third, because compiler wrappers add 
 header and library search paths for dependencies, header and library detection
@@ -93,22 +92,28 @@ bleeding-edge platforms or new, esoteric compilers.
 
 \subsubsection{Environment Module Integration}
 \label{sec:envmodule}
-In addition to build-time environments, Spack can also assist in create run-time
-environments.  A package may need environment variables like {\tt PATH}, 
-{\tt LD_LIBRARY_PATH}, or {\tt MANPATH} set before they can be used.  Some users
-may prefer to manually point environment variables and paths at packages, and 
-Section~\ref{sec:package-views} discusses how Spack can assist those users.  
+In addition to managing the build-time environment, Spack can assist in managing
+the run-time environment.  A package may need environment variables like {\tt PATH}, 
+{\tt LD_LIBRARY_PATH}, or {\tt MANPATH} set before they can be used.  
 As discussed in Section~\ref{sec:motivation}, many sites rely on environment 
-modules to set their runtime environment.  Spack can automatically create 
+modules to set up the runtime environment.  Spack can automatically create simple
 dotkit~\cite{dotkit} and Module configuration files for its packages, allowing 
 users to setup their runtime environment using familiar systems.  
-
+%
 Future versions of Spack may also allow the creation of Lmod~\cite{mclay:lmod} 
-module files.  Lmod allows users to load packages using a heirarchy of module 
-load operations.  For example, a user might load a {\tt gcc} module and a 
-{\tt mvapich2} module, and a subsequent load of the {\tt MPILeaks} package would 
-load the appropriate version for that compiler and MPI implementation.  Spack 
-understands where packages would fit in the Lmod hierarchy, allowing it to create 
-Lmod module files.  
+hierarchies, as discussed in Section~\ref{sec:env-rpath}. Spack's rich 
+dependency information would allow such hierarchies to be generated automatically.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
