@@ -27,9 +27,12 @@ many users will go directly through the filesystem to access package installs.
 Spack installs packages into paths based on concretized specs,
 which is ideal for maintaining multiple package installations, but may be difficult for an end-user to navigate.
 A version of {\tt mpileaks}, for example, may be installed in a location like
-{\tt spack/opt/chaos\_5\_x86\_64\_ib/ gcc@4.9.2/mpileaks@1.0-db465029}.
-
-Spack thus allows the creation of views, which are a symlink-based directory layout of packages.
+%
+\begin{minted}[fontsize=\small]{bash}
+    spack/opt/chaos_5_x86_64_ib/ gcc@4.9.2/mpileaks@1.0-db465029
+\end{minted}
+%
+Spack thus allows the creation of views, which are a symbolic-link based directory layout of packages.
 Views provide a human-readable directory layout,
 which can be taylored to fit alongside existing directory layouts or used to create new layouts.
 For example, the above {\tt mpileaks} package may have a view that creates a symlink in
@@ -46,7 +49,11 @@ For each package or set of packages, the {\tt spackconfig} file contains rules
 describing the symlinks that should point into that package.
 The symlink names can be parameterized.
 For example, the above {\tt mpileaks} symlink might have been created by rule like
-{\tt /opt/\$\{PACKAGE\}-\$\{VERSION\}-\$\{MPINAME\} }.
+%
+\begin{minted}[fontsize=\small]{bash}
+    /opt/${PACKAGE}-${VERSION}-${MPINAME}
+\end{minted}
+%
 When Spack installs or removes packages,
 symlinks are automaticaly created, deleted, or updated according to these rules.  
 
@@ -69,11 +76,15 @@ preferences for deciding between MPI implementations and different compilers.
 A user can override Spack's default sort order through their {\tt spackconfig} file.
 For example, at one site users may typically use the Intel compiler,
 but some users also use the system's default {\tt gcc 4.4.7}.
-These preferences could be stated by adding the line
-{\tt compiler\_order = icc,gcc@4.4.7} to the site's {\tt spackconfig} file,
-which would cause the ambigious {\tt mpileaks} symlink to point to an {\tt icc} installation.
-Any compiler left out of the compiler\_order setting is treated as less prefered than explicitly stated compilers.
-Spack can also be configured to treat specific package versions as more prefered than other versions,
+These preferences could be stated by adding:
+%
+\begin{minted}[fontsize=\small]{bash}
+    compiler_order = icc,gcc@4.4.7
+\end{minted}
+%
+to the site's {\tt spackconfig} file, which would cause the ambigious {\tt mpileaks} symlink to point to an {\tt icc} installation.
+Any compiler left out of the compiler\_order setting is treated as less preferred than explicitly stated compilers.
+Spack can also be configured to treat specific package versions as more preferred than other versions,
 which can be useful if a new version is unstable and untested, and should not be advertised with symlinks.  
 
 
@@ -83,12 +94,9 @@ may have patches that are not useful outside of a certain company or organizatio
 this type of code back into a public repository does not often make sense, and if it makes the
 mainline less stable, it can actually make sharing code between sites more difficult.  
 
-To support our own private packages, and to support those of LLNL code teams, Spack allows he creation of site-specific variants of packages.  
-
-The build instructions for a Spack package are encoded in a Python class, which must inherit from Spack's {\tt Package} class.  Via the {\tt spackconfig} file, users can specify additional search directories for finding additional {\tt Package} classes.  These additional packages can inherit from and replace the Spack's default packages, allowing sites to either tweak or completely replace Spack's build recipes.  To continue the previous example, a site can write a {\tt LocalSpindle} Python class, which inherits from Spack's {\tt Spindle} class.  {\tt LocalSpindle} may simply add additional configure flags to the {\tt Spindle} class, while leaving the dependencies and most of the build instructions from its parent class.  To keep builds deterministic and reproducable, Spack also tracks which {\tt Package} class drove a specific build. 
-
-
-
+To support our own private packages, and to support those of LLNL code teams, Spack allows the creation of site-specific variants of packages.  Via the {\tt spackconfig} file, users can specify additional search directories for finding additional {\tt Package} classes.
+%
+The additional packages are like the {\tt mpileaks} package shown in Figure~\ref{fig:mpileaks}.  However, the extension packages can extend from not only {\tt Package}, but also any of Spack's built-in packages.   Custom packages can inherit from and replace the Spack's default packages, allowing sites to either tweak or completely replace Spack's build recipes.  To continue the previous example, a site can write a {\tt LocalSpindle} Python class, which inherits from Spack's {\tt Spindle} class.  {\tt LocalSpindle} may simply add additional configure flags to the {\tt Spindle} class, while leaving the dependencies and most of the build instructions from its parent class.  To keep builds deterministic and reproducable, Spack also tracks which {\tt Package} class drove a specific build. 
 
 
 
