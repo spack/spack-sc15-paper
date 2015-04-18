@@ -172,26 +172,26 @@ with a version constraint after the package name:
 We see from Figure~\ref{fig:specs-mpileaks-version} that the specific version constraint is
 placed on the {\tt mpileaks} node in the DAG, but the rest of the DAG remains unconstrained.
 If the user does not need a specific version of {\tt mpileaks}, but does require
-particular minimu version, then the user could use {\it version range} syntax.
+particular minimum version, then the user could use {\it version range} syntax.
 and write {\tt @2.3:}.  Likewise, for a version between 2.3 and 2.5.6, she would use
 {\tt @2.3:2.5.6} to designate the range. In these cases, the user can save build time if
-Spack already has a version installed that satisfies the constraint -- Spack will just take
-the already built instead of building a new one.
+Spack already has a version installed that satisfies the constraint -- Spack will just use
+the previously-built installation instead of building a new one.
 
-Figure~\ref{fig:specs-mpileaks-abstract} shows the recursive nature of spec syntax:
+Figure~\ref{fig:specs-mpileaks-abstract} shows the recursive nature of the spec syntax:
 %
 \begin{minted}[fontsize=\scriptsize]{bash}
     $ spack install mpileaks@2.3 ^callpath@1.0+debug ^libelf@0.8.11
 \end{minted}
 %
 The caret (\verb|^|) denotes constraints for a particular dependency.  In the DAG,
-we now see that there are now version constraints on {\tt callpath} and {\tt libelf},
-and the user has asked for the debug variant of the {\tt callpath} library.
+we now see that there are version constraints on {\tt callpath} and {\tt libelf},
+and that the user has asked for the debug variant of the {\tt callpath} library.
 
 Recall that Spack guarantees there will be only a single version of any package in 
 the spec DAG.  Therefore, within the same DAG, each dependency can be uniquely identified by 
 only its package name.  The user does not have to think about DAG connectivity to add
-constraints.  She need only know that a package depends, somehow on {\tt callpath}. 
+constraints.  She need only know that a package depends, somehow, on {\tt callpath}. 
 For the same reason, the constraint order does not matter; dependency constraints
 can appear in arbitrary order.
 
@@ -230,7 +230,7 @@ where debug is enabled ({\tt +debug}) and disabled (with {\tt -debug}
 or {\tt ~debug}).  The names simplify the versioning and prevent
 Spack's configuration space from becoming too fine-grained.
 It would violate our goal of conciseness, for example, to include detailed 
-compiler flags in the spec syntax, but known sets of flags can simply be named.
+compiler flags in spec syntax, but known sets of flags can simply be named.
 
 {\bf Cross-compilation.}
 To support cross-compilation, Spack includes the platform in the package spec (line 5).
@@ -245,7 +245,7 @@ command line, when {\tt spack install} is invoked.  However, the user is not the
 source of constraints.  Applications may require specific versions of dependencies,
 and it is often desirable to write constraints like this into a package file.  For
 example, the ROSE compiler only builds with a certain version of the {\tt boost} library.
-At first glance, the {\tt depends\_on()} directive in Figure~\ref{fig:mpileaks} look
+At first glance, the {\tt depends\_on()} directives in Figure~\ref{fig:mpileaks} look
 like they take simple package names.  However, a package name is also a spec, and
 the same constraint syntax usable from the command line can be applied inside directives.
 So, the ROSE compiler can simply write:
@@ -257,7 +257,7 @@ So, the ROSE compiler can simply write:
 This constraint will be incorporated into the initial DAG node generated from
 the ROSE package.
 
-Spack's {\tt patch} directive also accepts spec syntax as a predicates in an
+Spack's {\tt patch} directive also accepts spec syntax as a predicate in an
 optional {\tt when} parameter.  For example, these concise directives in the 
 Python package ensure that specific patches are applied to the Python source
 code when it is being built on Blue Gene/Q, with the appropriate compiler:
@@ -329,11 +329,11 @@ This allows us to have two separate implementations of {\tt install} or {\it any
 in a package class. Figure~\ref{fig:specialization} shows how this is used in the Dyninst
 package.  The {\tt @when} directive is a Python decorator: a higher order function that 
 takes a function definition as a parameter and returns a new function to put in its place.
-Here, we replace the function with a callable multi-function dispatch object, and we 
+We replace the function with a callable multi-function dispatch object, and we 
 integrate the predicate check into the function dispatch mechanism.  Here, the
 {\tt when} condition is true when Dyninst is at version 8.1 or lower, and in those cases
 the package will use the {\tt configure}-based build.  By default if no predicate matches,
-{\tt install} will simply use the default CMake-based implementation. The simple {\tt @when}
+{\tt install} will use the default CMake-based implementation. The simple {\tt @when}
 annotation allows us to maintain our old build code alongside the new version without 
 accumulating complex logic in a single {\tt install} function.
 
