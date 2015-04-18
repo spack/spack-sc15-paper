@@ -31,6 +31,7 @@
 	\caption{
 		Constraints applied to {\tt mpileaks} specs.
 	}
+	\label{fig:specs}
 \end{figure}
 
 
@@ -61,7 +62,7 @@ the distinction: while Spack can install arbitrarily many configurations of any 
 no two configurations of the same package will ever appear in the same build DAG.
 
 DAGs for {\tt mpileaks} are shown in Figure~\ref{fig:specs}.
-Each node is a package and has five configuration parameters that control
+Each node represents a package, and each package has five configuration parameters that control
 how it will be built: 1) the package version, 2) the compiler to
 build with, 3) the compiler version, 4) named compile-time build options, or {\it variants},
 and 5) the target architecture.
@@ -172,7 +173,7 @@ with a version constraint after the package name:
 We see from Figure~\ref{fig:specs-mpileaks-version} that the specific version constraint is
 placed on the {\tt mpileaks} node in the DAG, but the rest of the DAG remains unconstrained.
 If the user does not need a specific version of {\tt mpileaks}, but does require
-particular minimum version, then the user could use {\it version range} syntax.
+particular minimum version, then the user could use {\it version range} syntax
 and write {\tt @2.3:}.  Likewise, for a version between 2.3 and 2.5.6, she would use
 {\tt @2.3:2.5.6} to designate the range. In these cases, the user can save build time if
 Spack already has a version installed that satisfies the constraint -- Spack will just use
@@ -201,8 +202,8 @@ notation to cover the rest of the HPC package parameter space.
 
 {\bf Versions.}
 The version constraint, denoted with {\tt @}, was already covered above. Versions
-can be precise ({\tt @2.5.1}) or denote a potentially open-ended
-range ({\tt @2.5:}, {\tt @2.5:4.4}).
+can be precise ({\tt @2.5.1}) or denote a range ({\tt @2.5:4.4}),
+which may be open-ended ({\tt @2.5:}).
 
 The package in Figure~\ref{fig:mpileaks} lists two ``safe'' versions with checksums, but
 in our experience users frequently want bleeding-edge versions.  Package managers
@@ -219,7 +220,7 @@ With a compiler constraint (shown on line 3) the user
 simply adds {\tt \%} followed by its name, along with an optional compiler version
 specifier.  Spack compiler names, e.g. {\tt gcc}, refer to the full compiler {\it toolchain},
 i.e. the C, C++, Fortran 77, and Fortran 90 compilers.  Spack can auto-detect
-compiler toolchains if they are in the user's {\tt PATH} or they can be registered manually
+compiler toolchains if they are in the user's {\tt PATH}, or they can be registered manually
 through a configuration file.
 
 {\bf Variants.}
@@ -227,7 +228,7 @@ To handle build options like compiler flags or optional components, specs can
 have named flags, or {\it variants}.  Variants are associated with the package,
 so the {\tt mpileaks} package implementor must check the spec and handle the cases
 where debug is enabled ({\tt +debug}) and disabled (with {\tt -debug}
-or {\tt ~debug}).  The names simplify the versioning and prevent
+or {\tt \textasciitilde \ignorespaces debug}).  The names simplify the versioning and prevent
 Spack's configuration space from becoming too fine-grained.
 It would violate our goal of conciseness, for example, to include detailed
 compiler flags in spec syntax, but known sets of flags can simply be named.
@@ -330,7 +331,7 @@ package.  The {\tt @when} directive is a Python decorator: a higher order functi
 takes a function definition as a parameter and returns a new function to put in its place.
 We replace the function with a callable multi-function dispatch object, and we
 integrate the predicate check into the function dispatch mechanism.  Here, the
-{\tt when} condition is true when Dyninst is at version 8.1 or lower, and in those cases
+{\tt @when} condition is true when Dyninst is at version 8.1 or lower, and in those cases
 the package will use the {\tt configure}-based build.  By default if no predicate matches,
 {\tt install} will use the default CMake-based implementation. The simple {\tt @when}
 annotation allows us to maintain our old build code alongside the new version without
