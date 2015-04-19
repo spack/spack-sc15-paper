@@ -5,7 +5,7 @@
 
 
 The complexity of managing HPC software is rapidly increasing, and it
-will continue unabated without effective tools.
+will continue unabated without better tools.
 In this paper, we reviewed the state of software management tools 
 across a number of HPC sites, with particular focus on Livermore
 Computing (LC). While tools exist that can handle multi-configuration
@@ -18,12 +18,16 @@ provides truly {\it parameterized} builds.  Spack implements
 a novel, recursive {\it spec} syntax that simplifies the process of working
 with large software configuration spaces, and it builds software 
 so that it will run correctly, regardless of the environment.
-We outlined a number of additional unique features of Spack, including
-versioned virtual dependencies, and Spack's {\it concretization} process,
+We outlined a number of Spack's unique features, including
+versioned virtual dependencies, and the {\it concretization} process,
 which converts an underspecified build DAG into a buildable spec.
-We showed through several use cases that Spack is already
-increasing operational efficiency and simplifying software management
-at LLNL, and that it can be rapidly adapted to new production use cases.
+
+We showed through three use cases that Spack is already
+increasing operational efficiency 
+in production at LLNL.  We believe that the software management
+techniques implemented in
+Spack are applicable to a broad range of HPC facilities.
+Spack is available online at: http://bit.ly/spack-git.
 
 
 
