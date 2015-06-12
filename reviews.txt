@@ -1,0 +1,163 @@
+Review of pap264s2 by Reviewer 1
+----------------------------------
+
+# Summary and High Level Discussion
+
+This paper presents Spack, a package manager developed for tackling
+complex scientific software installation on HPC systems. The paper is
+very well written and it gives a clear background about the challenges
+of managing dependencies when building scientific software in a
+multi-user environment.
+
+One of the main contributions with respect existing tools is the
+proposed grammar for specifying dependencies: it provides the
+possibility of using a relaxed dependency scheme (using package names
+only) and version constraints can be added when needed.
+
+The feature set is rather complete and the software design seems
+robust (the choice of Python language can be also observed in similar
+tools).
+
+The tool is very promising, however the user community seems to be
+still limited to local level (LLNL) and the insight given by the Spack
+Github repository suggests that most of the development is done by
+only a few users.
+
+# Comments for Rebuttal
+None
+
+# Detailed Comments for Authors
+The tool seems to be mature enough and authors should focus on
+building a community, in order to attract new users that could
+potentially contribute back to the project.
+
+Section 3.2.3: Please rephrase the sentence starting with "She need
+only know that a package depends, .."
+
+
+Review of pap264s2 by Reviewer 2
+----------------------------------
+
+# Summary and High Level Discussion
+
+This paper presents a new package manager for HPC workloads and
+systems, called Spack. Spack introduces a recursive syntax for
+specifying and querying the large space of HPC packages. The paper
+describes s build methodology that shows packages find their
+dependencies regardless of users’ environments. Three case studies
+have been presented to demonstrate that Spack is an useful addition to
+the software suite at Livermore computing.
+
+  + "Dependency Hell" is very well recognized, long-standing
+    problem. Any small step toward mitigating this is a good
+    contribution. It indirectly reduces the time-to-solution and
+    time-to-discovery.
+
+  + Spack is an interesting software suite and seems to be very
+    useful.
+
+  + The paper is very well-written. The paper describes the features
+    and design of Spack is sufficient detail.
+
+  - While useful and novel in some aspects, I am uncertain that Spack
+    is fundamentally new contribution that warrants a publication at
+    SC. It is not clear what were the major technical challenges in
+    designing and implementing Spack. It makes the jobs of end users
+    easier, but what else it can be judged on? Is there something
+    fundamentally new or insightful. I couldn't find new lessons or
+    findings.
+
+  - What are some of specific examples where other package managers
+    failed terribly (by some quantitative measure), but Spack provided
+    the desired solution quickly and optimally (by some quantitative
+    measure)?
+
+  - There is no discussion on the limitations of Spack. What may be
+    the drawbacks?
+
+# Comments for Rebuttal
+
+Please comment on the following:
+
+  - I appreciate the engineering effort involved in developing Spack
+    manager, but what are the major new scientific contributions here?
+
+  - Please provide some quantitative measure by which the success of
+    Spack can be judged now and in future?
+
+  - What are the major features or capabilities that Spark currently
+    lacks?
+
+  - What are the major barriers to entry for end users? Will they use
+    such a framework, given its complexity w.r.t. grammar-rules and
+    recursive nature. While it is definitely nice, end users may
+    simply rely on a small, local work-around than adopt this? How
+    have you solved this problem. Three cases presented here do not
+    make a convincing in this regard.
+
+# Detailed Comments for Authors
+I particularly liked the level of detail presented in this paper. It's
+very well written. I liked the discussion on Concretization and
+virtualized virtual dependency. However, there a number of
+shortcomings. Please see the weakness section. It may be worth while
+to publicize this tool to wider community by publishing in a
+tool-focused conference and see it adopted at other places.
+
+
+Review of pap264s2 by Reviewer 3
+----------------------------------
+
+# Summary and High Level Discussion
+
+This is a very well written paper discussing the Spack Package
+Manager, which supports build at LLNL. This is an important area of
+HPC that does not receive the attention that it should often. The
+authors do a nice job in detailing the contributions of the work in
+the introduction, and then backing these up with well thought out
+examples. An extensive list of related work is given.
+
+# Comments for Rebuttal
+
+  - Is there a way you can characterize the performance or overhead of
+    the system?
+
+  - What are the downsides to your approach?
+
+# Detailed Comments for Authors
+
+This is a well written and well thought out paper detailing a tool
+that will be of high interest to SC attendees. It is broadly
+applicable, and solves a serious problem in this space. The authors
+compare their approach to a wide set of related approaches, however I
+would have expected to see ROCKS out of UCSD in the list.
+
+The examples given are very helpful, and the authors balance higher
+level explanations and sample code well. It would have been nice to
+see some comparison of this work and those others out there - I'm not
+sure what - how many more codes can be run for less disk space? or
+something about overhead? But that's in my opinion a minor
+complaint. This was a very well thought out tool that is presented
+excellently.
+
+
+Review of pap264s2 by Reviewer 4
+----------------------------------
+
+# Summary and High Level Discussion
+
+The authors present a new package manager called Spack that provides
+parametrized builds and emphasizes composability as a means to manage
+complexity and ensure sustainability in managing HPC software. The
+manuscript also details additional innovations such as a syntax for
+packages, and compiler wrappers to ensure that each build finds and
+uses the correct library dependencies.
+
+# Comments for Rebuttal
+
+This is an excellent paper, outside of my area but an interesting and
+educational read.
+
+# Detailed Comments for Authors
+
+* What remains for future work? Are there trends that will require
+  particular adaptations or extensions to Spack?
