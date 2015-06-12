@@ -32,7 +32,7 @@ Further, Spack offers novel research contributions. In particular:
   b. A novel concretization process to translate the relaxed spec
      grammar into a full build specification.
 
-  c. First-class support for versionsed dependencies, versioned
+  c. First-class support for versioned dependencies, versioned
      virtual dependencies, versioned compilers, and build constraints.
 
 To our knowledge, no other system gives the user this much control
