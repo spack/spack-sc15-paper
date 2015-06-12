@@ -51,7 +51,7 @@ Reviewers 2 and 3 ask for limitations and downsides. Spack can require
 more disk space than a purely environment-module-based system, as we
 require otherwise identical packages with different dependencies to be
 built separately. In our view, the significant reduction in complexity
-for the end user makes this worthwhile.
+for the end user justifies this cost.
 
 Reviewer 2 asks for barriers to entry for end users. Recursive syntax
 has not been a barrier. As designed, Spack requires only a package
@@ -77,10 +77,10 @@ Reviewer 4 asks what remains for future work. Spack uses a greedy
 constraint solver, which is sufficient for current packages. We may
 need full SAT solving in the future. Architecture support is currently
 LLNL-specific, and we plan to support a broader range of OS and system
-types. Currently no system supports allows packages to depend on
-particular compiler features, e.g. support for C++11 language features
-or support for specific OpenMP versions. We plan to add this
-capability to our already robust compiler support.
+types. Currently no system allows packages to depend on particular 
+compiler features, e.g., support for C++11 language features or support 
+for specific OpenMP versions. We plan to add this capability to our 
+already robust compiler support.
 
 We will clarify all of the points above in the final paper.
 
