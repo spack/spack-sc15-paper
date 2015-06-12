@@ -40,12 +40,12 @@ over parameterized builds, and no other system handles the full
 combinatoric complexity or constraint management for software
 dependency DAGs on modern HPC systems.
 
-Reviewer 2 asks for quantitative measures of success.  Using other
-tools, it was impossible to automatically build an LLNL production
-code in all supported configurations. Using Spack's parameterized
-builds, we can build the code with 50-60 dependencies in 20
-configurations on 2 architectures, nightly. Each such build replaces
-what was previously a multi-day effort.
+Reviewer 2 asks for quantitative measures of success.  A large LLNL
+production code previously used another tool to manage its 50-60
+dependencies.  Even with tool support, builds were a multi-day manual
+task requiring a specialist.  After moving to Spack the team was able
+to start building across 20 configurations and 2 architectures as
+automatic nightly builds.
 
 Reviewers 2 and 3 ask for limitations and downsides. Spack can require
 more disk space than a purely environment-module-based system, as we
