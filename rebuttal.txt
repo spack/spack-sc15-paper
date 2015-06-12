@@ -1,0 +1,98 @@
+We thank the reviewers for their thoughtful comments. We will fix all
+grammatical errors and phrasing issues. Below we address the major
+concerns of the reviewers.
+
+Reviewer 2 asks for new scientific contributions. We first note that
+this is a State of the Practice (SOP) submission. From the SC15
+website:
+
+    A SOP paper can describe a first-of-its-kind technology or
+    methodology or can capture a unique perspective (or experience) on
+    issues, challenge, and solutions for dealing with aspects of
+    unprecedented scale and complexity, particularly the experiences
+    and knowledge that can be generalized to wide ranges of systems
+    and usages [...] how the experience generalizes to wider
+    applicability should be explored.
+
+    (http://sc15.supercomputing.org/program/technical-papers/papers-faq)
+
+This paper matches this description, as well as these SOP topics from
+the SC15 CFP:
+
+  1. Deployment experiences of large-scale infrastructures &
+     facilities.
+
+  2. User support experiences with large-scale and novel machines.
+
+Further, Spack offers novel research contributions. In particular:
+
+  a. No other tool offers a concise, grammar to specify constraints on
+     elements in a dependency DAG.
+
+  b. A novel concretization process to translate the relaxed spec
+     grammar into a full build specification.
+
+  c. First-class support for versionsed dependencies, versioned
+     virtual dependencies, versioned compilers, and build constraints.
+
+To our knowledge, no other system gives the user this much control
+over parameterized builds, and no other system handles the full
+combinatoric complexity or constraint management for software
+dependency DAGs on modern HPC systems.
+
+Reviewer 2 asks for quantitative measures of success.  Using other
+tools, it was impossible to automatically build an LLNL production
+code in all supported configurations. Using Spack's parameterized
+builds, we can build the code with 50-60 dependencies in 20
+configurations on 2 architectures, nightly. Each such build replaces
+what was previously a multi-day effort.
+
+Reviewers 2 and 3 ask for limitations and downsides. Spack can require
+more disk space than a purely environment-module-based system, as we
+require otherwise identical packages with different dependencies to be
+built separately. In our view, the significant reduction in complexity
+for the end user makes this worthwhile.
+
+Reviewer 2 asks for barriers to entry for end users. Recursive syntax
+has not been a barrier. As designed, Spack requires only a package
+name in most cases, and constraints allow specificity *when
+needed*. End users with mid- or large-size projects have readily
+adopted Spack.  Python has been a barrier for some and a major
+attraction for others. For those who would otherwise create local
+workarounds, Python's flexibility has allowed them to extend local
+Spack packages to suit their needs. Such customizations frequently
+guide our priorities for new core features.
+
+Reviewer 3 asks for performance overhead. Spack commands run quickly;
+concretization takes no more than seconds even for packages with many
+dependencies. Spack builds run faster than typical manual builds
+because spack automatically stages them in a fast tmp
+filesystem. Overhead of our compiler wrapper is negligible.
+
+Reviewer 3 mentions the ROCKS distribution, which formerly used RPM
+and now uses Anaconda. Both are binary package managers and are cited
+in Section 2. We will explicitly mention ROCKS in the final paper.
+
+Reviewer 4 asks what remains for future work. Spack uses a greedy
+constraint solver, which is sufficient for current packages. We may
+need full SAT solving in the future. Architecture support is currently
+LLNL-specific, and we plan to support a broader range of OS and system
+types. Currently no system supports allows packages to depend on
+particular compiler features, e.g. support for C++11 language features
+or support for specific OpenMP versions. We plan to add this
+capability to our already robust compiler support.
+
+We will clarify all of the points above in the final paper.
+
+Finally, Reviewer 1 mentions the need to grow a broader community for
+Spack. We wholeheartedly agree. Outside LLNL, we have received
+contributions from Argonne National Laboratory, Los Alamos National
+Laboratory, Illinois Institute of Technology, Stowers Institute for
+Medical Research, UC Davis, and U. Canterbury.  Via weekly
+teleconferences and a public mailing list, we actively collaborating
+with these organizations, as well as groups at Sandia and Intel.
+
+We are actively working to grow the base of contributors, as a tool
+like Spack will only survive in the long term with community support.
+We submitted to SC15 for greater visibility in the HPC community, and
+because SC is a well-known top-tier venue for HPC tools.
