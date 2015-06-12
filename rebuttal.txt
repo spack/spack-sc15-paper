@@ -75,12 +75,15 @@ in Section 2. We will explicitly mention ROCKS in the final paper.
 
 Reviewer 4 asks what remains for future work. Spack uses a greedy
 constraint solver, which is sufficient for current packages. We may
-need full SAT solving in the future. Architecture support is currently
-LLNL-specific, and we plan to support a broader range of OS and system
-types. Currently no system allows packages to depend on particular 
-compiler features, e.g., support for C++11 language features or support 
-for specific OpenMP versions. We plan to add this capability to our 
-already robust compiler support.
+need full SAT solving in the future. We have used Spack on Linux
+(primarily RHEL), Blue Gene, and Cray machines. Packages build on all
+of these, but we are continuing to add core features to reduce the
+amount of architecture-specific conditional logic in package
+scripts. We also plan to increase build robustness by deploying a
+continuous testing system. Currently no system allows packages to
+depend on particular compiler features, e.g., support for C++11
+language features or support for specific OpenMP versions. We plan to
+add this capability to our already robust compiler support.
 
 We will clarify all of the points above in the final paper.
 
