@@ -264,7 +264,7 @@
 \gdef\additionalauthors#1{\addauthors={#1}}
 
 \gdef\numberofauthors#1{\global\aucount=#1
-\ifnum\aucount>3\global\originalaucount=\aucount \global\aucount=3\fi %g}  % 3 OK - Gerry March 2007
+\ifnum\aucount>4\global\originalaucount=\aucount \global\aucount=4\fi %g}  
 \global\auskipcount=\aucount\global\advance\auskipcount by 1
 \global\multiply\auskipcount by 2
 \global\multiply\auskip by \auskipcount

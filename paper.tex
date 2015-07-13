@@ -95,33 +95,40 @@
 \title{The Spack Package Manager:\\
 Bringing order to HPC software chaos}
 %\subtitle{}
-\numberofauthors{7}
+\numberofauthors{8}
 \author{
-\alignauthor Todd Gamblin\\
+\alignauthor Todd~Gamblin\\
        \email{tgamblin@llnl.gov}
 \and
-\alignauthor Matthew Legendre\\
+\alignauthor Matthew~LeGendre\\
        \email{legendre1@llnl.gov}
 \and
-\alignauthor Gregory L. Lee\\
+\alignauthor Michael~R.~Collette\\
+       \email{mcollette@llnl.gov}
+\and
+\alignauthor Gregory~L.~Lee\\
        \email{lee218@llnl.gov}
 \and
-\alignauthor Adam Moody\\
+\alignauthor Adam~Moody\\
        \email{moody20@llnl.gov}
 \and
-\alignauthor Bronis R. de Supinski\\
-       \email{bronis@llnl.gov}
+\alignauthor Bronis~R.~de~Supinski\\
+       \email{~~~bronis@llnl.gov}
 \and
-\alignauthor Scott Futral\\
+\alignauthor Scott~Futral\\
        \email{futral@llnl.gov}
-\and\\
-%
+\and
 \affaddr{Lawrence Livermore National Laboratory}
 %\affaddr{Computation Directorate}\\
 %\affaddr{Livermore, CA 94550}
 }
-\maketitle
 
+% ---------------------------------------------------------------
+% No hyphenation in title text.
+\begingroup
+\hyphenpenalty=10000
+\maketitle
+\par\endgroup
 % ---------------------------------------------------------------
 % Abstract
 % ---------------------------------------------------------------
