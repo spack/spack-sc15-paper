@@ -1,4 +1,4 @@
-name = paper
+name = spack-paper-sc15
 tex_args = -shell-escape
 
 $(name).pdf: *.tex *.cls *.bib
@@ -12,3 +12,4 @@ clean:
 	rm -f *.out *.aux *.toc *.log *.bbl *.blg $(name).pdf
 	rm -f *.ent *.synctex.gz *.rai *.cpt
 	rm -f *Graph.pdf *Graph.dot *Graph.log
+	rm -rf _minted-*

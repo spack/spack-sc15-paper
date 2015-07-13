@@ -5,6 +5,6 @@
 *.blg
 *.aux
 *.rai
-paper.pdf
+spack-paper-sc15.pdf
 *.synctex.gz
-_minted-paper
+_minted-spack-paper-sc15
