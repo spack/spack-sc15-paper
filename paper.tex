@@ -18,6 +18,9 @@
 % Also add below skip settings to minted.
 % ---------------------------------------------------------------
 \usepackage{minted}
+\renewcommand{\theFancyVerbLine}{%
+	\sffamily {\tiny\oldstylenums{\arabic{FancyVerbLine}}}}
+
 %\makeatletter
 %\newlength\minted@belowskip
 %\define@key{minted@opt}{belowskip}[\@topsepadd]
