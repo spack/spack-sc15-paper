@@ -82,10 +82,10 @@ very specific, so we have two competing concerns.  We need the ability to specif
 of the configuration space, without the complexity of remembering all of them.
 
 \subsubsection{Spec Syntax}\label{sec:syntax}
-
 \begin{figure}
+{\fontfamily{cmr}\selectfont
 \begin{grammar}\small
-  <spec>         ::= <id> [ constraints ]
+  <spec>         ::= <id> [ <constraints> ]
 
   <constraints>   ::= \{ `@' <version-list> | `+' <variant> \newline
                    | `-' <variant> ~~~| `~' <variant> \newline
@@ -104,8 +104,9 @@ of the configuration space, without the complexity of remembering all of them.
 
   <architecture> ::= <id>
 
-  <id>           ::= [A-Za-z0-9_][A-Za-z0-9_.-]*
+  <id>           ::= "[A-Za-z0-9_][A-Za-z0-9_.-]*"
 \end{grammar}
+} % End fontfamily{cmr}
 \caption{
 	EBNF grammar for spec expressions.
 	\label{fig:grammar}
