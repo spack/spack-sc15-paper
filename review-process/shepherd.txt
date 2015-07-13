@@ -1,0 +1,127 @@
+From: <Tiwari>, Devesh <tiwari@ornl.gov>
+Date: Thursday, July 2, 2015 at 1:59 PM
+To: Todd Gamblin <tgamblin@llnl.gov>
+Cc: "Legendre, Matthew P." <legendre1@llnl.gov>, "Moody, Adam T."
+<moody20@llnl.gov>, "de Supinski, Bronis R." <desupinski1@llnl.gov>,
+Scott Futral <futral2@llnl.gov>, "Lee, Greg" <lee218@llnl.gov>
+Subject: Re: SC15 paper 264 shepherding
+
+All,
+
+First of all, Congratulations! Thank you for sharing such an exciting
+and useful paper with the community. We had a very interesting
+discussion surrounding this paper.
+
+Please address the three listed items and other things that you have
+promised in your rebuttal comments.
+
+- Regarding the overhead issue:
+
+  Please attempt to provide quantification of the overhead wherever
+  possible. This can be storage or runtime overhead. Even if it's
+  negligible, please report the absolute numbers and preferably, put
+  the numbers in context (by comparing it to other competitive tools,
+  overall application runtime etc.). From your rebuttal response, I
+  can readily see multiple places where you could report such
+  numbers. Some examples include, but not limited to, disk space
+  overhead, compiler wrapper overhead, how the complexity of
+  concretization step increases with increase in dependency
+  complexity, effect of fast/slow filesystem for the build process,
+  overall memory requirements etc.
+
+- Regarding the benefits issue:
+
+  Please provide more concrete examples about how Spack has impacted
+  different applications. The PC was particularly interested in seeing
+  more evidences within and beyond LLNL. Mike's case may be an
+  interesting one to add. In general, it would be better to provide
+  more concrete examples using more complex applications. How much
+  effort was required? What changes were made? Why was it hard to do
+  so for that particular application? Whenever possible, please
+  provide code snippets and quantitative evidence.
+
+- Regarding the author list:
+
+  COI is indeed one of the major issues that prevents addition of new
+  authors after acceptance. As per your description, Mike's addition
+  doesn't create new COI that could have affected the evaluation of
+  this paper. So, I am perfectly fine with his addition as an author
+  (also, given his anticipated contribution as you have already said).
+  I am of the view that contributors should be acknowledged
+  appropriately. In this case, it seems like adding him to the author
+  list seems like doing justice to his contribution. But,this is just
+  my personal opinion and may not be fully justified/fair across the
+  board given that I am not making this decision for every such
+  request. So, it's better that you write to the PC Chairs and get
+  their guidance on this issue.
+
+Also, please use an appropriate tool to highlight the changes you will
+be making. There are certain latex packages that can highlight the
+changes easily. You can also use some other tool as long as it is
+clear what changes were made and exactly where. I am asking this so
+that I can justify the process to the PC chairs later. It will only
+make the process more smooth and quicker.
+
+I am available for chat/phone call to clarify any questions you may
+have. My simple goal is to improve that quality of an already exciting
+paper. Please let me know how could I help you. Once you have made the
+edits, I can review them and provide feedback as soon as possible.
+
+Thank you for submitting your good work to SC and Congratulations,
+again!
+
+…∂t
+
+
+------------------------------------------------------------------------------
+From: Todd Gamblin <tgamblin@llnl.gov>
+Date: Thursday, July 2, 2015 at 12:01 AM
+To: <Tiwari>, Devesh <tiwari@ornl.gov>
+Cc: "Legendre, Matthew P." <legendre1@llnl.gov>, "Moody, Adam T."
+<moody20@llnl.gov>, "de Supinski, Bronis R." <desupinski1@llnl.gov>,
+Scott Futral <futral2@llnl.gov>, "Lee, Greg" <lee218@llnl.gov>
+Subject: SC15 paper 264 shepherding
+
+Devesh,
+
+Thanks for being a shepherd on our SC15 paper.  I'm touching base with
+you to clarify the shepherding requirements.  The comments from the
+committee list these three items:
+
+  1. The paper should quantify the benefits and overheads of the tool.
+
+  2. The paper should include more sophisticated use cases, such as
+     complex applications being run at LLNL.
+
+  3. The paper should more clearly list all the limitations and
+     possible future extensions.
+
+In general, we can add these.  However, I have several requests for
+clarification:
+
+  1. We would like to add another author to the paper.  One of our
+     application developers, Mike Collette, has put a lot of effort
+     into automating his build for one of our largest codes, and I
+     think he should be included as an author if we write about his
+     use case.  Is this all right with you?  I do not believe he is
+     conflicted with anyone on the SC committee aside from LLNL staff,
+     so there should be no issue of conflicts between him and the
+     reviewers.
+
+  2. We are not sure what types of benefits you would like to see
+     quantified.  The use case I mentioned above would help with this,
+     as Mike spent 2 months using Spack, roughly half-time, and he was
+     able to build his code and 70 dependencies in 4 configurations on
+     3 machines.  With the prior system, he was only able to build 43
+     of these on a single architecture, with 2 years' effort, also
+     roughly half-time.  Is this the sort of quantification you are
+     looking for?  Or do you want something else?
+
+  3. We are not sure what types of overheads you would like to see
+     quantified.  Can you elaborate on this?  Spack's commands run at
+     interactive speeds.  The builds themselves run at the same speed
+     as they do without spack, which is not particularly interesting.
+     Is there something else you want us to plot?
+
+Best regards,
+-Todd Gamblin

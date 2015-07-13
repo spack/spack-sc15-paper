@@ -161,3 +161,24 @@ educational read.
 
 * What remains for future work? Are there trends that will require
   particular adaptations or extensions to Spack?
+
+
+Committee Comments to Authors
+----------------------------------
+
+The committee agrees that this an useful tool for the community that
+could have significant impact in the long-term. The paper is
+well-written and design choices are well-articulated. However, the
+reviewers felt that following concerns should be addressed explicitly
+to meet at the SC quality bar.
+
+  1. The paper should quantify the benefits and overheads of the tool.
+
+  2. The paper should include more sophisticated use cases, such as
+     complex applications being run at LLNL.
+
+  3. The paper should more clearly list all the limitations and
+     possible future extensions.
+
+A shepherd has been assigned to help make sure that you have made the
+requested changes.
