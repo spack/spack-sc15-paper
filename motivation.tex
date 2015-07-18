@@ -7,7 +7,7 @@
 {\it Meta-build systems} such as Contractor, WAF, and
 MixDown~\cite{amundson:contractor,epperly+:mixdown,epperly+:mixdown-report,nagy:waf} are
 related to package managers, but they focus on ensuring that a single
-package builds correctly with its dependencies.  MixDown notably provides excellent
+package builds with its dependencies.  MixDown notably provides excellent
 features for ensuring consistent compiler flags in a build.
 However, these systems do not provide facilities to manage
 large package repositories or combinatorial versioning.
@@ -30,7 +30,7 @@ privileges and do not optimize for specific hardware.
 {\it Port systems} such as Gentoo, BSD Ports, MacPorts, and
 Homebrew~\cite{bsdports,groffen:gentoo-prefix,homebrew,macports,thiruvathukal:gentoo04}
 build packages from source instead of installing from a pre-built binary.
-Most existing port systems suffer from
+Most port systems suffer from
 the same versioning and naming issues as traditional package managers.
 Some allow multiple versions to be installed in the same
 prefix~\cite{groffen:gentoo-prefix}, but again the burden is on package
@@ -51,10 +51,10 @@ has been extremely successful for servers at cloud data centers. VMs typically
 have near-native compute performance but low-level HPC network drivers still
 exhibit major performance issues. VMs are not well supported on many
 non-Linux operating systems, an issue for the lightweight
-kernels of bleeding-edge Blue Gene/Q and Cray machines. 
+kernels of bleeding-edge Blue Gene/Q and Cray machines.
 Finally, each VM still uses a traditional package manager,
 so running many configurations still requires a large number of VMs.
-For facilities, this is a security concern, as a profusion of VMs makes 
+For facilities, this is a security concern, as a profusion of VMs makes
 mandatory patching difficult.  It is also tedious for users to manage a large
 number of VM environments.
 
@@ -88,16 +88,16 @@ package managers and either manual or semi-automated installation.
 For the baseline OS, many sites maintain traditional binary
 packages using the vendor's package manager. LLNL maintains a Linux
 distribution, CHAOS~\cite{chaos} for this purpose, which is managed using RPM.
-
-For more specific builds, many sites adhere to detailed naming conventions
+%
+For custom builds, many sites adhere to detailed naming conventions
 that encode information in file system paths.
-Table~\ref{tab:naming-conventions} shows conventions
-at several sites. At LLNL, we use the APT package manager for installs
+Table~\ref{tab:naming-conventions} shows several sites' conventions.
+LLNL uses the APT package manager for installs
 in the {\tt /usr/local/tools} file system and {\tt /usr/global/tools}
 for manual installs.
-ORNL uses hand installs but adheres to a strict scripting structure
+ORNL uses hand installs but adheres to strict scripting conventions
 to reproduce each build~\cite{jones+:cug08}.
-TACC relies heavily on locally maintained RPMs for its installs.
+TACC relies heavily on locally maintained RPMs.
 
 From the conventions in Table~\ref{tab:naming-conventions},
 we see that most sites use some combination of architecture, compiler version,
@@ -141,8 +141,8 @@ quickly if they know which one is required.
 The alternative to per-user environment settings is to embed library search
 paths in installed binaries at compile time. When set this way, the search
 path is called an {\tt RPATH}. {\tt RPATHs} and environment modules are not
-mutually exclusive. Modules can still be used to set {\tt MANPATH}, {\tt PATH}
-and other variables, while adding {\tt RPATHs} ensures that binaries run correctly
+mutually exclusive. Modules can still be used to set {\tt MANPATH}, {\tt PATH},
+etc., while adding {\tt RPATHs} ensures that binaries run correctly
 regardless of whether the right module is loaded. LC installs software with
 both {\tt RPATHs} and {\tt dotkit}~\cite{dotkit} modules.
 
@@ -154,7 +154,7 @@ multi-configuration builds.
 Smithy~\cite{digirolamo:smithy} is an installation tool in use at ORNL. It
 can generate module files, but it does not provide any
 automated dependency management; it only checks whether a package's
-prerequisites have already been installed by the user. 
+prerequisites have already been installed by the user.
 
 Nix~\cite{dolstra+:icfp08,dolstra+:lisa04}
 is a package manager and an OS distribution that supports the installation of
@@ -174,10 +174,10 @@ BLAS libraries together in a {\it toolchain} that can be combined with
 any package file. This provides some degree of composability and
 separates compiler flags and MPI concerns from client packages.
 
-HashDist~\cite{hashdist} is a meta-build system and package manager for HPC.
-Of existing solutions, it is probably the most similar to spack.
-Like Nix, it uses cryptographic versioning and stores installations in unique
-directories.
+HashDist~\cite{hashdist} is a meta-build system and package manager
+for HPC.  Of the existing solutions, it is the most similar to spack.
+Like Nix, it uses cryptographic versioning and stores installations in
+unique directories.
 %
 Both Nix and HashDist use {\tt RPATHs} in their packages to ensure that
 libraries are found correctly.
@@ -220,14 +220,3 @@ or versioned interfaces.
 HPC sites need better mechanisms to {\it parameterize} packages so that new
 builds can be {\it composed} in response to user needs.
 %
-
-
-
-
-
-
-
-
-
-
-
