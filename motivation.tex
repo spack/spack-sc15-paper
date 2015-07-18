@@ -10,7 +10,7 @@ related to package managers, but they focus on ensuring that a single
 package builds correctly with its dependencies.  MixDown notably provides excellent
 features for ensuring consistent compiler flags in a build.
 However, these systems do not provide facilities to manage
-large package repositories or combinatoric versioning.
+large package repositories or combinatorial versioning.
 
 \paragraph{Traditional package managers}
 Package managers automate the installation of complex sets of software packages.
@@ -23,7 +23,7 @@ stack, which works well for the baseline OS and drivers, which are
 common to all applications on a system.
 These tools assume that each package only has a single version
 and most of the tools install packages in a single, inflexible location.
-To install multiple configurations, the user must create a custom, combinatoric
+To install multiple configurations, the user must create a custom, combinatorial
 naming scheme to avoid conflicts. They typically require root
 privileges and do not optimize for specific hardware.
 
@@ -188,7 +188,7 @@ Nix does not even offer a way to ask for a package's dependencies.
 %
 EasyBuild and Smithy generate environment modules, which allow querying
 through their own interface. Naming schemes used in existing module systems, however, cannot
-handle combinatoric versions. The Lmod authors call this the
+handle combinatorial versions. The Lmod authors call this the
 ``matrix problem``~\cite{mclay:lmod-tutorial}.
 
 %EasyBuild's attempts to version groups dependencies by adding versions to
@@ -202,7 +202,7 @@ handle combinatoric versions. The Lmod authors call this the
 %This may lead to erroneous runs.
 
 The main limitation of existing tools is the lack of build {\it composability}.
-The full set of package versions is combinatoric, and realizing an arbitrary
+The full set of package versions is combinatorial, and realizing an arbitrary
 combination of compiler, MPI version, build options, and dependency versions
 requires tediously modifying many package files.
 %

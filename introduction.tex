@@ -4,51 +4,51 @@
 \label{sec:intro}
 
 The Livermore Computing (LC) facility at Lawrence Livermore National Laboratory
-(LLNL) supports around 2,500 users on 25 different clusters, ranging 
+(LLNL) supports around 2,500 users on 25 different clusters, ranging
 in size from a 1.6 teraflop, 256-core cluster to the
 20 petaflop, 1.6 million-core Sequoia machine, currently ranked first and
 third on the Graph500~\cite{graph500} and Top500~\cite{top500}
 lists, respectively.
 %
 %The massively parallel simulations that run on LC machines support
-%U.S. Department of Energy missions across a range of scientific domains, 
-%including nuclear physics, material science, climate science, mechanical 
+%U.S. Department of Energy missions across a range of scientific domains,
+%including nuclear physics, material science, climate science, mechanical
 %engineering, geophysics, seismology, and stockpile stewardship.
 %
 The simulation software that runs on these machines is very complex; some
 codes depend on specific versions of over 50 dependency libraries.
 They require specific compilers, build options and MPI implementations to
 achieve the best performance, and users may run several
-different codes in the same environment as part of larger 
+different codes in the same environment as part of larger
 scientific workflows.
 
-To support the diverse needs of applications, system administrators 
-and application developers 
-frequently build, install, and support many different configurations
-of math and physics libraries, as well as other software.
-Frequently, applications must be rebuilt to fix bugs and to support
-new versions of the operating system (OS), Message Passing Interface (MPI)
-implementation, compilers, and other dependencies. 
-Unfortunately, building scientific software is notoriously complex, with
-immature build systems that are difficult to adapt to new
+To support the diverse needs of applications, system administrators
+and application developers frequently build, install, and support many
+different configurations of math and physics libraries, as well as
+other software.  Frequently, applications must be rebuilt to fix bugs
+and to support new versions of the operating system (OS), Message
+Passing Interface (MPI) implementation, compilers, and other
+dependencies.  Unfortunately, building scientific software is
+notoriously complex, with immature build systems that are difficult to
+adapt to new
 machines~\cite{dubois+:comp-sci-eng,hoste+:pyhpc12,wilson+:corr}.
-Worse, the space of required builds grows combinatorically
-with each new configuration parameter. As a result, LLNL staff
-spend countless hours dealing with build and deployment issues.
+Worse, the space of required builds grows combinatorially with each
+new configuration parameter. As a result, LLNL staff spend countless
+hours dealing with build and deployment issues.
 
-Existing package management tools automate parts of the build 
+Existing package management tools automate parts of the build
 process~\cite{bsdports,digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,homebrew,hoste+:pyhpc12,macports,thiruvathukal:gentoo04}.
-For the most part, these systems focus on keeping a single, stable set of 
+For the most part, these systems focus on keeping a single, stable set of
 packages up to date, and they do not handle installation of multiple
 versions or configurations.  Those that {\it do} handle multiple configurations
-typically require that package files be created for each combination of 
-options~ \cite{digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,hoste+:pyhpc12}, 
+typically require that package files be created for each combination of
+options~ \cite{digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,hoste+:pyhpc12},
 leading to a profusion of files and maintenance issues.
 To our knowledge, no existing tool allows new configurations to be composed
-and assembled on demand.  Some allow limited forms of 
+and assembled on demand.  Some allow limited forms of
 composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but their
 dependency management is overly rigid, and they burden users with
-the combinatoric problems of naming and versioning.
+the combinatorial naming and versioning problems.
 
 In this paper, we describe our experiences with the {\it Spack} package manager,
 which we have developed at LLNL to manage increasing software complexity.
@@ -57,16 +57,16 @@ Specifically, this paper offers the following contributions:
 \item A novel, recursive syntax for concisely specifying and querying
       the large parameter space of HPC packages;
 \item A build methodology that ensures packages find their dependencies
-      regardless of users' environments; 
+      regardless of users' environments;
 \item Spack: An implementation of these concepts; and
 \item Three use cases that detail LLNL's use of Spack to compose
-      software configurations rapidly, to manage Python installations, and 
+      software configurations rapidly, to manage Python installations, and
       to implement site-specific build policies.
 \end{enumerate}
 
 \noindent Spack is in active development at LLNL, and our use cases outline some of
-its first applications in our environment.  Spack solves software problems 
-that are pervasive at large, multi-user HPC centers, and our experiences 
+its first applications in our environment.  Spack solves software problems
+that are pervasive at large, multi-user HPC centers, and our experiences
 are relevant to the full range of HPC facilities.  Spack improves
-operational efficiency by simplifying the build and deployment of 
+operational efficiency by simplifying the build and deployment of
 bleeding-edge scientific software.
