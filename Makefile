@@ -17,8 +17,11 @@ clean:
 
 diff:
 	rm -f *-diffsubmitted.tex
-	scripts/require-clean-work-tree "make diff"
+	scripts/require-clean-work-tree "make diff" *.tex
 	for file in *.tex; do \
 		$(latexdiff) -r submitted $$file; \
 		diff_file=`echo $$file | sed 's/.tex$$/-diffsubmitted.tex/'` && mv $$diff_file $$file; \
 	done
+	make $(name).pdf
+	mv $(name).pdf $(name)-diff.pdf
+	git checkout *.tex
