@@ -185,14 +185,15 @@ libraries are found correctly.
 \paragraph{Gaps in current practice}
 The cryptographic versioning of Nix and HashDist is very flexible. It versions
 the package {\it and} its dependency configuration, and can represent any
-configuration. However, users cannot navigate or query the installed software.
-The systems are in a sense ``write-only'':
-Nix does not offer a way to view a package's dependencies.
+configuration. However, users cannot navigate or easily query the installed
+software.
+%The systems are in a sense ``write-only'':
+%Nix does not offer a way to view a package's dependencies.
 %
-EasyBuild and Smithy generate environment modules, which allow querying
-through their own interface. Naming schemes used in existing module systems, however, cannot
-handle combinatorial versions. The Lmod authors call this the
-``matrix problem``~\cite{mclay:lmod-tutorial}.
+EasyBuild and Smithy generate environment modules, and some querying is
+possible through the module system.  Naming schemes used in existing module
+systems, however, cannot handle combinatorial versions. The Lmod authors
+call this the ``matrix problem''~\cite{mclay:lmod-tutorial}.
 
 %EasyBuild's attempts to version groups dependencies by adding versions to
 %toolchains, but the naming is difficult to understand.
@@ -210,11 +211,11 @@ combination of compiler, MPI version, build options, and dependency versions
 requires tediously modifying many package files.
 Indeed, the number of package files required for most existing systems scales
 with the number of version {\it combinations}, not the number of packages, which
-quickly becomes unmanageable.  As an example, the very flexible EasyBuild
+quickly becomes unmanageable.  As an example, the EasyBuild
 system has over 3,300 files for several permutations of only 600 packages.
-To create a slightly different dependency graph, an entire new package file
-hierarchy must be constructed.  HashDist a more robust support for composition,
-but it does not have a first-class parameters for package versions, compilers,
+A slightly different dependency graph requires an entire new package file
+hierarchy.  HashDist a more robust support for composition,
+but it does not have a first-class parameters for versions, compilers,
 or versioned interfaces.
 %
 HPC sites need better mechanisms to {\it parameterize} packages so that new
