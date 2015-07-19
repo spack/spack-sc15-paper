@@ -41,11 +41,10 @@
 Using the simple script in Figure~\ref{fig:mpileaks}, Spack can build many different
 versions and configurations of the {\tt mpileaks} package.  In traditional port systems,
 package code is structured to build a single version of a package, but in Spack, each
-package file is a {\it template} that can be built in many different ways.  The build is
-{\it parameterized} so that it can be configured many different ways.
-Spack calls a single build configuration a {\it spec},
- and the {\tt spec} object passed to {\tt install()}
-is how the Spack system encapsulates build parameters for package authors.
+package file is a {\it template} that can be configured and built in many
+different ways, according to a set of {\it parameters}.
+Spack calls a single build configuration a {\it spec}. The {\tt spec} object
+passed to {\tt install()} is how Spack communicates dependencies and parameters to package authors.
 
 \subsubsection{Structure}
 To understand how specs work, consider the {\tt mpileaks} package structure.
@@ -53,10 +52,10 @@ Metadata in the {\tt Mpileaks} class ({\tt version}, {\tt depends\_on}, etc.) de
 its relationships with other packages.  There are two direct dependencies:
 the {\tt callpath} library and {\tt mpi}.  Spack recursively inspects the class definitions
 for each dependency and constructs a graph of their relationships.  The result
-is a directed, acyclic graph (DAG) of dependencies\footnote{Spack currently disallows
-circular dependencies.}.
+is a directed, acyclic graph (DAG) of dependencies.\footnote{Spack currently disallows
+circular dependencies.}
 %
-To guarantee a consistent build, and to avoid ABI incompatibility, the DAG
+To guarantee a consistent build, and to avoid ABI compatibility issues, the DAG
 is constructed so that there is only {\it one} version of any particular package.  Note
 the distinction: while Spack can install arbitrarily many configurations of any package,
 no two configurations of the same package will ever appear in the same build DAG.
@@ -73,13 +72,13 @@ A spec DAG has many degrees of freedom, and it is not reasonable to expect users
 understand or specify all of them.  In our experience at LLNL, the typical user
 only cares about a small number of build constraints (if any), and does not know enough to
 specify the rest. For example, a user may know that a certain version of a library like
-{\tt boost} is required, but only cares that other build parameters are set so that
+{\tt boost}~\cite{boost} is required, but only cares that other build parameters are set so that
 the build will succeed.
 %
 Configuration complexity makes the HPC software ecosystem difficult to manage: there are
 simply too many parameters. However, the small set of important build constraints can be
 very specific, so we have two competing concerns.  We need the ability to specify details
-of the configuration space, without the complexity of remembering all of them.
+of the configuration, without the complexity of remembering all of it.
 
 \subsubsection{Spec Syntax}\label{sec:syntax}
 \begin{figure}
@@ -149,8 +148,7 @@ to implement this in Spack is shown in Figure~\ref{fig:grammar}.
 
 We begin with a simple example.
 Consider the case where a user wants to install the {\tt mpileaks} package, but knows
-nothing about its structure.  To install the package, the user invokes the {\tt spack install}
-command:
+nothing about its structure.  To install the package, the user invokes {\tt spack install}:
 %
 \begin{minted}[fontsize=\scriptsize]{bash}
     $ spack install mpileaks
@@ -159,9 +157,9 @@ command:
 Here, {\tt mpileaks} is the simplest possible spec---a single identifier.
 Spack parses it and converts it into the DAG shown in Figure~\ref{fig:specs-mpileaks}.
 Note that even though the spec contains no dependency information, it is still
-converted to a full DAG, based on the directives supplied in package files. Since there
-are no constraints on the nodes, Spack has considerable leeway for how to build the package,
-and we say that the package is {\it unconstrained}.
+converted to a full DAG, based on directives supplied in package files. Since there
+are no constraints on the nodes, Spack has considerable leeway when building the
+package, and we say that the package is {\it unconstrained}.
 %
 Now, suppose the user wants a specific version of {\tt mpileaks}.  This can be requested
 with a version constraint after the package name:
@@ -175,8 +173,8 @@ placed on the {\tt mpileaks} node in the DAG, but the rest of the DAG remains un
 If the user does not need a specific version of {\tt mpileaks}, but does require
 particular minimum version, then the user could use {\it version range} syntax
 and write {\tt @2.3:}.  Likewise, for a version between 2.3 and 2.5.6, she would use
-{\tt @2.3:2.5.6} to designate the range. In these cases, the user can save build time if
-Spack already has a version installed that satisfies the constraint -- Spack will just use
+{\tt @2.3:2.5.6} to designate the range. In these cases, the user can save time if
+Spack already has a version installed that satisfies the spec -- Spack will use
 the previously-built installation instead of building a new one.
 
 Figure~\ref{fig:specs-mpileaks-abstract} shows the recursive nature of the spec syntax:
@@ -186,13 +184,14 @@ Figure~\ref{fig:specs-mpileaks-abstract} shows the recursive nature of the spec 
 \end{minted}
 %
 The caret (\verb|^|) denotes constraints for a particular dependency.  In the DAG,
-we now see that there are version constraints on {\tt callpath} and {\tt libelf},
-and that the user has asked for the debug variant of the {\tt callpath} library.
+we see that there are now version constraints on {\tt callpath} {\it and} {\tt libelf},
+and that the user has requested the {\tt debug} variant of the {\tt callpath} library.
 
-Recall that Spack guarantees there will be only a single version of any package in
-the spec DAG.  Therefore, within the same DAG, each dependency can be uniquely identified by
-only its package name.  The user does not have to think about DAG connectivity to add
-constraints.  She only needs to know that a package somehow depends on {\tt callpath}.
+Recall that Spack guarantees that there is only a single version of any package in
+the spec DAG.  Within the same DAG, each dependency can be uniquely
+identified by its package name alone.  Therefore, the user need not think about DAG 
+connectivity to add constraints.  She need only know that {\tt mpileaks}
+somehow depends on {\tt callpath}.
 For the same reason, the constraint order does not matter; dependency constraints
 can appear in arbitrary order.
 
@@ -206,11 +205,11 @@ can be precise ({\tt @2.5.1}) or denote a range ({\tt @2.5:4.4}),
 which may be open-ended ({\tt @2.5:}).
 
 The package in Figure~\ref{fig:mpileaks} lists two ``safe'' versions with checksums, but
-in our experience users frequently want bleeding-edge versions.  Package managers
+in our experience users frequently want bleeding-edge versions, and package managers
 frequently lag behind the latest releases.
 Spack has a capability to extrapolate URLs from versions,
-using the package's {\tt url} attribute as a model\footnote{This works
-for packages with consistently named URLs}.  The user can request a specific
+using the package's {\tt url} attribute as a model.\footnote{This works
+for packages with consistently named URLs.}  The user can request a specific
 version on the command line, even if it is unknown to Spack,
 and Spack will attempt to install it.  Spack also uses the same
 model to scrape webpages and find new versions as they become available.
@@ -239,7 +238,7 @@ Platforms begin with {\tt =} and take names like {\tt linux-ppc64} or {\tt bgq}.
 specified per-package; this allows front-end tools to depend on their back-end measurement
 libraries with a {\it different} architecture on cross-compiled machines.
 
-\subsubsection{Constraints in packages}
+\subsubsection{Constraints in packages}\label{sec:constraints}
 
 So far, we have shown examples of specs being used to request constraints from the
 command line, when {\tt spack install} is invoked.  However, the user is not the only
@@ -256,27 +255,39 @@ So, the ROSE compiler can simply write:
 \end{minted}
 %
 This constraint will be incorporated into the initial DAG node generated from
-the ROSE package.
-
-Spack's {\tt patch} directive also accepts spec syntax as a predicate in an
-optional {\tt when} parameter.  For example, these concise directives in the
-Python package ensure that specific patches are applied to the Python source
-code when it is being built on Blue Gene/Q, with the appropriate compiler:
+the {\tt ROSE} package.  Dependencies can also be {\it conditional}.  For example,
+the {\tt ROSE} package builds with different versions of boost, depending on the
+compiler version. To handle this, directives also accept spec syntax as a
+predicate in an optional {\tt when} parameter:
 %
 \begin{minted}[fontsize=\scriptsize]{python}
-    patch('python-bgq-xlc.patch',   when='=bgq%xlc')
+    depends_on('boost@1.47.0', when='%gcc@:4')
+    depends_on('boost@1.54.0', when='%gcc@5:')
+\end{minted}
+%
+The same notation is used to optionally build with libraries like MPI:
+%
+\begin{minted}[fontsize=\scriptsize]{python}
+    depends_on('mpi', when='+mpi')
+\end{minted}
+%
+and to ensure that specific patches are applied to Python source code
+when it is built on Blue Gene/Q, with different compilers:
+%
+\begin{minted}[fontsize=\scriptsize]{python}
+    patch('python-bgq-xlc.patch',   when='=bgq%xl')
     patch('python-bgq-clang.patch', when='=bgq%clang')
 \end{minted}
 %
-Constraints in the {\tt when} clause are matched against the Python package spec.
-Outside of directives, constraints can be used directly
-with the {\tt spec} object in the {\tt install} method:
+Constraints in the {\tt when} clause are matched against the package spec.
+Outside of directives, constraints can also be tested directly on the {\tt spec}
+object in the {\tt install} method:
 %
 \begin{minted}[fontsize=\scriptsize]{python}
   def install(self, spec, prefix):
       if spec.satisfies('%gcc'):
           # Handle gcc
-      elif spec.satisfies('%xlc'):
+      elif spec.satisfies('%xl'):
           # Handle XL compilers
       ...
 \end{minted}
@@ -284,11 +295,10 @@ with the {\tt spec} object in the {\tt install} method:
 
 \subsubsection{Build specialization}
 
-In our experience maintaining packages at LLNL, we have sometimes had to change
+In our experience maintaining packages at LLNL, we often have to change
 entire package build scripts due to large changes in the way certain packages build.
 This can be very cumbersome, and it is difficult to maintain both the old and new
-version of a build script, but we must if we want to keep installing older versions
-for users who rely on them.
+version of a build script, which we must do for users who rely on the old version.
 
 
 %class Dyninst(Package):
@@ -324,11 +334,11 @@ for users who rely on them.
 \end{figure}
 
 For cases like this, Spack provides functionality that allows Python functions to have
-multiple definitions, with some specialized for particular configurations of the package.
+multiple definitions, each specialized for particular configurations of the package.
 This allows us to have two separate implementations of {\tt install} or {\it any} method
 in a package class. Figure~\ref{fig:specialization} shows how this is used in the Dyninst
 package.  The {\tt @when} directive is a Python decorator: a higher order function that
-takes a function definition as a parameter and returns a new function to put in its place.
+takes a function definition as a parameter and returns a new function to replace it.
 We replace the function with a callable multi-function dispatch object, and we
 integrate the predicate check into the function dispatch mechanism.  Here, the
 {\tt @when} condition is true when Dyninst is at version 8.1 or lower, and in those cases
