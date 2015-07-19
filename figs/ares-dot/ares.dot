@@ -63,6 +63,25 @@ digraph G {
 "readline"                     [label="readline", fillcolor=dodgerblue4]
 "openssl"                      [label="openssl", fillcolor=dodgerblue4]
 
+"mpi"                          [label="MPI", fillcolor=dodgerblue4]
+
+"ares" -> "mpi"
+"overlink" -> "mpi"
+"Leos" -> "mpi"
+"Cheetah" -> "mpi"
+"Teton" -> "mpi"
+"ASCLaser" -> "mpi"
+"DSD" -> "mpi"
+"mslib" -> "mpi"
+"cretin" -> "mpi"
+"hypre" -> "mpi"
+"matprop" -> "mpi"
+"scallop" -> "mpi"
+"hdf5" -> "mpi"
+"silo" -> "mpi"
+"SAMRAI" -> "mpi"
+
+
 "tk" -> "tcl"
 "tcl" -> "zlib"
 "scipy" -> "python"
