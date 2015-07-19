@@ -1,0 +1,155 @@
+digraph G {
+    labelloc = "b"
+    rankdir = "TB"
+    ratio = .3
+    nodesep=0.3
+    edge[penwidth=3,
+         arrowsize=3,
+         color="darkslategray"]
+    node[
+         color=black,
+         penwidth=2,
+         fontname=ArialBlack,
+         fontsize=64,
+         margin=0.2,
+         fontcolor=white,
+         shape=box,
+         style="rounded,filled"]
+
+"ares"                         [label="ARES", fillcolor=red3]
+"tcl"                          [label="tcl", fillcolor=dodgerblue4]
+"tk"                           [label="tk", fillcolor=dodgerblue4]
+"scipy"                        [label="scipy", fillcolor=dodgerblue4]
+"python"                       [label="python", fillcolor=dodgerblue4]
+"cmake"                        [label="cmake", fillcolor=dodgerblue4]
+"hpdf"                         [label="hpdf", fillcolor=dodgerblue4]
+"opclient"                     [label="opclient", fillcolor=dodgerblue4]
+"boost"                        [label="boost", fillcolor=dodgerblue4]
+"zlib"                         [label="zlib", fillcolor=dodgerblue4]
+"numpy"                        [label="numpy", fillcolor=dodgerblue4]
+"bzip2"                        [label="bzip2", fillcolor=dodgerblue4]
+"lapack"                       [label="LAPACK", fillcolor=dodgerblue4]
+"netlib-blas"                  [label="BLAS", fillcolor=dodgerblue4]
+"gsl"                          [label="gsl", fillcolor=dodgerblue4]
+"hdf5"                         [label="HDF5", fillcolor=dodgerblue4]
+"gperftools"                   [label="gperftools", fillcolor=dodgerblue4]
+"papi"                         [label="papi", fillcolor=dodgerblue4]
+"GA"                           [label="GA", fillcolor=dodgerblue4]
+"bdivxml"                      [label="bdivxml",fillcolor=chartreuse4]
+"sgeos_xml"                    [label="sgeos_xml", fillcolor=chartreuse4]
+"scallop"                      [label="Scallop", fillcolor=chartreuse4]
+"rng"                          [label="rng", fillcolor=chartreuse4]
+"perflib"                      [label="perflib", fillcolor=chartreuse4]
+"memusage"                     [label="memusage", fillcolor=chartreuse4]
+"timers"                       [label="timers", fillcolor=chartreuse4]
+"silo"                         [label="Silo", fillcolor=chartreuse4]
+"SAMRAI"                       [label="SAMRAI", fillcolor=darkgoldenrod3]
+"hypre"                        [label="HYPRE", fillcolor=darkgoldenrod3]
+"matprop"                      [label="matprop", fillcolor=darkgoldenrod3]
+"overlink"                     [label="overlink", fillcolor=darkgoldenrod3]
+"qd"                           [label="qd", fillcolor=red3]
+"Leos"                         [label="LEOS", fillcolor=red3]
+"mslib"                        [label="MSlib", fillcolor=red3]
+"Laser"                        [label="Laser", fillcolor=red3]
+"cretin"                       [label="CRETIN", fillcolor=red3]
+"tdf"                          [label="tdf", fillcolor=red3]
+"Cheetah"                      [label="Cheetah", fillcolor=red3]
+"DSD"                          [label="DSD", fillcolor=red3]
+"Teton"                        [label="Teton", fillcolor=red3]
+"nuclear"                      [label="Nuclear", fillcolor=red3]
+"ASCLaser"                     [label="ASCLaser", fillcolor=red3]
+"ncurses"                      [label="ncurses", fillcolor=dodgerblue4]
+"sqlite"                       [label="sqlite", fillcolor=dodgerblue4]
+"readline"                     [label="readline", fillcolor=dodgerblue4]
+"openssl"                      [label="openssl", fillcolor=dodgerblue4]
+
+"tk" -> "tcl"
+"tcl" -> "zlib"
+"scipy" -> "python"
+"scipy" -> "lapack"
+"scipy" -> "numpy"
+"python" -> "bzip2"
+"sgeos_xml" -> "bdivxml"
+"hpdf" -> "zlib"
+"hpdf" -> "cmake"
+"opclient" -> "silo"
+"Leos" -> "hdf5"
+"matprop" -> "bdivxml"
+"silo" -> "hdf5"
+"SAMRAI" -> "zlib"
+"SAMRAI" -> "boost"
+"SAMRAI" -> "hdf5"
+"scallop" -> "cmake"
+"scallop" -> "boost"
+"Laser" -> "GA"
+"Laser" -> "silo"
+"cretin" -> "lapack"
+"hdf5" -> "zlib"
+"ares" -> "hpdf"
+"ares" -> "scallop"
+"ares" -> "tcl"
+"ares" -> "gperftools"
+"ares" -> "Cheetah"
+"ares" -> "sgeos_xml"
+"ares" -> "cretin"
+"ares" -> "Teton"
+"ares" -> "bzip2"
+"ares" -> "cmake"
+"ares" -> "lapack"
+"ares" -> "nuclear"
+"ares" -> "SAMRAI"
+"ares" -> "mslib"
+"ares" -> "tk"
+"ares" -> "boost"
+"ares" -> "Laser"
+"ares" -> "python"
+"ares" -> "bdivxml"
+"ares" -> "rng"
+"ares" -> "tdf"
+"ares" -> "matprop"
+"ares" -> "opclient"
+"ares" -> "scipy"
+"ares" -> "GA"
+"ares" -> "DSD"
+"ares" -> "silo"
+"ares" -> "ASCLaser"
+"ares" -> "hypre"
+"ares" -> "memusage"
+"ares" -> "papi"
+"ares" -> "hdf5"
+"ares" -> "numpy"
+"ares" -> "zlib"
+"ares" -> "Leos"
+"ares" -> "timers"
+"ares" -> "qd"
+"ares" -> "perflib"
+"ares" -> "gsl"
+"ares" -> "overlink"
+"hypre" -> "zlib"
+"hypre" -> "cmake"
+"tdf" -> "nuclear"
+"Cheetah" -> "zlib"
+"Cheetah" -> "hdf5"
+"numpy" -> "python"
+"numpy" -> "lapack"
+"overlink" -> "zlib"
+"overlink" -> "hdf5"
+"overlink" -> "silo"
+"DSD" -> "bdivxml"
+"lapack" -> "cmake"
+"netlib-blas" -> "cmake"
+"lapack" -> "netlib-blas"
+"mslib" -> "cmake"
+"mslib" -> "lapack"
+"mslib" -> "bdivxml"
+"mslib" -> "matprop"
+"mslib" -> "Leos"
+"mslib" -> "Cheetah"
+"readline" -> "ncurses"
+"python" -> "readline"
+"python" -> "ncurses"
+"python" -> "bzip2"
+"python" -> "openssl"
+"python" -> "sqlite"
+"openssl" -> "zlib"
+}

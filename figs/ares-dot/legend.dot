@@ -1,0 +1,26 @@
+digraph Legend {
+    labelloc = "b"
+    rankdir = "TB"
+    ratio = .3
+    nodesep=0.3
+    node[
+         color=black,
+         penwidth=2,
+         fontname=ArialBlack,
+         fontsize=64,
+         margin=0.2,
+         fontcolor=white,
+         shape=box,
+         style="rounded,filled"]
+
+#subgraph cluster {
+#    label="Package Types"
+#    fontsize=64
+#    fontname=ArialBlack
+#    penwidth=2
+    "phys"        [label="Physics", fillcolor=red3]
+    "utility"     [label="Utility", fillcolor=chartreuse4]
+    "math"        [label="Math", fillcolor=darkgoldenrod3]
+    "extern"      [label="External", fillcolor=dodgerblue4]
+#    }
+}
