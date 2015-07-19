@@ -68,14 +68,14 @@ These point to the {\tt include} and {\tt lib} directories of dependency
 library installations, where needed headers and libraries are located.
 The wrappers then invoke the real compiler with the modified arguments.
 
-Spack's compiler wrappers have a number of useful effects.  First, they allow
+Spack's compiler wrappers have a number of benefits.  First, they allow
 Spack to transparently switch compilers in most builds.  This is how
 compiler options like {\tt \%gcc} are implemented.  Second, they enforce the
 use of {\tt RPATHs} in
 installed binaries.  This causes applications built by Spack to run correctly
 {\it regardless of the environment}.  Third, because compiler wrappers add 
 header and library search paths for dependencies, header and library detection
-tests that are run by most build systems succeed automatically, without
+tests used by most build systems succeed automatically, without
 the need to use special arguments for nonstandard locations.  {\tt configure}
 commands in Spack's {\tt install} function can have fewer arguments, and can
 be written as they would be for system installs.  This reduces complexity
