@@ -36,7 +36,7 @@ class Mpileaks(Package):
 	}
 \end{figure}
 
-In Spack, packages are Python scripts that build software artifacts.  
+In Spack, packages are Python scripts that build software artifacts.
 Each package is a class that extends a generic {\tt Package}
 base class.  {\tt Package} implements the bulk of the build process, but
 subclasses provide their own {\tt install} method to handle the
@@ -45,7 +45,7 @@ handle managing the install location.  Rather, Spack passes the {\tt install}
 method a {\tt prefix} parameter.  The package implementor must ensure that
 her {\tt install} function installs the package {\it into} the {\tt prefix},
 but Spack ensures that {\tt prefix} is computed in such a way that it is
-unique for every configuration of a package.  To further simplify 
+unique for every configuration of a package.  To further simplify
 package implementation, Spack implements an embedded domain-specific
 language (DSL).
 The DSL provides special directives such as {\tt depends\_on},
@@ -55,19 +55,12 @@ to the package class.
 Figure~\ref{fig:mpileaks} shows the package for \mpileaks, a tool developed
 at LLNL to find un-released MPI handle objects in parallel programs.
 The {\tt MpiLeaks} class first provides simple metadata: a text description,
-a homepage, and a download URL.  
+a homepage, and a download URL.
 Next, two {\tt version} directives identify known versions and provide
 MD5 checksums used to verify downloads.
 Below this, two {\tt depends\_on}
 directives indicate prerequisite packages that must be installed before \mpileaks.
-Last, the {\tt install()} method contains the commands used to build
+Last, the {\tt install} method contains the commands used to build
 the tool.  Spack's DSL allows shell commands to be invoked as Python functions,
-and the {\tt install()} method invokes {\tt configure},
+and the {\tt install} method invokes {\tt configure},
 {\tt make}, and {\tt make install} commands as a shell script would.
-
-
-
-
-
-
-

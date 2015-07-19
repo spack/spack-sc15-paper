@@ -44,7 +44,7 @@ package code is structured to build a single version of a package, but in Spack,
 package file is a {\it template} that can be configured and built in many
 different ways, according to a set of {\it parameters}.
 Spack calls a single build configuration a {\it spec}. The {\tt spec} object
-passed to {\tt install()} is how Spack communicates dependencies and parameters to package authors.
+passed to the {\tt install} method is how Spack communicates dependencies and parameters to package authors.
 
 \subsubsection{Structure}
 To understand how specs work, consider the {\tt mpileaks} package structure.
@@ -189,7 +189,7 @@ and that the user has requested the {\tt debug} variant of the {\tt callpath} li
 
 Recall that Spack guarantees that there is only a single version of any package in
 the spec DAG.  Within the same DAG, each dependency can be uniquely
-identified by its package name alone.  Therefore, the user need not think about DAG 
+identified by its package name alone.  Therefore, the user need not think about DAG
 connectivity to add constraints.  She need only know that {\tt mpileaks}
 somehow depends on {\tt callpath}.
 For the same reason, the constraint order does not matter; dependency constraints

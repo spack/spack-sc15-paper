@@ -1,61 +1,56 @@
 %!TEX root = spack-paper-sc15.tex
 
-
 \subsection{Installation Environment}
 
-%{\bf Reproducibility.}
-%\paragraph{Reproducibility}
-Spack is intended to build a consistent HPC stack for our multi-user
+Spack is designed to build a consistent HPC stack for our multi-user
 environment, and reproducible builds are one of our design goals.
 Experience at LLNL has shown that it is vexingly difficult to reproduce
 a build manually.
 %
-Many packages used at LLNL have a profusion of build options, and specifying them 
-correctly often requires tedious experimentation.  This is due to lack of
-build standards and to the diversity of HPC environments.  
+Many packages used at LLNL have a profusion of build options, and specifying
+them correctly often requires tedious experimentation.  This is due to lack of
+build standards, as well as the diversity of HPC environments.
 For example, in some packages that depend on the {\tt Silo} library,
 the \verb|--with-silo| parameter takes a path to {\tt Silo}'s installation prefix.
 In others, it takes the {\tt include} and {\tt lib} subdirectories,
 separated by a comma.
-The {\tt install} method in Spack's package files allows us to record
-precise build incantations for later reuse.
+The {\tt install} method in Spack's package files encodes precise build
+incantations for later reuse.
 
-%{\bf Environment isolation.}
-\paragraph{Environment isolation}
-In addition to command-line issues, we
-frequently encounter errors due to inconsistencies between the environment of
-the package installer and the package user.
+\subsubsection{Environment isolation}
+In addition to inconsistencies that arise from building manually, we
+frequently encounter errors due to inconsistencies between the package
+installation environment and the environment of the package user.
 %
-For example, there are two versions of the {\tt libelf} library used by
-LLNL performance tools. One is distributed with RedHat Linux, while another
-publicly available version has the same API but an incompatible ABI.
-Failure to specify the right version at build time has caused many
+For example, LLNL performance tools use two versions of the {\tt libelf}
+library. One is distributed with RedHat Linux, while the
+other is publicly available, and they have the same API but an incompatible ABI.
+Specifying the wrong version at build time has caused many
 unexpected crashes.
-%
-Spack manages the build environment by running each {\tt install} invocation
-in a new process.  It helps packages find dependencies 
-correctly, by setting
+
+Spack manages the build environment by running each call to {\tt install}
+in its own process.  In this environment, Spack sets
 {\tt PATH}, {\tt PKG\_CONFIG\_PATH}, {\tt CMAKE\_PREFIX\_PATH}, and
 {\tt LD\_LIBRARY\_PATH} to include the dependencies of the current build.
 These variables are commonly used by build systems to locate dependencies,
-and setting them helps to ensure that correct libraries are detected.
+and setting them helps to ensure that the correct libraries are detected by
+build systems.
 The isolated build environment also gives package authors 
 free reign to set build-specific environment variables without interfering
 with other packages.
 
 
-%{\bf Compiler wrappers and RPATHs.}
-\paragraph{Compiler wrappers and RPATHs}
-Finding compilers at build time is not the only obstacle to reproducible
+\subsubsection{Compiler wrappers and RPATHs}
+Finding dependencies at build time is not the only obstacle to reproducible
 behavior.  As mentioned in Section~\ref{sec:motivation}, it is also important
 for binaries to be able to find dependency libraries at {\it runtime}.
-One of the most frequent user errors at LC is improper library configuration.
+One of the most common user errors at LC is improper library configuration.
 Users frequently do not know what libraries a package was built with, and 
 it is difficult for them to construct a suitable {\tt LD\_LIBRARY\_PATH} for
-a package that was built by someone else.  Because of frequent support calls,
+a package that was built by someone else.  To reduce the number of support calls,
 we typically add {\tt RPATHs} to public software installations, so that paths
-to dependencies are embedded in binaries and so that users do not have to know
-this information to run installed software correctly.
+to dependencies are embedded in binaries. This way, users do not need to know
+details of dependencies to run installed software correctly.
 
 Spack manages {\tt RPATH} settings and other build policies with
 {\it compiler wrappers}. 
@@ -64,9 +59,9 @@ environment variables
 {\tt CC}, {\tt CXX}, {\tt F77}, and {\tt FC} to point to its own compiler
 wrapper scripts.  These variables are used by most build systems to select
 C, C++, and Fortran compilers, so they are generally picked up 
-automatically\footnote{If builds do not respect {\tt CC}, {\tt CXX}, etc.,
+automatically.\footnote{If builds do not respect {\tt CC}, {\tt CXX}, etc.,
 wrappers can be added as arguments or inserted into Makefiles
-by {\tt install}.}.
+by {\tt install}.}
 When run, the wrappers insert include ({\tt -I}), library ({\tt -L}), and 
 {\tt RPATH} ({\tt -Wl,-rpath} or similar) flags into the argument list.
 These point to the {\tt include} and {\tt lib} directories of dependency
@@ -80,11 +75,11 @@ use of {\tt RPATHs} in
 installed binaries.  This causes applications built by Spack to run correctly
 {\it regardless of the environment}.  Third, because compiler wrappers add 
 header and library search paths for dependencies, header and library detection
-tests that are run by most build systems succeed automatically, {\it without}
+tests that are run by most build systems succeed automatically, without
 the need to use special arguments for nonstandard locations.  {\tt configure}
 commands in Spack's {\tt install} function can have fewer arguments, and can
 be written as they would be for system installs.  This reduces complexity
-for package maintainers and enforces consistent, reproducible
+for package maintainers and helps to ensure consistent, reproducible
 build policies across packages.  Finally, because Spack has control over the 
 wrappers, package authors can programmatically filter the compiler flags
 used by software build systems, a useful last resort when porting to
@@ -94,15 +89,31 @@ bleeding-edge platforms or new, esoteric compilers.
 \label{sec:envmodule}
 In addition to managing the build-time environment, Spack can assist in managing
 the run-time environment.  A package may need environment variables like {\tt PATH}, 
-{\tt LD_LIBRARY_PATH}, or {\tt MANPATH} set before it can be used.  
+{\tt MANPATH}, or {\tt PKG\_CONFIG\_PATH} set before it can be used.  
 As discussed in Section~\ref{sec:motivation}, many sites rely on environment 
 modules to setup the runtime environment.  Spack can automatically create simple
 dotkit~\cite{dotkit} and Module configuration files for its packages, allowing 
-users to setup their runtime environment using familiar systems.  
+users to setup their runtime environment using familiar systems.  While Spack
+packages do not {\tt LD\_LIBRARY\_PATH} to run, we set it in our generated module
+files as well, because it can be used by build systems to find libraries, as well
+as by dependent packages that do not use {\tt RPATH}.
 %
 Future versions of Spack may also allow the creation of Lmod~\cite{mclay:lmod} 
 hierarchies, as discussed in Section~\ref{sec:env-rpath}. Spack's rich 
 dependency information would allow such hierarchies to be generated automatically.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
