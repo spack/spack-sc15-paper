@@ -3,49 +3,55 @@
 \subsection{User and Site Policies}
 \label{sec:usecase-policy}
 
-Spack makes it easy for package maintainers to create and organize package installations.
-But it also needs to be easy for end-users to find and use those packages.
-Different end-users may have different expectations about how packages should be built and installed,
-and those expectations are typically shaped by years of site policies, personal preferences,
-and lingering legacy decisions originallly made on a DEC VAX.
-Rather than try to dictate these expectations,
-Spack allows both end-users and package maintainers to create custom policies dictating
-how packages are built and installed at their site.
+Spack makes it easy to create and organize package installations,
+but it must also be easy for end-users to find and use packages on an HPC
+system. Different end-users have different expectations about how packages
+should be built and installed, and at LLNL those expectations are shaped
+by years of site policies, personal preferences, and lingering legacy
+decisions originally made on a DEC VAX.
+Spack provides mechanisms that allow users to customize it for the needs
+of particular sites and users.
+
+%Rather than try to dictate these expectations,
+%Spack allows both end-users and package maintainers to create custom policies dictating
+%how packages are built and installed at their site.
 
 \subsubsection{Package Views}
 \label{sec:package-views}
 
 While Spack can easily create many installations of a package like {\tt mpileaks}
-for different compilers and MPI implementations, end users may find Spack's directory layout
-confusing, and they may not be able to find the right libraries.
-As discussed in Section~\ref{sec:envmodule},
-environment modules are commonly used on supercomputer systems to solve this problem,
-and Spack allows the package author to automatically create module and dotkit files for packages that Spack installs.
-
-However, even when modules and dotkits are available,
-many users will go directly through the filesystem to access package installs.
-Spack installs packages into paths based on concretized specs,
-which is ideal for maintaining multiple package installations, but may be difficult for an end-user to navigate.
-A version of {\tt mpileaks}, for example, may be installed in a location like
+for different compilers and MPI implementations, end users may find Spack's directory layout confusing, and they may not be able to find libraries intuitively.
+Spack installs packages into paths based on concretized specs.
+This is ideal for maintaining multiple package installations, 
+but it may be difficult for an end-user to navigate.
+For example, an {\tt mpileaks} installation prefix might be:
 %
 \begin{minted}[fontsize=\small]{bash}
-spack/opt/chaos_5_x86_64_ib/gcc@4.9.2/mpileaks@1.0-db465029
+spack/opt/linux-x86_64/gcc-4.9.2/mpileaks-1.0-db465029
 \end{minted}
-%
+
+As discussed in Section~\ref{sec:envmodule},
+environment modules are commonly used on HPC systems to solve this problem,
+and Spack allows the package author to automatically create environment modules
+for packages that Spack installs.
+Even when modules are available, many users still
+navigate the filesystem to access packages.
+
 Spack thus allows the creation of views, which are a symbolic-link based directory layout of packages.
 Views provide a human-readable directory layout,
-which can be taylored to fit alongside existing directory layouts or used to create new layouts.
+which can be adapted to match legacy directory layouts that users rely on.
 For example, the above {\tt mpileaks} package may have a view that creates a link in
-{\tt /opt/mpileaks-1.0-openmpi} to the Spack installation of {\tt mpilleaks}.
+{\tt /opt/mpileaks-1.0-openmpi} to the Spack installation of {\tt mpileaks}.
 The same package install may be referenced by multiple links and views,
 so the above package could also be linked from a more generic {\tt /opt/mpileaks-openmpi}
-link (which is useful for users who don't want to hardcode a specific version).
+link. This is useful for users who always want to use the latest version.
 Views can also be used to create symbolic links to specific executables or libraries in an install,
-so a Spack-built {\tt gcc 4.9.2} install may have a view that creates links from
+so a Spack-built {\tt gcc@4.9.2} install may have a view that creates links from
 {\tt /bin/gcc49} and {\tt /bin/g++49} to the appropriate {\tt gcc} and {\tt g++} executables.
 
-Views are configured through a {\tt spackconfig} file, which can be set up at the site or user level.
-For each package or set of packages, the {\tt spackconfig} file contains rules
+Views are configured using configuration files, which can be set up at the site or
+user level.
+For each package or set of packages, configuration file contains rules
 describing the links that should point into that package.
 The link names can be parameterized.
 For example, the above {\tt mpileaks} symbolic link might have been created by a rule like:
@@ -54,49 +60,68 @@ For example, the above {\tt mpileaks} symbolic link might have been created by a
     /opt/${PACKAGE}-${VERSION}-${MPINAME}
 \end{minted}
 %
-On installation or removal,
+On installation and removal,
 links are automatically created, deleted, or updated according to these rules.  
 
-Spack's views are a projection from a point in a high-dimension space
-(the concretized spec, which fully specifies all parameters) to point in a lower-dimension space
-(the link name, which may only specify a few parameters).
-Thus several package installations may map to the same link.
+Spack's views are a projection from a point in a high-dimensional space
+(the concretized spec, which fully specifies all parameters) to point
+in a lower-dimensional space
+(the link name, which may only contain a few parameters).
+Thus, several installations may map to the same link.
 For example, the above {\tt mpileaks} link could point to an {\tt mpileaks} compiled with
 {\tt gcc} or {\tt icc} -- the compiler parameter is not part of the link.
-To keep  package installations  consistent and reproducible,
-Spack has a well-defined mechanism for resolving conflicting links.
-Spack defines a sort order for packages, which arranges packages from ``most desired'' to ``least desired''.
-When a symbolic link could resolve to multiple package installations,
-Spack points the link at the most desired package.  
-
-By default, Spack treats newer versions of packages compiled with newer compilers
-as more desirable than older packages built with older compilers.
-It has well-defined, but not necessarily meaningful,
-preferences for deciding between MPI implementations and different compilers.
-A user can override Spack's default sort order through their {\tt spackconfig} file.
-For example, at one site users may typically use the Intel compiler,
-but some users also use the system's default {\tt gcc 4.4.7}.
+To keep  package installations consistent and reproducible,
+Spack has a well-defined mechanism for resolving conflicting links;
+it uses a combination of internal default policies and user- or site-defined
+policies to define an {\it order} of preference for different parameters.
+By default, Spack prefers newer versions of packages compiled with newer compilers
+to older packages built with older compilers. It has well-defined, but not 
+necessarily meaningful, order of preference for deciding between MPI
+implementations and different compilers.
+The default policies can be overridden in configuration files, by either users
+or by sites. For example, at one site users may typically use the Intel compiler,
+but some users also use the system's default {\tt gcc@4.4.7}.
 These preferences could be stated by adding:
 %
 \begin{minted}[fontsize=\small]{bash}
     compiler_order = icc,gcc@4.4.7
 \end{minted}
 %
-to the site's {\tt spackconfig} file, which would cause the ambigious {\tt mpileaks} link to point to an {\tt icc} installation.
-Any compiler left out of the compiler\_order setting is treated as less preferred than explicitly stated compilers.
-Spack can also be configured to treat specific package versions as more preferred than other versions,
-which can be useful if a new version is unstable and untested, and should not be advertised with symbolic links.  
+to the site's {\tt spackconfig} file, which would cause the ambiguous
+{\tt mpileaks} link to point to an installation compiled with {\tt icc}.
+Any compiler not in the compiler\_order setting is treated as less preferred
+than those explicitly provided.
+%
+In a similar manner, Spack can be configured to give specific package
+configurations priority over others.
+This can be useful if a new version is unstable and untested.
 
-
-By default, Spack stores its package files in a mainline repository that is present when users
-first run Spack.  At many sites, packages may build sensitive, proprietary software, or they 
-may have patches that are not useful outside of a certain company or organization.  Putting
-this type of code back into a public repository does not often make sense, and if it makes the
+\subsubsection{External Package Repositories}
+By default, Spack stores its package files in a mainline repository
+that is present when users
+first run Spack.  At many sites, packages may build sensitive,
+proprietary software, or they 
+may have patches that are not useful outside of a certain company or
+organization.  Putting this type of code back into a public repository
+does not often make sense, and if it makes the
 mainline less stable, it can actually make sharing code between sites more difficult.  
 
-To support our own private packages, and to support those of LLNL code teams, Spack allows the creation of site-specific variants of packages.  Via the {\tt spackconfig} file, users can specify additional search directories for finding additional {\tt Package} classes.
+To support our own private packages, and to support those of LLNL code teams,
+Spack allows the creation of site-specific variants of packages.
+Via configuration files, users can specify additional search
+directories for finding additional {\tt Package} classes.
 %
-The additional packages are like the {\tt mpileaks} package shown in Figure~\ref{fig:mpileaks}.  However, the extension packages can extend from not only {\tt Package}, but also any of Spack's built-in packages.   Custom packages can inherit from and replace the Spack's default packages, allowing sites to either tweak or completely replace Spack's build recipes.  To continue the previous example, a site can write a {\tt LocalSpindle} Python class, which inherits from Spack's {\tt Spindle} class.  {\tt LocalSpindle} may simply add additional configure flags to the {\tt Spindle} class, while leaving the dependencies and most of the build instructions from its parent class.  For reproducibility, Spack also tracks the {\tt Package} class that drove a specific build. 
+The additional packages are like the {\tt mpileaks} package shown in Figure~\ref{fig:mpileaks}.  However, the extension packages can extend from not
+only {\tt Package}, but also any of Spack's built-in packages.
+Custom packages can inherit from and replace Spack's default
+packages, so other sites to either tweak or completely replace Spack's
+build recipes.  To continue the previous example, a site can write
+a {\tt LocalSpindle} Python class, which inherits from Spack's
+{\tt Spindle} class.  {\tt LocalSpindle} may simply add additional
+configure flags to the {\tt Spindle} class, while leaving the
+dependencies and most of the build instructions from its parent
+class.  For reproducibility, Spack also tracks the {\tt Package}
+class that drove a specific build. 
 
 
 

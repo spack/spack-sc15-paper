@@ -8,21 +8,11 @@
 developers for its high-performance thread-safe heap and its lightweight profilers.
 Unfortunately, two issues made it difficult to maintain {\tt gperftools} installations
 at LC.  First, {\tt gperftools} is a C++ library.  Since C++ does not define a standard
-ABI, {\tt gperftools} must be re-built with each compiler and compiler version used by client
-applications.  Second, building {\tt gperftools} on bleeding-edge architectures
+ABI, {\tt gperftools} must be rebuilt with each compiler and compiler version used by client applications.  Second, building {\tt gperftools} on bleeding-edge architectures
 (such as Blue Gene/Q) requires patches and complicated configure lines that
 change with each compiler.  One application team tried to maintain their own
-builds of {\tt gperftools} for their preferred compilers, but this
-task was complicated due to the second issue.
+builds of {\tt gperftools}, but the maintenance burden soon became too great.
 
-Spack presented a solution to both problems.  Package administrators can use Spack to
-easily maintain a central install of {\tt gperftools} across combinations of
-compilers and compiler versions.  Spack's {\tt gperftools} package also serves as a central
-institutional knowledge repository for builds, as its package files encode
-the patches and configure lines required for each platform and compiler combination.
-We are investigating whether we can move some of these settings into compiler and
-architecture descriptors to further simplify Spack's build template for cross-platform
-installations.
 \begin{figure}
 \begin{minted}[linenos,
                numbersep=5pt,
@@ -48,20 +38,25 @@ def install(self, spec, prefix):
   }
 \end{figure}
 
+Spack presented a solution to both problems.  Package administrators can use Spack to
+easily maintain a central install of {\tt gperftools} across combinations of
+compilers and compiler versions.  Spack's {\tt gperftools} package also serves as a central
+institutional knowledge repository, as its package files encode
+the patches and configure lines required for each platform and compiler combination.
+%
 Figure~\ref{fig:gperftools} illustrates per-compiler and platform build rules with
 a simplified version of the install routine for {\tt gperftools}.
 %(the full {\tt gperftools} install routine includes other compilers and more options).
 The package applies a patch if {\tt gperftools} 2.4 is built with the XL compiler,
 and it selects the correct configure line based on the spec's platform and compiler.
 
-LC's {\tt mpileaks} tool, which we have used as a running example in this paper,
+LC's {\tt mpileaks} tool, which has been a running example in this paper,
 has an even larger configuration space than {\tt gperftools}.  It must be built
-for different compilers, compiler versions, MPI implementations, and MPI implementation
+for different compilers, compiler versions, MPI implementations, and MPI
 versions. As with {\tt gperftools}, we have been able to install many different
-configurations of {\tt mpileaks} using Spack.  Moreover, Spack's virtual dependency system
-allows us to
-quickly compose a new {\tt mpileaks} build when a new MPI library is deployed at LC, {\it without}
-modifying the {\tt mpileaks} package itself.
+configurations of {\tt mpileaks} using Spack.  Moreover, Spack's virtual dependency 
+system allows us to quickly compose a new {\tt mpileaks} build when a new MPI library is 
+deployed at LC, {\it without} modifying the {\tt mpileaks} package itself.
 %Though we simplified its dependency structure
 %here, the {\tt callpath} library can be built with three different stack trace libraries:
 %{\tt dyninst}, {\tt libunwind}, or {\tt glibc}.  For some codes we may soon need to build
