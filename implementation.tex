@@ -13,16 +13,17 @@ prior system, Spack provides a language to specify and manage the
 combinatorial space of HPC software configurations.
 
 \noindent
-Spack has the following unique capabilities:
+Spack provides the following unique features:
 \begin{enumerate}
-\item Packages are explicitly {\bf parameterized} by version,
-      architecture, compiler, other options, and dependencies,
-      allowing easy composition of new builds.
-\item To manage this large parameter space, spack provides a novel,
-      recursive {\bf spec syntax} for dependency graphs and constraints.
-\item Specs support versioned, ABI-incompatible interfaces like MPI through
-      {\bf versioned virtual dependencies}.
-\item Spack builds with {\bf compiler wrappers} that enforce build
+\item Packages explicitly {\bf parameterized} by version, platform,
+      compiler, options, and dependencies, to allow easy composition.
+\item A novel, recursive {\bf spec syntax} for dependency graphs and constraints,
+      which aids in managing the build parameter space.
+\item {\bf Versioned virtual dependencies} to handle versioned, 
+      ABI-incompatible interfaces like MPI.
+\item A novel {\bf concretization} process that translates an abstract build
+      specification into a full, concrete build specification.
+\item A build environment with {\bf compiler wrappers} that enforce build
       consistency and simplify package writing.
 \end{enumerate}
 
