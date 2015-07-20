@@ -11,7 +11,8 @@ across a number of HPC sites, with particular focus on Livermore
 Computing (LC). While tools exist that can handle multi-configuration
 installs, none of them addresses the combinatorial nature
 of the software configuration space directly. None of them allows
-a user to rapidly {\it compose} new parametric builds.
+a user to rapidly {\it compose} new builds with version, compiler,
+and dependency parameters.
 
 We introduced Spack, a package manager in development at LLNL, that
 provides truly {\it parameterized} builds.  Spack implements
@@ -19,12 +20,12 @@ a novel, recursive {\it spec} syntax that simplifies the process of working
 with large software configuration spaces, and it builds software
 so that it will run correctly, regardless of the environment.
 We outlined a number of Spack's unique features, including
-versioned virtual dependencies, and the {\it concretization} process,
-which converts an underspecified build DAG into a buildable spec.
+versioned virtual dependencies, and its novel {\it concretization}
+process, which converts an abstract build DAG into a concrete,
+buildable spec.
 
-We showed through three use cases that Spack is already
-increasing operational efficiency
-in production at LLNL.  We believe that the software management
-techniques implemented in
-Spack are applicable to a broad range of HPC facilities.
-Spack is available online at: http://bit.ly/spack-git.
+We showed through four use cases that Spack is already increasing
+operational efficiency in production at LLNL.  We believe that the
+software management techniques implemented in Spack are applicable
+to a broad range of HPC facilities.
+Spack is available online at http://github.com/scalability-llnl/spack.
