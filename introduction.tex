@@ -27,7 +27,7 @@ and application developers frequently build, install, and support many
 different configurations of math and physics libraries, as well as
 other software.  Frequently, applications must be rebuilt to fix bugs
 and to support new versions of the operating system (OS), Message
-Passing Interface (MPI) implementation, compilers, and other
+Passing Interface (MPI) implementation, compiler, and other
 dependencies.  Unfortunately, building scientific software is
 notoriously complex, with immature build systems that are difficult to
 adapt to new
@@ -48,11 +48,11 @@ To our knowledge, no existing tool allows new configurations to be composed
 and assembled on demand.  Some allow limited forms of
 composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but their
 dependency management is overly rigid, and they burden users with
-the combinatorial naming and versioning problems.
+combinatorial naming and versioning problems.
 
-In this paper, we describe our experiences with the {\it Spack} package manager,
+This paper describes our experiences with the {\it Spack} package manager,
 which we have developed at LLNL to manage increasing software complexity.
-Specifically, this paper offers the following contributions:
+It makes the following contributions:
 \begin{enumerate}
 \item A novel, recursive syntax for concisely specifying and querying
       the large parameter space of HPC packages;
