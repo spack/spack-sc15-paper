@@ -2,46 +2,43 @@
 
 \subsection{Limitations and Future Work}
 
-There are currently several limitations to Spack as implemented.
-As mentioned in Section~\ref{sec:concretization}, the concretization
-algorithm makes choices greedily. For example, if a package {\tt P} depends on 
-both {\tt hwloc@1.9} and {\tt mpi}, and if the concretization algorithm
+Spack's current implementation has several limitations.
+As mentioned in Section~\ref{sec:concretization}, we use a greedy 
+concretization algorithm. For example, if package {\tt P} depends on 
+both {\tt hwloc@1.9} and {\tt mpi}, and if the algorithm
 chooses an MPI implementation for {\tt P} that depends strictly on
-{\tt hwloc@1.8}, this will lead to a conflict on {\tt hwloc}, and Spack
-will raise an error and the user must resolve the issue.
-Our implementation will not backtrack to find an MPI version
-that does not conflict. So far, cases like this have been rare.
-However, we plan to add better constraint satisfaction solving to
-Spack in future work.
+{\tt hwloc@1.8}, a conflict on {\tt hwloc} arises. In this case, Spack 
+raises an error and the user must resolve the issue. Our implementation 
+does not backtrack to find an MPI version that does not conflict. These 
+cases have been rare so far. However, we plan to add better constraint
+satisfaction solving to Spack in future work.
 
 While Spack supports different architectures as part of the 
-configuration space, we do not currently have ways to factor common
-preferences (like {\tt configure} arguments and architecture-specific
-compiler flags) out of packages and into separate architecture
-descriptions.  This leads to some clutter in the package files when
-too many per-platform conditions accumulate.  We are in the process
-of adding features that would further simplify Spack's build templates
+configuration space, we cannot currently factor common preferences (like 
+{\tt configure} arguments and architecture-specific compiler flags) out of 
+packages and into separate architecture descriptions, which leads to some 
+clutter in the package files when too many per-platform conditions accumulate.
+We are adding features that will further simplify Spack's build templates
 for cross-platform installations.
 
-Spack can require more disk space than a module-based
-system, as we require otherwise identical packages with different
-dependencies to be built separately. In our view, the significant
-reduction in complexity for the end user justifies this cost.
+Spack can require more disk space than a module-based system, as otherwise 
+identical packages with different dependencies must be built separately. In 
+our view, the significant reduction in complexity for the end user justifies 
+this cost.
 
 The use of Python has been a barrier for some users, and
 a major attraction for others. For those who would otherwise create local
 workarounds, Python's flexibility has allowed them to extend local
 Spack packages to suit their needs. Such customizations frequently
-guide our priorities for new core features. We believe that the
+guide our priorities for new core features. The
 benefits of using a popular, rapidly emerging HPC language for our
 embedded DSL outweigh any costs of the learning curve.
 
-In addition to the future directions already mentioned,
-our main near-term goal is to grow a community around Spack and to
-build a larger base of contributors.  On the technical side, we will
+In the near term, we are actively working to grow a community around Spack 
+and to build a larger base of contributors. On the technical side, we will
 increase build robustness by deploying a continuous testing system
 at LLNL.  Finally, to support the growing number of
-HPC languages, runtimes, and programming models, we plan to add
+HPC languages, runtimes, and programming models, we will add
 capabilities to Spack that allow packages to depend on particular
 compiler features.  More and more, our codes are beginning to rely
 on advanced compiler capabilities, like {\tt C++11} language features,
