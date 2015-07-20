@@ -3,33 +3,6 @@
 \subsection{The ARES Multi-physics Code}
 \label{sec:ares}
 
-\begin{figure*}
-	\includegraphics[width=\textwidth]{figs/ares-dot/ares-fig.pdf}
-	\caption{
-		Dependencies of ARES, colored by type of package.
-		\label{fig:ares}
-	}
-\end{figure*}
-
-\begin{table}\centering
-\begin{tabular}{|r|c|c|c|c|}
-\hline
-\multirow{2}{*}{} & \multicolumn{2}{|c|}{\bf Linux} & {\bf BG/Q}     & {\bf Cray XE6} \\\cline{2-5}
-                  & {\it MVAPICH} & {\it OpenMPI}   & {\it BG/Q MPI} & {\it Cray MPI} \\\hline
-{\bf GCC}         & {\tt C P L D} &                 &                &                \\\hline
-{\bf Intel}       & {\tt C P L D} & {\tt C P L D}   &                &                \\\hline
-{\bf PGI}         & {\tt C P L D} &                 &                & {\tt C P L D}  \\\hline
-{\bf Clang}       & {\tt C P L D} &                 & {\tt C P L D}  &                \\\hline
-{\bf XL}          &               &                 & {\tt C P L D}  &                \\\hline
-\end{tabular}
-\caption{
-	Configurations of ARES built with Spack: \newline
-	(C)urrent and
-	(P)revious production, (L)ite, and (D)evelopment).
-	\label{tab:ares-configs}
-}
-\end{table}
-
 For our final use case, we describe our experiences using Spack to build ARES.
 ARES~\cite{ares1,ares2} is a 1, 2 and 3-dimensional radiation hydrodynamics code,
 developed for production use at LLNL.  It is capable of running both small, serial
@@ -42,6 +15,14 @@ it is being ported to LANL's forthcoming Trinity Cray XC30 machine on Trinitite,
 a smaller version of the full system.  The Trinity machine will consist of two partitions;
 one using Intel Haswell processors and another using Intel Knights Landing processors.
 Currently, only the Haswell partition is deployed on Trinitite.
+
+\begin{figure*}[t]
+	\includegraphics[width=\textwidth]{figs/ares-dot/ares-fig.pdf}
+	\caption{
+		Dependencies of ARES, colored by type of package.
+		\label{fig:ares}
+	}
+\end{figure*}
 
 ARES comprises 47 packages, with complex dependency relationships.  The DAG for
 the current production configuration of ARES is shown in Figure~\ref{fig:ares}.
@@ -70,6 +51,25 @@ Figure~\ref{fig:ares}.
 Many of the external packages were already available in Spack when ARES was
 packaged, but some, such as Python, required modifications to support the
 new platforms and compilers.
+
+\begin{table}\centering
+\begin{tabular}{|r|c|c|c|c|}
+\hline
+\multirow{2}{*}{} & \multicolumn{2}{|c|}{\bf Linux} & {\bf BG/Q}     & {\bf Cray XE6} \\\cline{2-5}
+                  & {\it MVAPICH} & {\it OpenMPI}   & {\it BG/Q MPI} & {\it Cray MPI} \\\hline
+{\bf GCC}         & {\tt C P L D} &                 &                &                \\\hline
+{\bf Intel}       & {\tt C P L D} & {\tt C P L D}   &                &                \\\hline
+{\bf PGI}         & {\tt C P L D} &                 &                & {\tt C P L D}  \\\hline
+{\bf Clang}       & {\tt C P L D} &                 & {\tt C P L D}  &                \\\hline
+{\bf XL}          &               &                 & {\tt C P L D}  &                \\\hline
+\end{tabular}
+\caption{
+	Configurations of ARES built with Spack: \newline
+	(C)urrent and
+	(P)revious production, (L)ite, and (D)evelopment).
+	\label{tab:ares-configs}
+}
+\end{table}
 
 Table~\ref{tab:ares-configs} shows the configurations of ARES that we have packaged.
 The rows and columns show architectures, compilers, and MPI versions.
