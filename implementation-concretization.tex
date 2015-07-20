@@ -69,10 +69,6 @@ force the build to use a {\it particular} MPI implementation
 by supplying \verb|^openmpi| or \verb|^mpich|.  We leave automatic constraint
 space exploration for future work.
 
-When the concretization process completes, it outputs a fully concrete spec DAG.
-Figure~\ref{fig:specs-mpileaks-concrete} shows a concrete DAG with architectures,
-compilers, versions, variants, and all dependencies resolved.
-This fulfills Spack's guarantees.
 
 \begin{figure}
 	\centering
@@ -82,6 +78,10 @@ This fulfills Spack's guarantees.
 		\label{fig:specs-mpileaks-concrete}
 	}
 \end{figure}
+When the concretization process completes, it outputs a fully concrete spec DAG.
+Figure~\ref{fig:specs-mpileaks-concrete} shows a concrete DAG with architectures,
+compilers, versions, variants, and all dependencies resolved.
+This fulfills Spack's guarantees.
 
 At install time, Spack constructs a package object for each node in the spec DAG
 and traverses the DAG in a bottom-up fashion.  At each node, it invokes the package's
@@ -89,7 +89,43 @@ and traverses the DAG in a bottom-up fashion.  At each node, it invokes the pack
 a sub-DAG rooted at current node, which is also a concrete spec.  Package authors are
 responsible for querying the spec in {\tt install} and handling different configurations.
 
-\subsubsection{Shared sub-DAGs}\label{sec:directory-layout}
+\subsubsection{Concretization Runtime}
+\label{sec:concretization-overhead}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\columnwidth]{figs/concretization-overhead/concretization-times.pdf}
+	\caption{
+		Concretization running time for 245 packages.
+		\label{fig:concretization-time}
+	}
+\end{figure}
+
+Figure~\ref{fig:concretization-time} shows the running time of concretization vs.
+the size of a package DAG (in nodes).  We generated this plot by running {\tt concretize}
+on all 245 packages in our internal version of Spack.  We see that for all but the 9 largest
+packages, the algorithm takes less than 2 seconds on a Sandy Bridge cluster node, and less
+than 1 second on a Haswell MacBook Pro.  For larger DAGs, we begin to see superlinear
+scaling, but even for 50 nodes or more, concretization takes less than 6 seconds.
+%
+This performance is expected from a greedy, fixed-point method.
+The algorithm repeats, evaluating conditions and adding dependencies and constraints, until
+there are no more changes to be made.
+%
+%  Additionally, our current compiler concretization
+% policy requires a search in the DAG; it prefers the compiler of the nearest ancestor
+% if the current node's compiler is not set. 
+%
+More generally, concretization is an instance of the constraint
+satisfaction problem, which is NP-complete. Our greedy solver is sufficient for the
+packages we have built so far, and its running time is currently negligible. We do
+not expect to see software packages with thousands of dependencies in the near
+future, and we do not expect concretization to become a bottleneck, even if we
+use a full constraint solver.
+
+\subsubsection{Shared sub-DAGs}
+\label{sec:directory-layout}
+
 \begin{figure}\centering
    \includegraphics[width=\linewidth]{specs/rpaths.pdf}
    \caption{
@@ -110,6 +146,8 @@ both the {\tt mpich} and {\tt openmpi} builds of {\tt mpileaks}.
 
 
 \subsubsection{Reproducibility}
+
+
 For reproducibility, and to preserve provenance, Spack stores a number of
 files in the installation directory that document how the installed package was
 built.  These include the {\tt package.py} file used to build, a build log
