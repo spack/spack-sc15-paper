@@ -1,6 +1,6 @@
-#!/usr/bin/env spack-python
+#!/usr/bin/env python
 
-from external import yaml
+import yaml
 import matplotlib.pyplot as plt
 
 files = { 'macbook.yaml' : 'MacBook Pro, Haswell, 2.6Ghz',

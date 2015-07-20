@@ -1,4 +1,4 @@
-#!/usr/bin/env spack-python
+#!/usr/bin/env python
 
 from external import yaml
 import matplotlib.pyplot as plt
