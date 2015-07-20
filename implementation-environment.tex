@@ -57,7 +57,7 @@ Spack manages {\tt RPATH} settings and other build policies with
 In each isolated {\tt install} environment, Spack sets the standard
 environment variables
 {\tt CC}, {\tt CXX}, {\tt F77}, and {\tt FC} to point to its own compiler
-wrapper scripts.  These variables are used by most build systems to select
+wrapper scripts.  These variables are used by most build systems to select 
 C, C++, and Fortran compilers, so they are generally picked up
 automatically.\footnote{If builds do not respect {\tt CC}, {\tt CXX}, etc.,
 wrappers can be added as arguments or inserted into Makefiles
@@ -85,6 +85,19 @@ wrappers, package authors can programmatically filter the compiler flags
 used by software build systems, a useful last resort when porting to
 bleeding-edge platforms or new, esoteric compilers.
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\columnwidth]{figs/wrappers/wrapper-overhead.pdf}
+	\caption{
+		Build times with and without Spack's compiler wrappers.
+		\label{fig:wrapper-overhead}
+	}
+\end{figure}
+
+Spack's compiler wrappers incur a small amount of overhead because they intercept
+calls to compilers within a build.  Figure~\ref{fig:wrapper-overhead} shows build time
+with and without the wrappers for seven different packages. 
+
 \subsubsection{Environment Module Integration}
 \label{sec:envmodule}
 In addition to managing the build-time environment, Spack can assist in managing
@@ -101,3 +114,15 @@ as by dependent packages that do not use {\tt RPATH}.
 Future versions of Spack may also allow the creation of Lmod~\cite{mclay:lmod}
 hierarchies, as discussed in Section~\ref{sec:env-rpath}. Spack's rich
 dependency information would allow such hierarchies to be generated automatically.
+
+
+
+
+
+
+
+
+
+
+
+
