@@ -55,9 +55,9 @@ non-Linux operating systems, an issue for the lightweight
 kernels of bleeding-edge Blue Gene/Q and Cray machines.
 Finally, each VM still uses a traditional package manager,
 so running many configurations still requires a large number of VMs.
-For facilities, this is a security concern, as a profusion of VMs makes
-mandatory patching difficult.  It is also tedious for users to manage a large
-number of VM environments.
+For facilities, this profusion of VMs is a security concern since it 
+complicates mandatory patching. Also, managing  a large number of VM 
+environments is tedious for users.
 
 \begin{table*}\centering
 \begin{tabular}{|l|l|}
@@ -154,18 +154,20 @@ both {\tt RPATHs} and {\tt dotkit}~\cite{dotkit} modules.
 Recently, a number of HPC package managers have emerged that manage
 multi-configuration builds.
 %
-Smithy~\cite{digirolamo:smithy} is an installation tool in use at ORNL. It
+ORNL uses the Smithy~\cite{digirolamo:smithy} installation tool. It
 can generate module files, but it does not provide any
 automated dependency management; it only checks whether a package's
 prerequisites have already been installed by the user.
 
-Nix~\cite{dolstra+:icfp08,dolstra+:lisa04}
-is a package manager and an OS distribution that supports the installation of
-arbitrarily many software configurations.  As at most HPC sites, each package
-in Nix is installed in a unique prefix, but Nix does not have a human-readable
-naming convention.  Instead, Nix determines the prefix by hashing the package
-file along with its dependencies. Nix package files are written in a custom
-functional language designed for packaging.
+The Nix~\cite{dolstra+:icfp08,dolstra+:lisa04} package manager and OS 
+distribution supports installation of arbitrarily many software 
+configurations.  As at most HPC sites, it installs each package
+in a unique prefix but it does not have a human-readable naming 
+convention.  Instead, Nix determines the prefix by hashing the package
+file and its dependencies.
+%% BRONIS: I'm not sure what the following sentence really adds
+%%  Nix package files are written in a custom
+%% functional language designed for packaging.
 
 The EasyBuild~\cite{hoste+:pyhpc12} tool is in production use at
 the University of Ghent and several other sites.  It allows multiple versions
@@ -186,17 +188,17 @@ Both Nix and HashDist use {\tt RPATHs} in their packages to ensure that
 libraries are found correctly.
 
 \paragraph{Gaps in current practice}
-The cryptographic versioning of Nix and HashDist is very flexible. It versions
-the package {\it and} its dependency configuration, and can represent any
-configuration. However, users cannot navigate or easily query the installed
+The flexible cryptographic versioning of Nix and HashDist manages 
+the package {\it and} its dependency configuration and can represent any
+configuration. However, users cannot easily navigate or query the installed
 software.
 %The systems are in a sense ``write-only'':
 %Nix does not offer a way to view a package's dependencies.
 %
-EasyBuild and Smithy generate environment modules, and some querying is
-possible through the module system.  Naming schemes used in existing module
-systems, however, cannot handle combinatorial versions. The Lmod authors
-call this the ``matrix problem''~\cite{mclay:lmod-tutorial}.
+EasyBuild and Smithy generate environment modules, which supports some 
+querying. Naming schemes used in existing module systems, however, cannot 
+handle combinatorial versions, which the Lmod authors call the 
+``matrix problem''~\cite{mclay:lmod-tutorial}.
 
 %EasyBuild's attempts to version groups dependencies by adding versions to
 %toolchains, but the naming is difficult to understand.
@@ -209,17 +211,16 @@ call this the ``matrix problem''~\cite{mclay:lmod-tutorial}.
 %This may lead to erroneous runs.
 
 The main limitation of existing tools is the lack of build {\it composability}.
-The full set of package versions is combinatorial, and realizing an arbitrary
-combination of compiler, MPI version, build options, and dependency versions
-requires tediously modifying many package files.
-Indeed, the number of package files required for most existing systems scales
-with the number of version {\it combinations}, not the number of packages, which
-quickly becomes unmanageable.  As an example, the EasyBuild
-system has over 3,300 files for several permutations of only 600 packages.
-A slightly different dependency graph requires an entire new package file
-hierarchy.  HashDist a more robust support for composition,
-but it does not have a first-class parameters for versions, compilers,
-or versioned interfaces.
+The full set of package versions is combinatorial, and arbitrary combinations 
+of compiler, MPI version, build options, and dependency versions requires 
+tedious modifications of many package files. Indeed, the number of package 
+files required for most existing systems scales with the number of version 
+{\it combinations}, not the number of packages, which quickly becomes 
+unmanageable.  As an example, the EasyBuild system has over 3,300 files for 
+several permutations of only 600 packages. A slightly different dependency 
+graph requires an entire new package file hierarchy.  HashDist supports 
+composition more robustly but does not have first-class parameters for 
+versions, compilers, or versioned interfaces.
 %
 HPC sites need better mechanisms to {\it parameterize} packages so that new
 builds can be {\it composed} in response to user needs.
