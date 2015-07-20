@@ -1,4 +1,4 @@
-%!TEX root = spack-paper-sc15.tex
+%!TEX root = spack-sc15.tex
 
 \subsection{Combinatorial Naming}
 \label{sec:usecase-combinatorial}
@@ -54,8 +54,8 @@ LC's {\tt mpileaks} tool, which has been a running example in this paper,
 has an even larger configuration space than {\tt gperftools}.  It must be built
 for different compilers, compiler versions, MPI implementations, and MPI
 versions. As with {\tt gperftools}, we have been able to install many different
-configurations of {\tt mpileaks} using Spack.  Moreover, Spack's virtual dependency 
-system allows us to quickly compose a new {\tt mpileaks} build when a new MPI library is 
+configurations of {\tt mpileaks} using Spack.  Moreover, Spack's virtual dependency
+system allows us to quickly compose a new {\tt mpileaks} build when a new MPI library is
 deployed at LC, {\it without} modifying the {\tt mpileaks} package itself.
 %Though we simplified its dependency structure
 %here, the {\tt callpath} library can be built with three different stack trace libraries:

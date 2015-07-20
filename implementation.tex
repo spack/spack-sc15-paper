@@ -1,4 +1,4 @@
-%!TEX root = spack-paper-sc15.tex
+%!TEX root = spack-sc15.tex
 
 \section{The Spack Package Manager}
 \label{sec:implementation}
@@ -18,7 +18,7 @@ Spack has the following unique capabilities:
 \item Packages are explicitly {\bf parameterized} by version,
       architecture, compiler, other options, and dependencies,
       allowing easy composition of new builds.
-\item To manage this large parameter space, spack provides a novel, 
+\item To manage this large parameter space, spack provides a novel,
       recursive {\bf spec syntax} for dependency graphs and constraints.
 \item Specs support versioned, ABI-incompatible interfaces like MPI through
       {\bf versioned virtual dependencies}.
@@ -31,6 +31,3 @@ Spack has the following unique capabilities:
 \input{implementation-virtual-deps}
 \input{implementation-concretization}
 \input{implementation-environment}
-
-
-

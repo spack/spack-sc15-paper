@@ -1,9 +1,9 @@
-%!TEX root = spack-paper-sc15.tex
+%!TEX root = spack-sc15.tex
 
 \subsection{Support for interpreted languages}
 \label{sec:usecase-python}
 
-Python is becoming increasingly popular for HPC applications, 
+Python is becoming increasingly popular for HPC applications,
 due to its flexibility as a language and its excellent support
 for calling into fast, compiled numerical libraries.
 Python is an interpreted language, but one can use it
@@ -16,12 +16,12 @@ time. The problems are similar to those that drove us to create
 Spack: different teams want different Python libraries with different
 configurations.
 
-Existing Python package managers are either language-specific~\cite{eby:setuptools}, 
+Existing Python package managers are either language-specific~\cite{eby:setuptools},
 or they do not support building from source~\cite{anaconda,conda}. None
 handles multi-configuration builds.  More glaringly, Python extensions
 are usually installed into the Python interpreter's prefix.
 This makes it impossible to install multiple versions.\footnote{{\tt setuptools}
-has support for multiple versions via {\tt pkg_resources}, 
+has support for multiple versions via {\tt pkg_resources},
 but this requires modifications to client code.}
 Installing each extension in its own prefix enables combinatorial versioning,
 but it requires users to add packages to the {\tt PYTHONPATH} variable at runtime.
@@ -41,7 +41,7 @@ symbolically links each file in the extension prefix into the Python
 installation prefix, as though it were installed directly. If any file
 conflict would arise from this operation, {\tt activate} fails.
 Similarly, the {\tt deactivate} operation removes the symbolic links and restores
-the Python installation to its  pristine state. 
+the Python installation to its  pristine state.
 
 There were additional complications because many Python packages {\it install their own
 package manager} if they do not find one in the Python installation.
@@ -65,25 +65,5 @@ This has allowed us to efficiently support our application teams, for whom we ca
 now rapidly construct custom Python installations.  We have also reduced
 the amount of time that LC staff spend installing Python modules.
 Because Spack packages can extend the activation and deactivation mechanisms,
-we believe the same mechanism could be used with other 
+we believe the same mechanism could be used with other
 interpreted languages with similar extension models, such as R, Ruby, or Lua.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

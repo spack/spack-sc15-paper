@@ -1,4 +1,4 @@
-%!TEX root = spack-paper-sc15.tex
+%!TEX root = spack-sc15.tex
 
 \subsection{User and Site Policies}
 \label{sec:usecase-policy}
@@ -22,7 +22,7 @@ of particular sites and users.
 While Spack can easily create many installations of a package like {\tt mpileaks}
 for different compilers and MPI implementations, end users may find Spack's directory layout confusing, and they may not be able to find libraries intuitively.
 Spack installs packages into paths based on concretized specs.
-This is ideal for maintaining multiple package installations, 
+This is ideal for maintaining multiple package installations,
 but it may be difficult for an end-user to navigate.
 For example, an {\tt mpileaks} installation prefix might be:
 %
@@ -61,7 +61,7 @@ For example, the above {\tt mpileaks} symbolic link might have been created by a
 \end{minted}
 %
 On installation and removal,
-links are automatically created, deleted, or updated according to these rules.  
+links are automatically created, deleted, or updated according to these rules.
 
 Spack's views are a projection from a point in a high-dimensional space
 (the concretized spec, which fully specifies all parameters) to point
@@ -75,7 +75,7 @@ Spack has a well-defined mechanism for resolving conflicting links;
 it uses a combination of internal default policies and user- or site-defined
 policies to define an {\it order} of preference for different parameters.
 By default, Spack prefers newer versions of packages compiled with newer compilers
-to older packages built with older compilers. It has well-defined, but not 
+to older packages built with older compilers. It has well-defined, but not
 necessarily meaningful, order of preference for deciding between MPI
 implementations and different compilers.
 The default policies can be overridden in configuration files, by either users
@@ -100,11 +100,11 @@ This can be useful if a new version is unstable and untested.
 By default, Spack stores its package files in a mainline repository
 that is present when users
 first run Spack.  At many sites, packages may build sensitive,
-proprietary software, or they 
+proprietary software, or they
 may have patches that are not useful outside of a certain company or
 organization.  Putting this type of code back into a public repository
 does not often make sense, and if it makes the
-mainline less stable, it can actually make sharing code between sites more difficult.  
+mainline less stable, it can actually make sharing code between sites more difficult.
 
 To support our own private packages, and to support those of LLNL code teams,
 Spack allows the creation of site-specific variants of packages.
@@ -121,10 +121,4 @@ a {\tt LocalSpindle} Python class, which inherits from Spack's
 configure flags to the {\tt Spindle} class, while leaving the
 dependencies and most of the build instructions from its parent
 class.  For reproducibility, Spack also tracks the {\tt Package}
-class that drove a specific build. 
-
-
-
-
-
-
+class that drove a specific build.

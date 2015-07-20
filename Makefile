@@ -1,4 +1,4 @@
-name = spack-paper-sc15
+name = spack-sc15
 tex_args = -shell-escape
 
 # LaTeX diff command

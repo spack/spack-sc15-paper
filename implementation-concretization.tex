@@ -1,4 +1,4 @@
-%!TEX root = spack-paper-sc15.tex
+%!TEX root = spack-sc15.tex
 
 \subsection{Concretization}
 
@@ -30,7 +30,7 @@ Spack's concretization algorithm is shown in Figure~\ref{fig:concretization}.
 The process starts when a user invokes {\tt spack install} and requests that a
 spec be built.  Spack converts the spec to an abstract DAG.
 It then builds a {\it separate} spec DAG for any constraints that are encoded
-in directives in package files. 
+in directives in package files.
 
 Spack intersects the constraints of the two DAGs package by package, and it
 checks each parameter for inconsistencies.  Inconsistencies can arise if, for example,
@@ -41,26 +41,26 @@ or platforms for particular packages, this will cause the user to be notified
 of the conflict. If the user or package specified version ranges, they are
 intersected, and if the ranges do not overlap, an error will be raised.
 When the intersection succeeds, Spack has a single spec DAG with the merged
-constraints of the user and the package files.  
+constraints of the user and the package files.
 
 The next part of the process is iterative.
 If any node in the DAG is a virtual dependency, spack replaces it with with a
 suitable interface provider.  It does this by building a reverse
-index from virtual packages to providers using the {\tt provides when} 
+index from virtual packages to providers using the {\tt provides when}
 directives discussed in Section~\ref{sec:virtual}. If multiple providers
-could satisfy the constraints on the virtual spec, 
+could satisfy the constraints on the virtual spec,
 Spack will consult site and user policies to select the ``best'' possible
 provider.  The selected provider may {\it itself} have virtual dependencies,
 so Spack repeats this process until there are no more virtual packages
 in the DAG.
 
-With the now non-virtual DAG, Spack again consults site and user preferences for 
+With the now non-virtual DAG, Spack again consults site and user preferences for
 variants, compilers, and versions to resolve any remaining abstract nodes.
 Adding a variant like {\tt +mpi} may cause a package to depend on more
 libraries (as in Section~\ref{sec:constraints}). The concretization algorithm
 evaluates conditions from {\tt when} clauses on the DAG, and if there are
 new libraries or other changes, the cycle begins again.
-Spack currently avoids an exhaustive search by using a greedy algorithm.  
+Spack currently avoids an exhaustive search by using a greedy algorithm.
 It will not backtrack to try other options if its first policy choice leads
 to an inconsistency.  Rather, it will raise an error and the user must resolve
 the issue by being more explicit.  The user might toggle a variant, or she might
@@ -68,10 +68,10 @@ force the build to use a {\it particular} MPI implementation
 by supplying \verb|^openmpi| or \verb|^mpich|.  We leave automatic constraint
 space exploration for future work.
 
-When the concretization process completes, it outputs a fully concrete spec DAG. 
-Figure~\ref{fig:specs-mpileaks-concrete} shows a concrete DAG with architectures, 
+When the concretization process completes, it outputs a fully concrete spec DAG.
+Figure~\ref{fig:specs-mpileaks-concrete} shows a concrete DAG with architectures,
 compilers, versions, variants, and all dependencies resolved.
-This fulfills Spack's guarantees.  
+This fulfills Spack's guarantees.
 
 \begin{figure}
 	\centering
@@ -98,7 +98,7 @@ responsible for querying the spec in {\tt install} and handling different config
 \end{figure}
 
 We mentioned in Section~\ref{sec:packages} that each unique configuration is
-guaranteed a unique install prefix. Spack uses the concrete {\it spec} 
+guaranteed a unique install prefix. Spack uses the concrete {\it spec}
 to generate a unique path, shown in Table~\ref{tab:naming-conventions}.
 To prevent the directory name from growing too long, Spack uses a SHA hash of
 dependencies' specs as the last directory component.  This
@@ -109,7 +109,7 @@ both the {\tt mpich} and {\tt openmpi} builds of {\tt mpileaks}.
 
 
 \subsubsection{Reproducibility}
-For reproducibility, and to preserve provenance, Spack stores a number of 
+For reproducibility, and to preserve provenance, Spack stores a number of
 files in the installation directory that document how the installed package was
 built.  These include the {\tt package.py} file used to build, a build log
 containing output and error messages, and a file containing the complete
@@ -126,7 +126,7 @@ tend to make arbitrary choices about the secondary build parameters,
 or they add logic to build scripts to make these choices.
 Manually built software is generally not installed in a consistent manner.
 
-Concretization provides two benefits.  First, it allows users and staff to 
+Concretization provides two benefits.  First, it allows users and staff to
 request builds with a minimal spec expression, while still providing a
 mechanism for the site and the user to make consistent, repeatable choices about
 other build parameters.  For example, the site or the user can set default versions
@@ -140,38 +140,3 @@ and HashDist require the package author to write a mostly concrete build spec in
 We believe that this puts undue burden on the package author, and it makes the task
 of changing site policies within a software stack difficult.  Spack
 separates these concerns.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
