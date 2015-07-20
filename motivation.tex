@@ -14,10 +14,11 @@ large package repositories or combinatorial versioning.
 
 \paragraph{Traditional package managers}
 Package managers automate the installation of complex sets of software packages.
-{\it Binary package managers} such as RPM, yum, and
-APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
+{\it Binary package managers} such as RPM, yum, and APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
 OS distributions, and they are used to ensure that dependencies
 are installed before packages that require them.
+Others, such as Anaconda~\cite{anaconda,conda}, use the same approach but
+are designed to run on top of a host OS.
 These tools largely solve the problem of managing a {\it single} software
 stack, which works well for the baseline OS and drivers, which are
 common to all applications on a system.
@@ -88,6 +89,8 @@ package managers and either manual or semi-automated installation.
 For the baseline OS, many sites maintain traditional binary
 packages using the vendor's package manager. LLNL maintains a Linux
 distribution, CHAOS~\cite{chaos} for this purpose, which is managed using RPM.
+The popular ROCKS~\cite{rocks} cluster distribution uses RPM and Anaconda
+in a similar fashion.
 %
 For custom builds, many sites adhere to detailed naming conventions
 that encode information in file system paths.
