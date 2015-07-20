@@ -20,18 +20,17 @@ clean:
 diff:
 	rm -f *-diffsubmitted.tex
 	scripts/require-clean-work-tree "make diff" *.tex
-# cat ARES usecase document to end of usecases, to make it look new to latexdiff.
-	sed -i~ 's/\\input{usecase-ares}//' usecases.tex
-	cat usecase-ares.tex >> usecases.tex
-	rm usecase-ares.tex
+# include new files directly in the old files (latexdiff doesn't seem to see them otherwise)
+	sed -i~ -e '/\\input{usecase-ares}/ {' -e 'r usecase-ares.tex' -e 'r limitations.tex' -e 'd' -e '}' usecases.tex
+	sed -i~ -e 's/\\input{limitations}//' spack-sc15.tex
 # Diff all the files
-	$(latexdiff) *.tex;
-	for file in *.tex; do \
+	files=`\ls *.tex` && \
+	$(latexdiff) *.tex && \
+	for file in $$files; do \
 		diff_file=`echo $$file | sed 's/.tex$$/-diffsubmitted.tex/'` && mv $$diff_file $$file; \
 	done
 # Make a PDF of the diff
 	make $(name).pdf
 	mv $(name).pdf $(name)-diff.pdf
 # Restore deleted ARES use case and restore all files to current revision
-	touch usecase-ares.tex
 	git checkout *.tex
