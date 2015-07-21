@@ -97,12 +97,14 @@ bleeding-edge platforms or new, esoteric compilers.
 
 Argument parsing and indirection cause Spack's compiler wrappers to incur a small
 but noticeable performance overhead.  Figure~\ref{fig:wrapper-overhead} shows build times
-with and without the wrappers for seven different packages. Above each set of bars,
+with and without the wrappers for seven different packages. 
+We performed these builds in a temporary staging area in a fast, 
+locally-mounted filesystem. Above each set of bars,
 the percent overhead is written. The {\tt dyninst} and {\tt lapack} packages
 use CMake to build, while the rest of the packages use autotools.
 The relative overheads range from negligible (-0.4\%) in the case of {\tt dyninst},
 and they are more exaggerated for shorter builds like {\tt mpileaks}, which
-incurs 12.3\%.
+incurs 12.3\%.  
 
 \subsubsection{Environment Module Integration}
 \label{sec:envmodule}
