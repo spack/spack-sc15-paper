@@ -74,21 +74,21 @@ the new platforms and compilers.
 }
 \end{table}
 
-Table~\ref{tab:ares-configs} shows the configurations of ARES that we have packaged.
-The rows and columns show architectures, compilers, and MPI versions.
+Table~\ref{tab:ares-configs} shows configurations of ARES that the ARES
+team tests nightly.  The rows and columns show architectures, compilers, and MPI versions.
 The ARES Spack package supports four different code configurations:
-the current and previous production versions, a ``lite'' version that includes
-a smaller set of features and dependencies, and a development version.  We 
-denote these as C, P, L, and D. Each cell in the table indicates the
-ARES configurations built for an architecture, compiler, and MPI combination.
-Each configuration requires a slightly different set of dependencies and 
-dependency versions, but one common ARES package supports all of them with 
-conditional logic on versions and variants.
+the current (C) and previous (P) production versions, a ``lite'' version (L) that includes
+a smaller set of features and dependencies, and a development version (D).
+Each cell in the table indicates the ARES configurations built for an architecture,
+compiler, and MPI combination. Each configuration requires a slightly different
+set of dependencies and dependency versions, but one common ARES package supports
+all of them with conditional logic on versions and variants.
 
 Altogether, the initial packaging effort for ARES took roughly two months,
-half time, for an experienced build engineer. It supports 64 different builds
-(4 configurations and 8 architecture-compiler-MPI combinations). Prior to 
-using Spack, only the Linux/Intel configurations were automated. The ARES 
+half time, for an experienced build engineer. As shown in the table, 32
+different configurations have been run using Spack
+(some of 4 versions on each of 10 architecture-compiler-MPI combinations).
+Prior to using Spack, only Linux/Intel configurations were automated. The ARES 
 team listed a number of key features that enabled the increased automation:
 \begin{enumerate}
 \item Spack's version tracking and optional dependencies were required to
