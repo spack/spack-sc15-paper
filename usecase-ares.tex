@@ -31,7 +31,7 @@ of ARES. At the top is ARES itself.  ARES depends on 11 LLNL physics packages
 (green). The utility libraries handle tasks including logging, I/O, and 
 performance measurement. ARES also uses 23 external software packages, 
 including MPI, BLAS, Python, and many other libraries.  Together, these 
-packages ares written in a diverse set of languages including C, C++, 
+packages are written in a diverse set of languages including C, C++, 
 Fortran, Python and tcl and uses MPI and OpenMP for parallelism.
 
 We have configured Spack to build ARES with external MPI implementations, 
@@ -50,16 +50,21 @@ packages in Figure~\ref{fig:ares}. Many of the external packages were already
 available in Spack, but some, such as Python, required modifications to support
 the new platforms and compilers.
 
-\begin{table}\centering
-\begin{tabular}{|r|c|c|c|c|}
+\newcommand{\hfmt}[1]{\textit{\scriptsize #1}}
+\newcommand{\cfmt}[1]{\texttt{\scriptsize #1}}
+
+\begin{table}\centering % mvapich2 for intel 15
+\footnotesize
+\begin{tabular}{|r|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{} & \multicolumn{2}{|c|}{\bf Linux} & {\bf BG/Q}     & {\bf Cray XE6} \\\cline{2-5}
-                  & {\it MVAPICH} & {\it OpenMPI}   & {\it BG/Q MPI} & {\it Cray MPI} \\\hline
-{\bf GCC}         & {\tt C P L D} &                 &                &                \\\hline
-{\bf Intel}       & {\tt C P L D} & {\tt C P L D}   &                &                \\\hline
-{\bf PGI}         & {\tt C P L D} &                 &                & {\tt C P L D}  \\\hline
-{\bf Clang}       & {\tt C P L D} &                 & {\tt C P L D}  &                \\\hline
-{\bf XL}          &               &                 & {\tt C P L D}  &                \\\hline
+\multirow{2}{*}{} & \multicolumn{3}{|c|}{\hfmt{Linux}}                      & {\hfmt{BG/Q}}     & {\hfmt{Cray XE6}} \\\cline{2-6}
+                  & {\hfmt{MVAPICH}} & {\hfmt{MVAPICH2}} & {\hfmt{OpenMPI}} & {\hfmt{BG/Q MPI}} & {\hfmt{Cray MPI}} \\\hline
+{\hfmt{GCC}}      & {\cfmt{C P L D}} &                   &                  &                   &                   \\\hline
+{\hfmt{Intel 14}} & {\cfmt{C P L D}} &                   &                  &                   &                   \\\hline
+{\hfmt{Intel 15}} & {\cfmt{C P L D}} & {\cfmt{D}}        &                  &                   &                   \\\hline
+{\hfmt{PGI}}      &                  & {\cfmt{D}}        & {\cfmt{C P L D}} &                   & {\cfmt{C L D}}    \\\hline
+{\hfmt{Clang}}    & {\cfmt{C P L D}} &                   &                  & {\cfmt{C L D}}    &                   \\\hline
+{\hfmt{XL}}       &                  &                   &                  & {\cfmt{C P L D}}  &                   \\\hline
 \end{tabular}
 \caption{
 	Configurations of ARES built with Spack: \newline
