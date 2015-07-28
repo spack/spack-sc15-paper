@@ -17,15 +17,15 @@ Package managers automate the installation of complex sets of software packages.
 {\it Binary package managers} such as RPM, yum, and APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
 OS distributions, and they are used to ensure that dependencies
 are installed before packages that require them.
-Others, such as Anaconda~\cite{anaconda,conda}, use the same approach but
-are designed to run on top of a host OS.
+Anaconda~\cite{anaconda,conda}, uses the same approach but
+is designed to run on top of a host OS.
 These tools largely solve the problem of managing a {\it single} software
 stack, which works well for the baseline OS and drivers, which are
 common to all applications on a system.
-These tools assume that each package only has a single version
-and most of the tools install packages in a single, inflexible location.
-To install multiple configurations, the user must create a custom, combinatorial
-naming scheme to avoid conflicts. They typically require root
+These tools assume that each package has only a single version,
+and most install packages in a single, inflexible location.
+To install multiple configurations, users must create custom, combinatorial
+naming schemes to avoid conflicts. They typically require root
 privileges and do not optimize for specific hardware.
 
 {\it Port systems} such as Gentoo, BSD Ports, MacPorts, and
@@ -98,9 +98,10 @@ Table~\ref{tab:naming-conventions} shows several sites' conventions.
 LLNL uses the APT package manager for installs
 in the {\tt /usr/local/tools} file system and {\tt /usr/global/tools}
 for manual installs.
-ORNL uses hand installs but adheres to strict scripting conventions
+Oak Ridge National Laboratory (ORNL) uses hand installs but adheres
+to strict scripting conventions
 to reproduce each build~\cite{jones+:cug08}.
-TACC relies heavily on locally maintained RPMs.
+The Texas Advanced Computing Center (TACC) relies heavily on locally maintained RPMs.
 
 From the conventions in Table~\ref{tab:naming-conventions},
 we see that most sites use some combination of architecture, compiler version,
@@ -130,22 +131,23 @@ system library paths such as {\tt /lib}, {\tt /usr/lib}, and
 {\tt /usr/local/lib}.  If binaries are installed in other locations, the
 {\it user} who runs the program must typically add dependency library paths to
 {\tt LD\_LIBRARY\_PATH} (or a similar environment variable) so that the loader
-can find them.  The user is often not the same person who installed the binary,
-so determining what paths to add can be difficult, especially for inexperienced users.
+can find them.  Often, the user is not the same person who installed the library,
+and even advanced users may have difficulty determining which paths to add.
 
 Many HPC sites address this problem using {\it environment modules}, which
 allow users to ``load'' and ``unload'' such settings dynamically using simple
 commands. Environment modules emerged in 1991, and there are many implementations~\cite{dotkit,furlani+:lisa91,furlani+:lisa96,mclay:lmod,mclay:lmod-tutorial}.
-The most advanced of these, such as Lmod~\cite{mclay:lmod,mclay:lmod-tutorial},
-provide software hierarchies similar to the naming conventions in
-Table~\ref{tab:naming-conventions}. They allow users to load a software stack
+The most advanced of these, Lmod~\cite{mclay:lmod,mclay:lmod-tutorial},
+provides software hierarchies similar to the naming conventions in
+Table~\ref{tab:naming-conventions}. This allows users to load a software stack
 quickly if they know which one is required.
 
 The alternative to per-user environment settings is to embed library search
 paths in installed binaries at compile time. When set this way, the search
 path is called an {\tt RPATH}. {\tt RPATHs} and environment modules are not
-mutually exclusive. Modules can still be used to set {\tt MANPATH}, {\tt PATH},
-etc., while adding {\tt RPATHs} ensures that binaries run correctly
+mutually exclusive. Modules can still be used to set variables that are
+unrelated to linking, such as {\tt MANPATH} and {\tt PATH}.  Adding
+{\tt RPATHs} still ensures that binaries run correctly,
 regardless of whether the right module is loaded. LC installs software with
 both {\tt RPATHs} and {\tt dotkit}~\cite{dotkit} modules.
 
@@ -170,17 +172,17 @@ file and its dependencies.
 %% functional language designed for packaging.
 
 The EasyBuild~\cite{hoste+:pyhpc12} tool is in production use at
-the University of Ghent and several other sites.  It allows multiple versions
-to be installed at once.  Rather than setting {\tt RPATHs}, it
-auto-generates module files
-to manage each package's environment, and it is closely coupled with
+the University of Ghent and the J\"ulich Supercomputing Center.
+It allows multiple versions to be installed at once.  Rather
+than setting {\tt RPATHs}, it auto-generates module files
+to manage the environment, and it is closely coupled with
 Lmod~\cite{geimer+:hust14}.  EasyBuild groups the compiler, MPI, FFT, and
-BLAS libraries together in a {\it toolchain} that can be combined with
-any package file. This provides some degree of composability and
+BLAS libraries together in a {\it toolchain} that can be used by
+package files. This provides some degree of composability and
 separates compiler flags and MPI concerns from client packages.
 
 HashDist~\cite{hashdist} is a meta-build system and package manager
-for HPC.  Of the existing solutions, it is the most similar to spack.
+for HPC.  Of the existing solutions, it is the most similar to Spack.
 Like Nix, it uses cryptographic versioning and stores installations in
 unique directories.
 %
@@ -212,8 +214,8 @@ handle combinatorial versions, which the Lmod authors call the
 
 The main limitation of existing tools is the lack of build {\it composability}.
 The full set of package versions is combinatorial, and arbitrary combinations 
-of compiler, MPI version, build options, and dependency versions requires 
-tedious modifications of many package files. Indeed, the number of package 
+of compiler, MPI version, build options, and dependency versions require 
+non-trivial modifications to many package files. Indeed, the number of package 
 files required for most existing systems scales with the number of version 
 {\it combinations}, not the number of packages, which quickly becomes 
 unmanageable.  As an example, the EasyBuild system has over 3,300 files for 
@@ -222,6 +224,6 @@ graph requires an entire new package file hierarchy.  HashDist supports
 composition more robustly but does not have first-class parameters for 
 versions, compilers, or versioned interfaces.
 %
-HPC sites need better mechanisms to {\it parameterize} packages so that new
+HPC sites need better ways to {\it parameterize} packages so that new
 builds can be {\it composed} in response to user needs.
 %

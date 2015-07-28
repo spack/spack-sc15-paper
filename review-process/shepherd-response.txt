@@ -1,0 +1,233 @@
+Todd and team,
+
+First of all, thank you very much for putting so much effort in making
+these changes, and your attention to detail. I am happy to note that
+you have put due diligence in addressing reviewers' comments. This has
+further improved the quality of the paper.
+
+I made a through pass the whole paper again. Here are my comments and
+suggestions. Please see if you can address them.
+
+Please note that several of my comments are of editorial-nature. Some
+of my comments are specifically aimed toward improving the readability
+of the paper. My intent is to help this paper look as good as
+possible, both from the technical perspective and presentation
+perspective. Many of these may also sound like nitpicks. Do not take
+it otherwise. Please make changes as you see fit.
+
+Please drop me a note once you are done with this set of revision. I
+don't expect to have us go through another round, since you have
+already done a very good job in addressing reviewers' comments.
+
+
+----------------------- My (rough) notes start here --------------------------
+
+Acknowledgment:
+
+- I recall you wanted to add one of your colleagues as a co-author. If
+  the PC Chairs have allowed this, that's good. Otherwise, please make
+  sure to mention his name here in this section.
+
+Introduction:
+
+- Please include the quantitative results / overhead numbers in the
+  introduction. You have quantitative results for concretization
+  process and compiler wrapper overhead. I think the introduction
+  section should list these numbers (with some context). Reader will
+  immediate realize that this tool can work well in practice, given
+  its relatively low-overhead. This will really strengthen the paper
+  and improve the adoption chances of Spack elsewhere.
+
+- You can include a sentence about the complexity of the four
+  use-cases you will discuss. I think this will put things in
+  perspective in terms of how useful Spack is. Reader will immediately
+  know that Spack can be applied to large-scale, real builds, and its
+  impact is not limited to synthetic, small-scale applications.
+
+Common Practice:
+
+Pg.2, Col.2: ORNL and TACC abbreviations appear multiple times. I
+think the paper should list the full name when it appears the first
+time. Did I miss it?
+
+Pg.2, Col.2, Para.2: last line in blue (really long
+sentence). Consider rephrasing?
+
+"Determining correct library paths can be difficult for relatively
+less experience users, especially in cases where someone else may have
+installed the binary."
+
+Pg.2, Col.2, Para.3: Use of "etc." is ambiguous here. Consider fixing?
+
+etc. can be used when the reader knows what else is missing in the
+list (no ambiguity about what is being omitted), or the list is too
+long to be enumerated and perhaps unnecessary.
+
+"Modules can still be used to set various variables including MANPATH
+and PATH, while adding …"
+
+Pg.3, Col.1, Para 2: Consider moving citation to the end of the
+sentence? Breaks readability. This happens at multiple places
+throughout the paper. Be mindful of consistency when you edit this.
+
+Pg.3, Col.1, Para 3: Please reference "several other sites".
+
+Pg.3, Col.1, Para 4: spack -> Spack ?
+
+Pg.3, Col.1, Last Para: "tedious modifications of many package files"
+-> "non-trivial modifications to many package files"?
+
+Pg.3, Col.2, Para 1: mechanisms --> tools?
+
+The Spack Manager:
+
+- Underline the letters of SPACK in Supercomputing PACKage manager?
+
+- "wide use of Python in HPC community" --> "consider changing it to
+  increasing use in the HPC community"
+
+Note that at some point in the paper, you say Python is not
+well-supported on BlueGene. It only reflects the fact that Python is
+being used increasingly in the HPC community, but probably not at a
+scale where we could call it "wide".
+
+- First feature: difficult to parse. Rephrase?
+
+- Fifth feature: "enforce" is ambiguous here. It sounds like the build
+  environment is enforcing. In that case, it should be "enforces".
+
+Pg. 4, Col. 1, First para: "Below this" --> it's not clear what "this"
+refers to? At least, not without reading the previous sentence twice
+and looking at the Fig. 1.
+
+
+Pg. 4, Col 2, First para: "The spec object passed to the install
+method is how Spack communicates dependencies and parameters to
+package authors."
+
+
+Consider rephrasing as following?
+
+
+"Spack communicates dependencies and parameters to package authors by
+passing spec object to the install method."
+
+
+Section 3.2.1: ABI -- first usage?
+
+
+Section 3.2.2: "the typical user only cares about a small number of
+build constraints (if any), and does not know enough to specify the
+rest" Too strong. "may care about only a small number of .." and may
+not always specify rest of the parameters".
+
+
+Footnote of page 4: Perhaps include this as a discussion in the
+limitation section, if you are aware of a real-world use-case that
+requires circular dependency.
+
+
+Page 5, Col 1, last para: "The user need not think about" --> "The
+user doesn't need to consider.."?
+
+
+Page 5, Col 2, first para: First line --> consider rephrasing?
+"ranging from simple to relatively more complex"
+
+
+Page 6, Col 1: ROSE compiler --> first use, no reference? I am certain
+many readers will know the reference, but some will not.
+
+
+Section 3.4.1: Please mention the platform as Intel SandyBridge and
+Intel Haswell. Provide more details about the platforms and
+environment. Do you expect users to perform this process on a
+MacbookPro? If so, it's OK. Otherwise, I would consider changing the
+first platform to something more representative like cluster login
+nodes.  MacbookPro sounds a bit of hack platform for measuring
+overhead. I really like the plot and results, but I found the choice
+of platforms a bit odd. Perhaps you should explain why you chose these
+platforms for evaluating concretization process.
+
+
+"superlinear scaling" --> The context is not clear here. Readers
+typically associate scaling term with "speed up results on multiple
+nodes/cores". You are reporting absolute execution time on a single
+node for varying DAG size, so the term "super linear scaling" is
+confusing here. I would suggest removing it.
+
+
+"running time is currently negligible" --> how much? Perhaps you
+should compare it with something and say it's 0.01% of that (provide a
+context).
+
+
+
+ "do not expect to see thousands of dependencies.." --> again, please
+ add some rational. Perhaps you can support this by citing the growth
+ in past few years.
+
+
+Section 3.4.4: "the rest parameters are unneeded complexity" -- Too
+strong? Probably a handful of users may still care about a few of the
+other parameters. We should state that other parameters add to the
+complexity, but not all of them may be useful for all the users.
+
+
+Use of "LC" -- I know what it is. Some readers may not know. Perhaps
+use its full form a couple of times?
+
+
+Last line of Section 3.5.2: Why negative overhead? Perhaps explain a
+bit more detail. I really like this plot too.
+
+Section 4.2: first para: "LC supports Python installations for several
+application teams, and maintaining these repositories has grown
+increasingly complex
+
+
+over time." --> "and" seems to be an odd way to connect these two
+clauses. Consider changing it to "however"?
+
+
+Section 4.2, third para: "But extensions can be activated or
+deactivated an within the dependent Python installation." --> typo
+"an"?
+
+
+
+Section 4.4: Figure in color is OK. But, a reader should be able to
+interpret it without ambiguity on B&W print. Also, the text should not
+refer to color-codes.
+
+
+Second para, last line: awkward sentence. I couldn't parse it to
+suggest a rephrased sentence. Please fix it.
+
+
+ "ARES took roughly two months, half time, for an experienced build
+ engineer" --> what is half time? half time compared to what?
+
+
+Second bullet: consider changing : to -- before "a necessity for …"
+
+
+Section 4.5: Limitations and Future work:
+
+
+- Please quantify the disk overhead.
+
+
+- last line of third para: This line is too strong. Since it's very
+  subjective claim, you can say something like: reduction in
+  complexity may be attractive enough for many users to bear this
+  cost.
+
+- last line of third para: again, this claim is a bit too
+  strong. Please consider softening it.
+
+
+----------------------- My (rough) notes end here --------------------------
+
+
+…∂t
