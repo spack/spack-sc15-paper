@@ -43,8 +43,9 @@ versions and configurations of the {\tt mpileaks} package.  In traditional port 
 package code is structured to build a single version of a package, but in Spack, each
 package file is a {\it template} that can be configured and built in many
 different ways, according to a set of {\it parameters}.
-Spack calls a single build configuration a {\it spec}. The {\tt spec} object
-passed to the {\tt install} method is how Spack communicates dependencies and parameters to package authors.
+Spack calls a single build configuration a {\it spec}. 
+Spack communicates dependencies and parameters to package authors using
+the {\tt spec} argument of the {\tt install} method.
 
 \subsubsection{Structure}
 To understand specs, consider the {\tt mpileaks} package structure.
@@ -55,9 +56,10 @@ for each dependency and constructs a graph of their relationships.  The result
 is a directed, acyclic graph (DAG).\footnote{Spack currently disallows
 circular dependencies.}
 %
-To guarantee a consistent build and to avoid ABI compatibility issues, we construct
-the DAG so that there is only {\it one} version of any package.  Note
-the distinction: while Spack can install arbitrarily many configurations of any package,
+To guarantee a consistent build and to avoid 
+Application Binary Interface (ABI) incompatibility, we construct
+the DAG with only {\it one} version of each package.  Thus, while
+Spack can install arbitrarily many configurations of any package,
 no two configurations of the same package will ever appear in the same build DAG.
 
 DAGs for {\tt mpileaks} are shown in Figure~\ref{fig:specs}.
@@ -188,9 +190,9 @@ there are now version constraints on {\tt callpath} {\it and} {\tt libelf},
 and the user has requested the {\tt debug} variant of the {\tt callpath} library.
 
 Recall that Spack guarantees that there is only a single version of any package in
-the spec DAG.  Within the same DAG, each dependency can be uniquely
-identified by its package name alone.  Therefore, the user need not think about DAG
-connectivity to add constraints.  She need only know that {\tt mpileaks}
+the spec DAG.  Within a spec, each dependency can be uniquely
+identified by its package name alone.  Therefore, the user does not need to consider 
+DAG connectivity to add constraints.  She need only know that {\tt mpileaks}
 somehow depends on {\tt callpath}.
 For the same reason, the constraint order does not matter; dependency constraints
 can appear in arbitrary order.
@@ -269,7 +271,7 @@ So far, we have shown examples of specs used to request constraints from the
 command line, when {\tt spack install} is invoked.  However, the user is not the only
 source of constraints.  Applications may require specific versions of dependencies,
 and it is often desirable to write constraints like this into a package file.  For
-example, the ROSE compiler only builds with a certain version of the {\tt boost} library.
+example, the ROSE compiler~\cite{rose} only builds with a certain version of the {\tt boost} library.
 The {\tt depends\_on()} directives in Figure~\ref{fig:mpileaks} contain
 simple package names.  However, a package name is also a spec, and
 the same constraint syntax usable from the command line can be applied inside directives.

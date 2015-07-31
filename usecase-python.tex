@@ -10,15 +10,15 @@ Python is an interpreted language, but one can use it
 as a friendlier interface to compiled libraries like FFTW, ATLAS, and
 other linear algebra libraries.  Many LLNL code teams use Python in this manner.
 %
-LC supports Python installations for several application teams,
-and maintaining these repositories has grown increasingly complex over
+LC supports Python installations for several application teams.
+Maintaining these repositories has grown increasingly complex over
 time. The problems are similar to those that drove us to create
 Spack: different teams want different Python libraries with different
 configurations.
 
-Existing Python package managers are either language-specific~\cite{eby:setuptools},
-or they do not support building from source~\cite{anaconda,conda}. None
-handles multi-configuration builds.  More glaringly, Python extensions
+Existing Python package managers either do not support building from
+source~\cite{anaconda,conda}, or they are language-specific~\cite{eby:setuptools}.
+None handles multi-configuration builds.  More glaringly, Python extensions
 are usually installed into the Python interpreter's prefix.
 This makes it impossible to install multiple versions.\footnote{{\tt setuptools}
 has support for multiple versions via {\tt pkg_resources},
@@ -35,7 +35,7 @@ to Spack. Python modules use the {\tt extends('python')} directive instead of
 {\tt depends\_on('python')}.
 Each module installs into its own prefix like any other package,
 and each module depends on a particular Python installation.
-But extensions can be {\tt activated} or {\tt deactivated} an
+But extensions can be {\tt activated} or {\tt deactivated}
 within the dependent Python installation.  The {\tt activate} operation
 symbolically links each file in the extension prefix into the Python
 installation prefix, as though it were installed directly. If any file

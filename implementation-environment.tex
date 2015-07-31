@@ -24,27 +24,25 @@ installation environment and the environment of the package user.
 %
 For example, LLNL performance tools use two versions of the {\tt libelf}
 library. One is distributed with RedHat Linux, while the
-other is publicly available, and they have the same API but an incompatible ABI.
+other is publicly available. They have the same API but an incompatible ABI.
 Specifying the wrong version at build time has caused many
 unexpected crashes.
 
 Spack manages the build environment by running each call to {\tt install}
-in its own process.  In this environment, Spack sets
+in its own process.  It also sets
 {\tt PATH}, {\tt PKG\_CONFIG\_PATH}, {\tt CMAKE\_PREFIX\_PATH}, and
 {\tt LD\_LIBRARY\_PATH} to include the dependencies of the current build.
-These variables are commonly used by build systems to locate dependencies,
-and setting them helps to ensure that the correct libraries are detected by
-build systems.
-The isolated build environment also gives package authors
+Build systems commonly use these variables to locate dependencies,
+and setting them helps to ensure that the correct libraries are detected.
+Using a separate process also gives package authors 
 free reign to set build-specific environment variables without interfering
 with other packages.
-
 
 \subsubsection{Compiler wrappers and RPATHs}
 Finding dependencies at build time is not the only obstacle to reproducible
 behavior.  As mentioned in Section~\ref{sec:motivation}, it is also important
 for binaries to be able to find dependency libraries at {\it runtime}.
-One of the most common user errors at LC is improper library configuration.
+One of the most common user errors at LLNL is improper library configuration.
 Users frequently do not know what libraries a package was built with, and
 it is difficult for them to construct a suitable {\tt LD\_LIBRARY\_PATH} for
 a package that was built by someone else.  To reduce the number of support calls,
@@ -85,26 +83,48 @@ wrappers, package authors can programmatically filter the compiler flags
 used by software build systems, a useful last resort when porting to
 bleeding-edge platforms or new, esoteric compilers.
 
-\begin{figure}
+\begin{figure}%{\linewidth}
 	\centering
-	\includegraphics[width=\columnwidth]{figs/wrappers/wrapper-overhead.pdf}
+	\includegraphics[width=\columnwidth]{figs/overhead/build-time.pdf}
 	\caption{
-		Build times with and without compiler wrappers\newline
-		(\% overhead above bars).
-		\label{fig:wrapper-overhead}
+		Build time on NFS and temp, with and without wrappers.
+		\label{fig:build-times}
+	}
+\end{figure}
+\begin{figure}%{\linewidth}
+	\centering
+	\includegraphics[width=\columnwidth]{figs/overhead/overhead.pdf}
+	\caption{
+		Build overhead of using NFS and compiler wrappers.
+		\label{fig:overhead}`
 	}
 \end{figure}
 
+\subsubsection{Build Overhead}
+
 Argument parsing and indirection cause Spack's compiler wrappers to incur a small
-but noticeable performance overhead.  Figure~\ref{fig:wrapper-overhead} shows build times
-with and without the wrappers for seven different packages. 
-We performed these builds in a temporary staging area in a fast, 
-locally-mounted filesystem. Above each set of bars,
-the percent overhead is written. The {\tt dyninst} and {\tt lapack} packages
-use CMake to build, while the rest of the packages use autotools.
-The relative overheads range from negligible (-0.4\%) in the case of {\tt dyninst},
-and they are more exaggerated for shorter builds like {\tt mpileaks}, which
-incurs 12.3\%.  
+but noticeable performance overhead.  Figure~\ref{fig:build-time} shows
+build times with and without compiler wrappers for seven different packages,
+and Figure~\ref{fig:overhead} shows the corresponding overhead as a percentage
+of the wrapper-less runtime.  {\tt Dyninst} and {\tt lapack}
+use CMake to build, and the rest use autotools.  We ran
+each build three times on an Intel Sandy Bridge cluster node, and we
+report the average here.
+In the case of {\tt dyninst}, the overhead is negligible (-0.4\%),
+but it is as high as 12.3\% for shorter builds, like
+{\tt mpileaks}
+
+To increase build speed, by default Spack runs each {\tt install}
+method in the default temporary directory. On most cluster nodes,
+this is a fast, locally-mounted filesystem. In our experience,
+many users build manually in their home directories out of habit.  At most sites, home
+directories are remotely mounted volumes (e.g., NFS).  To compare Spack builds
+with {\it typical} manual builds, we timed the same seven builds using
+NFS.  Figure~\ref{fig:overhead} shows that building this way can be as much
+as 62.7\% slower than using a temporary filesystem and
+33\% slower on average. We therefore expect many users to notice
+a speedup when Spack uses temporary space to build.
+
 
 \subsubsection{Environment Module Integration}
 \label{sec:envmodule}

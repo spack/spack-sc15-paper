@@ -4,7 +4,14 @@ tex_args = -shell-escape
 # LaTeX diff command
 latexdiff = latexdiff-vc --git -c review-process/latexdiff.cfg -r submitted
 
-$(name).pdf: *.tex *.cls *.bib
+figures = \
+	figs/concretization.pdf \
+	figs/overhead/overhead.pdf \
+	figs/overhead/build-time.pdf \
+	figs/ares-dot/ares-fig.pdf \
+	figs/concretization-overhead/concretization-times.pdf
+
+$(name).pdf: *.tex *.cls *.bib $(figures)
 	pdflatex $(tex_args) $(name)
 	bibtex $(name)
 	pdflatex $(tex_args) $(name)
