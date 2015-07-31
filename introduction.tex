@@ -17,17 +17,18 @@ lists, respectively.
 %
 The simulation software that runs on these machines is very complex; some
 codes depend on specific versions of over 70 dependency libraries.
-They require specific compilers, build options and MPI implementations to
+They require specific compilers, build options and Message Passing Interface (MPI)
+implementations to
 achieve the best performance, and users may run several
 different codes in the same environment as part of larger
 scientific workflows.
 
 To support the diverse needs of applications, system administrators
-and application developers frequently build, install, and support many
-different configurations of math and physics libraries, as well as
+and developers frequently build, install, and support many
+different configurations of math and physics libraries, and
 other software.  Frequently, applications must be rebuilt to fix bugs
-and to support new versions of the operating system (OS), Message
-Passing Interface (MPI) implementation, compiler, and other
+and to support new versions of the operating system (OS), 
+MPI implementation, compiler, and other
 dependencies.  Unfortunately, building scientific software is
 notoriously complex, with immature build systems that are difficult to
 adapt to new
@@ -38,14 +39,13 @@ hours dealing with build and deployment issues.
 
 Existing package management tools automate parts of the build
 process~\cite{bsdports,digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hashdist,homebrew,hoste+:pyhpc12,macports,thiruvathukal:gentoo04}.
-For the most part, these systems focus on keeping a single, stable set of
-packages up to date, and they do not handle installation of multiple
-versions or configurations.  Those that {\it do} handle multiple configurations
+For the most part, they focus on keeping a single, stable set of
+packages up to date, and they do not handle installation of multiple versions or
+configurations.  Those that {\it do} handle multiple configurations
 typically require that package files be created for each combination of
 options~ \cite{digirolamo:smithy,dolstra+:icfp08,dolstra+:lisa04,hoste+:pyhpc12},
 leading to a profusion of files and maintenance issues.
-To our knowledge, no existing tool allows new configurations to be composed
-and assembled on demand.  Some allow limited forms of
+Some allow limited forms of 
 composition~\cite{hoste+:pyhpc12,dolstra+:icfp08,dolstra+:lisa04}, but their
 dependency management is overly rigid, and they burden users with
 combinatorial naming and versioning problems.
@@ -62,25 +62,23 @@ It makes the following contributions:
 \item Four use cases detailing LLNL's use of Spack in production.
 \end{enumerate}
 \noindent
-Spack is in active development at LLNL, and our four use cases
-highlight its ability to manage complex software.
+Our use cases highlight Spack's ability to manage complex software.
 %
-Spack can rapidly compose new package configurations,
+Spack allows users to rapidly compose new package configurations,
 manage Python installations, and implement site-specific build policies. 
 %
-It also automates 36 different build configurations of an
-LLNL production code with 46 dependencies, across three platforms.  Despite
-this complexity, we show that Spack's {\it concretization} algorithm
-for managing
-dependency constraints runs in seconds, even for large packages.
-We further show that Spack's install environment incurs around
+It automates 36 different build configurations of an LLNL
+production code with 46 dependencies.
+Despite this complexity, Spack's {\it concretization} algorithm
+for managing constraints runs in seconds, even for
+large packages. Spack's install environment incurs only around
 10\% build-time overhead compared to a native install.
 
 Spack solves software problems that are pervasive at large,
-multi-user HPC centers, and our experiences are relevant to the 
-full range of HPC facilities.  Spack improves
-operational efficiency by simplifying the build and deployment of
-bleeding-edge scientific software.  
+multi-user HPC centers, and our experiences are relevant to the
+full range of HPC facilities.
+Spack improves operational efficiency by simplifying the
+build and deployment of bleeding-edge scientific software.  
 
 
 
