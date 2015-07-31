@@ -102,28 +102,25 @@ query the spec in {\tt install} to handle different configurations.
 
 Figure~\ref{fig:concretization-time} shows the running time of concretization vs.
 package DAG size in nodes.  We generated this plot by running {\tt concretize}
-on all of Spack's 245 packages.  We see that for all but the 9 largest
-packages, concretization takes less than 2 seconds on a Sandy Bridge machine, 
-and less than 1 second on a Haswell MacBook Pro.  For larger DAGs, we begin
-to see a quadratic trend, but even for 50 nodes or more, concretization
-takes less than 6 seconds.
+on all of Spack's 245 packages. We tested on three LLNL cluster front-end nodes:
+a 2.3Ghz Intel Haswell node and a 2.6 GHz Intel Sandy Bridge node on our Linux
+clusters, and the 3.6 GHz IBM Power7 front-end node of a Blue Gene/Q system.
+Each point is the average of 10 trials.  We see that for all but the 10
+largest packages, concretization takes less than 2 seconds on all machines tested.
+For larger DAGs, we begin to see a quadratic trend, but even for 50 nodes or more, 
+concretization takes less than 4 seconds on the Haswell machine and 9 seconds on the 
+Power7.
 %
-This performance is expected from a greedy, fixed-point method.
-The algorithm repeats, evaluating conditions and adding dependencies and constraints, until
-there are no more changes to be made.
-%
-%  Additionally, our current compiler concretization
-% policy requires a search in the DAG; it prefers the compiler of the nearest ancestor
-% if the current node's compiler is not set. 
-%
+This performance is expected from our greedy, fixed-point method, and
+it is sufficient for the packages we have built so far.
+Its running time is insignificant compared to the build time of
+most packages, and it only executes
+once per build. 
 More generally, concretization is an instance of the constraint
-satisfaction problem, which is NP-complete. Our greedy solver is sufficient for the
-packages we have built so far.  Its running time is insignificant
-compared to the build time of most packages, and it only executes
-once per build.
-We do not expect to see software packages with thousands of dependencies in the near
-future, and we do not expect concretization to become a bottleneck, even if we
-use a full constraint solver.
+satisfaction problem, which is NP-complete, so concretization could become
+more costly.  However, we do not expect to see software packages with
+thousands of dependencies in the near future, so we do not expect
+concretization to become a bottleneck, even if we use a full constraint solver.
 
 \subsubsection{Shared sub-DAGs}
 \label{sec:directory-layout}
