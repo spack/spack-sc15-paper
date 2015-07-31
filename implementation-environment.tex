@@ -34,7 +34,7 @@ in its own process.  It also sets
 {\tt LD\_LIBRARY\_PATH} to include the dependencies of the current build.
 Build systems commonly use these variables to locate dependencies,
 and setting them helps to ensure that the correct libraries are detected.
-Using a separate process also gives package authors 
+Using a separate process also gives package authors
 free reign to set build-specific environment variables without interfering
 with other packages.
 
@@ -55,7 +55,7 @@ Spack manages {\tt RPATHs} and other build policies with
 {\it compiler wrappers}.
 In each isolated {\tt install} environment, Spack sets the environment variables
 {\tt CC}, {\tt CXX}, {\tt F77}, and {\tt FC} to point to its compiler
-wrapper scripts.  These variables are used by most build systems to select 
+wrapper scripts.  These variables are used by most build systems to select
 C, C++, and Fortran compilers, so they are typically picked up
 automatically.\footnote{If builds do not respect {\tt CC}, {\tt CXX}, {\tt FC},
 or {\tt F77},
@@ -104,10 +104,10 @@ bleeding-edge platforms or new, esoteric compilers.
 \subsubsection{Build Overhead}
 
 Argument parsing and indirection cause Spack's compiler wrappers to incur a small
-but noticeable performance overhead.  Figure~\ref{fig:build-time} shows
+but noticeable performance overhead.  Figure~\ref{fig:build-times} shows
 build times with and without compiler wrappers for seven different packages,
 and Figure~\ref{fig:overhead} shows the corresponding overhead as a percentage
-of the wrapper-less runtime.  {\tt Dyninst} and {\tt lapack}
+of the wrapper-less runtime.  {\tt Dyninst} and {\tt LAPACK}
 use CMake to build, and the rest use autotools.  We ran
 each build three times on an Intel Sandy Bridge cluster node, and we
 report the average here.
@@ -117,12 +117,12 @@ but it is as high as 12.3\% for shorter builds, like
 
 To increase build speed, by default Spack runs each {\tt install}
 method in the default temporary directory. On most cluster nodes,
-this is a fast, locally-mounted filesystem. In our experience,
+this is a fast, locally-mounted file system. In our experience,
 many users build manually in their home directories out of habit.  At most sites, home
 directories are remotely mounted volumes (e.g., NFS).  To compare Spack builds
 with {\it typical} manual builds, we timed the same seven builds using
 NFS.  Figure~\ref{fig:overhead} shows that building this way can be as much
-as 62.7\% slower than using a temporary filesystem and
+as 62.7\% slower than using a temporary file system and
 33\% slower on average. We therefore expect many users to notice
 a speedup when Spack uses temporary space to build.
 
@@ -136,22 +136,10 @@ As discussed in Section~\ref{sec:motivation}, many sites rely on environment
 modules to setup the runtime environment.  Spack can automatically create simple
 dotkit~\cite{dotkit} and Module configuration files for its packages, allowing
 users to setup their runtime environment using familiar systems.  While Spack
-packages do not {\tt LD\_LIBRARY\_PATH} to run, we set it in our generated module
+packages do not need {\tt LD\_LIBRARY\_PATH} to run, we set it in our generated module
 files as well, because it can be used by build systems to find libraries, as well
 as by dependent packages that do not use {\tt RPATH}.
 %
 Future versions of Spack may also allow the creation of Lmod~\cite{mclay:lmod}
 hierarchies, as discussed in Section~\ref{sec:env-rpath}. Spack's rich
 dependency information would allow such hierarchies to be generated automatically.
-
-
-
-
-
-
-
-
-
-
-
-

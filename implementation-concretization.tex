@@ -36,7 +36,7 @@ When the intersection succeeds, Spack has a single DAG with the merged
 constraints of the user and the package files.
 
 The next part of the process is iterative.
-If any node is a virtual dependency, Spack replaces it with with a
+If any node is a virtual dependency, Spack replaces it with a
 suitable interface provider.  It does this by building a reverse
 index from virtual packages to providers using the {\tt provides when}
 directives (Section~\ref{sec:virtual}). If multiple providers
@@ -98,15 +98,15 @@ a 2.3GHz Intel Haswell node and a 2.6 GHz Intel Sandy Bridge node on our Linux
 clusters, and the 3.6 GHz IBM Power7 front-end node of a Blue Gene/Q system.
 Each point is the average of 10 trials.  For all but the 10
 largest packages, concretization takes less than 2 seconds on all machines.
-For larger DAGs, we begin to see a quadratic trend, but even for 50 nodes or more, 
-concretization takes less than 4 seconds on the Haswell machine and 9 seconds on the 
+For larger DAGs, we begin to see a quadratic trend, but even for 50 nodes or more,
+concretization takes less than 4 seconds on the Haswell machine and 9 seconds on the
 Power7.
 %
 We expect this performance from our greedy, fixed-point method, and
 it is sufficient for the packages we have built so far.
 Its running time is insignificant compared to the build time of
 most packages, and it only executes
-once per build. 
+once per build.
 More generally, concretization is an instance of the constraint
 satisfaction problem, which is NP-complete. While concretization could become
 more costly, we do not expect to see packages with
@@ -169,4 +169,3 @@ separates these concerns.
        \label{fig:reuse}
    }
 \end{figure}
-

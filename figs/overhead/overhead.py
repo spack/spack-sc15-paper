@@ -10,7 +10,7 @@ with open('overhead.yaml') as f:
 
 N = len(data)
 keys = ['libelf', 'libpng', 'mpileaks',
-        'libdwarf', 'python', 'dyninst', 'lapack']
+        'libdwarf', 'python', 'dyninst', 'LAPACK']
 
 nfs_color='RoyalBlue'
 wrap_color='Orange'

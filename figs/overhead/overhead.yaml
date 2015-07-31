@@ -117,7 +117,7 @@ dyninst:
     - 173.35
     - 170.67
     - 173.37
-lapack:
+LAPACK:
   wrapper:
     - 322.13
     - 326.68

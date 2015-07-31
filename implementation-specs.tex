@@ -43,7 +43,7 @@ versions and configurations of the {\tt mpileaks} package.  In traditional port 
 package code is structured to build a single version of a package, but in Spack, each
 package file is a {\it template} that can be configured and built in many
 different ways, according to a set of {\it parameters}.
-Spack calls a single build configuration a {\it spec}. 
+Spack calls a single build configuration a {\it spec}.
 Spack communicates dependencies and parameters to package authors using
 the {\tt spec} argument of the {\tt install} method.
 
@@ -56,7 +56,7 @@ for each dependency and constructs a graph of their relationships.  The result
 is a directed, acyclic graph (DAG).\footnote{Spack currently disallows
 circular dependencies.}
 %
-To guarantee a consistent build and to avoid 
+To guarantee a consistent build and to avoid
 Application Binary Interface (ABI) incompatibility, we construct
 the DAG with only {\it one} version of each package.  Thus, while
 Spack can install arbitrarily many configurations of any package,
@@ -191,7 +191,7 @@ and the user has requested the {\tt debug} variant of the {\tt callpath} library
 
 Recall that Spack guarantees that there is only a single version of any package in
 a spec.  Within a spec, each dependency can be uniquely
-identified by its package name alone.  Therefore, the user does not need to consider 
+identified by its package name alone.  Therefore, the user does not need to consider
 DAG connectivity to add constraints.  She must only know that {\tt mpileaks}
 somehow depends on {\tt callpath}.
 Thus, dependency constraints can appear in arbitrary order.
@@ -251,7 +251,7 @@ through a configuration file.
 {\bf Variants.}
 To handle options like compiler flags or optional components, specs can
 have named flags, or {\it variants}.  Variants are associated with the package,
-so the {\tt mpileaks} package implementor must explicitly handle cases
+so the {\tt mpileaks} package implementer must explicitly handle cases
 where debug is enabled ({\tt +debug}) or disabled ({\tt -debug}
 or {\tt \textasciitilde \ignorespaces debug}).  Names simplify versioning
 and prevent the configuration space from becoming too large.

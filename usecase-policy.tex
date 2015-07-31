@@ -20,7 +20,7 @@ of particular sites and users.
 \label{sec:package-views}
 
 While Spack can easily create many installations of a package like {\tt mpileaks}
-for different compilers and MPI implementations, end users may find Spack's directory layout confusing, and they may not be able to find libraries intuitively.
+for different compilers and MPI implementations, end-users may find Spack's directory layout confusing, and they may not be able to find libraries intuitively.
 Spack installs packages into paths based on concretized specs.
 This is ideal for maintaining multiple package installations,
 but it may be difficult for an end-user to navigate.
@@ -35,7 +35,7 @@ environment modules are commonly used on HPC systems to solve this problem,
 and Spack allows the package author to automatically create environment modules
 for packages that Spack installs.
 Even when modules are available, many users still
-navigate the filesystem to access packages.
+navigate the file system to access packages.
 
 Spack thus allows the creation of views, which are a symbolic-link based directory layout of packages.
 Views provide a human-readable directory layout,
@@ -51,7 +51,7 @@ so a Spack-built {\tt gcc@4.9.2} install may have a view that creates links from
 
 Views are configured using configuration files, which can be set up at the site or
 user level.
-For each package or set of packages, configuration file contains rules
+For each package or set of packages, the configuration file contains rules
 describing the links that should point into that package.
 The link names can be parameterized.
 For example, the above {\tt mpileaks} symbolic link might have been created by a rule like:
@@ -114,7 +114,7 @@ directories for finding additional {\tt Package} classes.
 The additional packages are like the {\tt mpileaks} package shown in Figure~\ref{fig:mpileaks}.  However, the extension packages can extend from not
 only {\tt Package}, but also any of Spack's built-in packages.
 Custom packages can inherit from and replace Spack's default
-packages, so other sites to either tweak or completely replace Spack's
+packages, so other sites can either tweak or completely replace Spack's
 build recipes.  To continue the previous example, a site can write
 a {\tt LocalSpindle} Python class, which inherits from Spack's
 {\tt Spindle} class.  {\tt LocalSpindle} may simply add additional
