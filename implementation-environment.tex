@@ -2,19 +2,19 @@
 
 \subsection{Installation Environment}
 
-Spack is designed to build a consistent HPC stack for our multi-user
+Spack is designed to build a consistent HPC stack for our
 environment, and reproducible builds are one of our design goals.
 Experience at LLNL has shown that it is vexingly difficult to reproduce
 a build manually.
 %
-Many packages used at LLNL have a profusion of build options, and specifying
+Many packages have a profusion of build options, and specifying
 them correctly often requires tedious experimentation.  This is due to lack of
 build standards, as well as the diversity of HPC environments.
 For example, in some packages that depend on the {\tt Silo} library,
 the \verb|--with-silo| parameter takes a path to {\tt Silo}'s installation prefix.
 In others, it takes the {\tt include} and {\tt lib} subdirectories,
 separated by a comma.
-The {\tt install} method in Spack's package files encodes precise build
+The {\tt install} method in Spack's packages encodes precise build
 incantations for later reuse.
 
 \subsubsection{Environment isolation}
@@ -45,26 +45,27 @@ for binaries to be able to find dependency libraries at {\it runtime}.
 One of the most common user errors at LLNL is improper library configuration.
 Users frequently do not know what libraries a package was built with, and
 it is difficult for them to construct a suitable {\tt LD\_LIBRARY\_PATH} for
-a package that was built by someone else.  To reduce the number of support calls,
+a package that was built by someone else.  To reduce the number of support calls
+we receive,
 we typically add {\tt RPATHs} to public software installations, so that paths
 to dependencies are embedded in binaries. This way, users do not need to know
 details of dependencies to run installed software correctly.
 
-Spack manages {\tt RPATH} settings and other build policies with
+Spack manages {\tt RPATHs} and other build policies with
 {\it compiler wrappers}.
-In each isolated {\tt install} environment, Spack sets the standard
-environment variables
-{\tt CC}, {\tt CXX}, {\tt F77}, and {\tt FC} to point to its own compiler
+In each isolated {\tt install} environment, Spack sets the environment variables
+{\tt CC}, {\tt CXX}, {\tt F77}, and {\tt FC} to point to its compiler
 wrapper scripts.  These variables are used by most build systems to select 
-C, C++, and Fortran compilers, so they are generally picked up
-automatically.\footnote{If builds do not respect {\tt CC}, {\tt CXX}, etc.,
+C, C++, and Fortran compilers, so they are typically picked up
+automatically.\footnote{If builds do not respect {\tt CC}, {\tt CXX}, {\tt FC},
+or {\tt F77},
 wrappers can be added as arguments or inserted into Makefiles
 by {\tt install}.}
 When run, the wrappers insert include ({\tt -I}), library ({\tt -L}), and
 {\tt RPATH} ({\tt -Wl,-rpath} or similar) flags into the argument list.
 These point to the {\tt include} and {\tt lib} directories of dependency
-library installations, where needed headers and libraries are located.
-The wrappers then invoke the real compiler with the modified arguments.
+installations, where needed headers and libraries are located.
+The wrappers invoke the real compiler with the modified arguments.
 
 Spack's compiler wrappers have a number of benefits.  First, they allow
 Spack to transparently switch compilers in most builds.  This is how
@@ -85,7 +86,7 @@ bleeding-edge platforms or new, esoteric compilers.
 
 \begin{figure}%{\linewidth}
 	\centering
-	\includegraphics[width=\columnwidth]{figs/overhead/build-time.pdf}
+	\includegraphics[width=.95\columnwidth]{figs/overhead/build-time.pdf}
 	\caption{
 		Build time on NFS and temp, with and without wrappers.
 		\label{fig:build-times}
@@ -93,7 +94,7 @@ bleeding-edge platforms or new, esoteric compilers.
 \end{figure}
 \begin{figure}%{\linewidth}
 	\centering
-	\includegraphics[width=\columnwidth]{figs/overhead/overhead.pdf}
+	\includegraphics[width=.95\columnwidth]{figs/overhead/overhead.pdf}
 	\caption{
 		Build overhead of using NFS and compiler wrappers.
 		\label{fig:overhead}`
@@ -112,7 +113,7 @@ each build three times on an Intel Sandy Bridge cluster node, and we
 report the average here.
 In the case of {\tt dyninst}, the overhead is negligible (-0.4\%),
 but it is as high as 12.3\% for shorter builds, like
-{\tt mpileaks}
+{\tt mpileaks}.
 
 To increase build speed, by default Spack runs each {\tt install}
 method in the default temporary directory. On most cluster nodes,

@@ -18,15 +18,6 @@ If a spec meets all of these criteria, we say it is {\it concrete}.
 process that allows it to reduce an unconstrained abstract
 description to a concrete build.
 
-\begin{figure*}
-	\centering
-	\includegraphics[width=\textwidth]{figs/concretization.pdf}
-	\caption{
-		Spack's concretization process.
-		\label{fig:concretization}
-	}
-\end{figure*}
-
 Spack's concretization algorithm is shown in Figure~\ref{fig:concretization}.
 The process starts when a user invokes {\tt spack install} and requests that a
 spec be built.  Spack converts the spec to an abstract DAG.
@@ -93,7 +84,7 @@ query the spec in {\tt install} to handle different configurations.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figs/concretization-overhead/concretization-times.pdf}
+	\includegraphics[width=.95\columnwidth]{figs/concretization-overhead/concretization-times.pdf}
 	\caption{
 		Concretization running time for 245 packages.
 		\label{fig:concretization-time}
@@ -105,33 +96,25 @@ package DAG size in nodes.  We generated this plot by running {\tt concretize}
 on all of Spack's 245 packages. We tested on three LLNL cluster front-end nodes:
 a 2.3Ghz Intel Haswell node and a 2.6 GHz Intel Sandy Bridge node on our Linux
 clusters, and the 3.6 GHz IBM Power7 front-end node of a Blue Gene/Q system.
-Each point is the average of 10 trials.  We see that for all but the 10
-largest packages, concretization takes less than 2 seconds on all machines tested.
+Each point is the average of 10 trials.  For all but the 10
+largest packages, concretization takes less than 2 seconds on all machines.
 For larger DAGs, we begin to see a quadratic trend, but even for 50 nodes or more, 
 concretization takes less than 4 seconds on the Haswell machine and 9 seconds on the 
 Power7.
 %
-This performance is expected from our greedy, fixed-point method, and
+We expect this performance from our greedy, fixed-point method, and
 it is sufficient for the packages we have built so far.
 Its running time is insignificant compared to the build time of
 most packages, and it only executes
 once per build. 
 More generally, concretization is an instance of the constraint
-satisfaction problem, which is NP-complete, so concretization could become
-more costly.  However, we do not expect to see software packages with
-thousands of dependencies in the near future, so we do not expect
-concretization to become a bottleneck, even if we use a full constraint solver.
+satisfaction problem, which is NP-complete. While concretization could become
+more costly, we do not expect to see packages with
+thousands of dependencies in the near future. We do not expect
+it to become a bottleneck, even if we use a full constraint solver.
 
 \subsubsection{Shared sub-DAGs}
 \label{sec:directory-layout}
-
-\begin{figure}\centering
-   \includegraphics[width=\linewidth]{specs/rpaths.pdf}
-   \caption{
-       {\tt mpileaks} built with {\tt mpich}, then {\tt openmpi}.
-       \label{fig:reuse}
-   }
-\end{figure}
 
 We mentioned in Section~\ref{sec:packages} that each unique configuration is
 guaranteed a unique install prefix. Spack uses the concrete {\it spec}
@@ -178,3 +161,12 @@ and HashDist require the package author to write a mostly concrete build spec in
 We believe that this puts undue burden on the package author, and it makes the task
 of changing site policies within a software stack difficult.  Spack
 separates these concerns.
+
+\begin{figure}\centering
+   \includegraphics[width=.9\linewidth]{specs/rpaths.pdf}
+   \caption{
+       {\tt mpileaks} built with {\tt mpich}, then {\tt openmpi}.
+       \label{fig:reuse}
+   }
+\end{figure}
+

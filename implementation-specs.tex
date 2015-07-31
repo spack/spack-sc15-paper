@@ -3,7 +3,7 @@
 \begin{figure}
 	\begin{subfigure}{\linewidth}
 		\centering
-		\includegraphics[width=\columnwidth]{specs/mpileaks.pdf}
+		\includegraphics[width=.9\columnwidth]{specs/mpileaks.pdf}
 		\caption{
 			Spec for {\tt mpileaks}
 			\label{fig:specs-mpileaks}
@@ -12,7 +12,7 @@
 %
 	\begin{subfigure}{\linewidth}
 		\centering
-		\includegraphics[width=\columnwidth]{specs/mpileaks-version}
+		\includegraphics[width=.9\columnwidth]{specs/mpileaks-version}
 		\caption{
 			{\tt mpileaks@2.3}
 			\label{fig:specs-mpileaks-version}
@@ -21,7 +21,7 @@
 %
 	\begin{subfigure}{\linewidth}
 		\centering
-		\includegraphics[width=\columnwidth]{specs/mpileaks-abstract.pdf}
+		\includegraphics[width=.9\columnwidth]{specs/mpileaks-abstract.pdf}
 		\caption{
 			{\tt mpileaks@2.3 \^{}callpath@1.0+debug \^{}libelf@0.8.11}
 			\label{fig:specs-mpileaks-abstract}
@@ -172,10 +172,10 @@ She can request it with a version constraint after the package name:
 %
 We see from Figure~\ref{fig:specs-mpileaks-version} that the specific version constraint is
 placed on the {\tt mpileaks} node in the DAG, but the rest of the DAG remains unconstrained.
-If the user does not need a specific version of {\tt mpileaks}, but does require
-particular minimum version, then the user could use {\it version range} syntax
-and write {\tt @2.3:}.  Likewise, for a version between 2.3 and 2.5.6, she would use
-{\tt @2.3:2.5.6} to designate the range. In these cases, the user can save time if
+If the user only requires a particular minimum version, then she could use
+{\it version range} syntax
+and write {\tt @2.3:}.  Likewise, for a version between 2.3 and 2.5.6, she would write
+{\tt @2.3:2.5.6}. In these cases, the user can save time if
 Spack already has a version installed that satisfies the spec -- Spack will use
 the previously-built installation instead of building a new one.
 
@@ -190,12 +190,11 @@ there are now version constraints on {\tt callpath} {\it and} {\tt libelf},
 and the user has requested the {\tt debug} variant of the {\tt callpath} library.
 
 Recall that Spack guarantees that there is only a single version of any package in
-the spec DAG.  Within a spec, each dependency can be uniquely
+a spec.  Within a spec, each dependency can be uniquely
 identified by its package name alone.  Therefore, the user does not need to consider 
-DAG connectivity to add constraints.  She need only know that {\tt mpileaks}
+DAG connectivity to add constraints.  She must only know that {\tt mpileaks}
 somehow depends on {\tt callpath}.
-For the same reason, the constraint order does not matter; dependency constraints
-can appear in arbitrary order.
+Thus, dependency constraints can appear in arbitrary order.
 
 Table~\ref{tab:specs} shows further examples of specs, ranging from very
 simple to more complex. These examples show how Spack's constraint
@@ -275,7 +274,7 @@ example, the ROSE compiler~\cite{rose} only builds with a certain version of the
 The {\tt depends\_on()} directives in Figure~\ref{fig:mpileaks} contain
 simple package names.  However, a package name is also a spec, and
 the same constraint syntax usable from the command line can be applied inside directives.
-So, the ROSE compiler can simply write:
+So, we can simply write:
 %
 \begin{minted}[fontsize=\scriptsize]{python}
     depends_on('boost@1.54.0')
@@ -292,6 +291,8 @@ predicate in an optional {\tt when} parameter:
     depends_on('boost@1.54.0', when='%gcc@5:')
 \end{minted}
 %
+\vfill\eject
+\noindent
 The same notation is used to optionally build with libraries like MPI:
 %
 \begin{minted}[fontsize=\scriptsize]{python}
@@ -316,7 +317,6 @@ object in the {\tt install} method:
           # Handle gcc
       elif spec.satisfies('%xl'):
           # Handle XL compilers
-      ...
 \end{minted}
 %
 

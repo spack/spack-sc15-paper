@@ -9,11 +9,8 @@
 			   fontsize=\scriptsize,
                frame=lines,
                framesep=2mm]{python}
-from spack import *
-
 class Mpileaks(Package):
-    """Tool to detect and report leaked MPI objects like
-       MPI_Requests and MPI_Datatypes."""
+    """Tool to detect and report leaked MPI objects."""
 
     homepage = "https://github.com/hpc/mpileaks"
     url = homepage + "/releases/download/v1.0/mpileaks-1.0.tar.gz"
@@ -54,13 +51,13 @@ to the package class.
 
 Figure~\ref{fig:mpileaks} shows the package for \mpileaks, a tool developed
 at LLNL to find un-released MPI handle objects in parallel programs.
-The {\tt MpiLeaks} class provides simple metadata on lines 4-8: a text
+The {\tt MpiLeaks} class provides simple metadata on lines 2-5: a text
 description, a homepage, and a download URL.
-Two {\tt version} directives on lines 10-11 identify known versions and provide
+Two {\tt version} directives on lines 7-8 identify known versions and provide
 MD5 checksums to verify downloads.
-The two {\tt depends\_on} directives on lines 13-14 indicate prerequisite
+The two {\tt depends\_on} directives on lines 10-11 indicate prerequisite
 packages that must be installed before \mpileaks.
-Last, the {\tt install} method on line 16 contains the commands for building.
+Last, the {\tt install} method on line 13 contains the commands for building.
 Spack's DSL allows shell commands to be invoked as Python functions,
 and the {\tt install} method invokes {\tt configure},
 {\tt make}, and {\tt make install} as a shell script would.
