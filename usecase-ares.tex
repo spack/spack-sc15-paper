@@ -26,9 +26,9 @@ Currently, only the Haswell partition is deployed on Trinitite.
 
 ARES comprises 47 packages, with complex dependency relationships. 
 Figure~\ref{fig:ares} shows the DAG for the current production configuration 
-of ARES. At the top is ARES itself.  ARES depends on 11 LLNL physics packages 
-(red), 4 LLNL math/meshing libraries (gold), and 8 LLNL utility libraries 
-(green). The utility libraries handle tasks including logging, I/O, and 
+of ARES. At the top is ARES itself.  ARES depends on 11 LLNL physics packages,
+4 LLNL math/meshing libraries, and 8 LLNL utility libraries.
+The utility libraries handle tasks including logging, I/O, and 
 performance measurement. ARES also uses 23 external software packages, 
 including MPI, BLAS, Python, and many other libraries.  Together, these 
 packages are written in a diverse set of languages including C, C++, 
@@ -84,9 +84,9 @@ compiler, and MPI combination. Each configuration requires a slightly different
 set of dependencies and dependency versions, but one common ARES package supports
 all of them with conditional logic on versions and variants.
 
-Altogether, the initial packaging effort for ARES took roughly two months,
-half time, for an experienced build engineer. As shown in the table, 32
-different configurations have been run using Spack
+Altogether, the initial packaging effort required roughly two months 
+for an experienced build engineer working 20 hours per week.
+As shown in the table, 32 different configurations have been run using Spack
 (some of 4 versions on each of 10 architecture-compiler-MPI combinations).
 Prior to using Spack, only Linux/Intel configurations were automated. The ARES 
 team listed a number of key features that enabled the increased automation:
@@ -94,7 +94,7 @@ team listed a number of key features that enabled the increased automation:
 \item Spack's version tracking and optional dependencies were required to
       build the four configurations with correct libraries;
 \item The spec syntax allowed build scripts to concisely test compiler,
-      compiler version, and dependency versions: a necessity
+      compiler version, and dependency versions---a necessity
       for handling the different architectures;
 \item Patching packages for particular platforms was
       necessary to build many packages; and

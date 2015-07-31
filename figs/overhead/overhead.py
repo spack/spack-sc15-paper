@@ -12,13 +12,9 @@ N = len(data)
 keys = ['libelf', 'libpng', 'mpileaks',
         'libdwarf', 'python', 'dyninst', 'lapack']
 
-#nfs_color='RoyalBlue'
-#wrap_color='Orange'
-#orig_color='SeaGreen'
-
-nfs_color='Black'
-wrap_color='Gray'
-orig_color='White'
+nfs_color='RoyalBlue'
+wrap_color='Orange'
+orig_color='SeaGreen'
 
 nfs_label='Wrappers, NFS'
 wrap_label='Wrappers, Temp FS'
