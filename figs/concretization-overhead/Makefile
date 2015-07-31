@@ -3,8 +3,8 @@ pdfs = concretization-times.pdf package-sizes.pdf
 
 all: $(pdfs)
 
-concretization-times.pdf: ./timings.py
-	./timings.py
+concretization-times.pdf: ./concretization-times.py
+	./concretization-times.py
 	pdfcrop concretization-times.pdf
 	mv concretization-times-crop.pdf concretization-times.pdf
 

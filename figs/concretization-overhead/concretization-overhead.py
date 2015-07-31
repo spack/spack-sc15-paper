@@ -23,7 +23,7 @@ for name in spack.db.all_package_names():
         end = time.clock()
         times.append(end - start)
 
-    record = (name, s.size, times)
+    record = (name, len([s for s in s.traverse()]), times)
     print record
     timings.append(record)
 
