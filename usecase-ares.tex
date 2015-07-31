@@ -59,7 +59,7 @@ the new platforms and compilers.
 \hline
 \multirow{2}{*}{} & \multicolumn{3}{|c|}{\hfmt{Linux}}                      & {\hfmt{BG/Q}}     & {\hfmt{Cray XE6}} \\\cline{2-6}
                   & {\hfmt{MVAPICH}} & {\hfmt{MVAPICH2}} & {\hfmt{OpenMPI}} & {\hfmt{BG/Q MPI}} & {\hfmt{Cray MPI}} \\\hline
-{\hfmt{GCC}}      & {\cfmt{C P L D}} &                   &                  &                   &                   \\\hline
+{\hfmt{GCC}}      & {\cfmt{C P L D}} &                   &                  & {\cfmt{C P L D}}  &                   \\\hline
 {\hfmt{Intel 14}} & {\cfmt{C P L D}} &                   &                  &                   &                   \\\hline
 {\hfmt{Intel 15}} & {\cfmt{C P L D}} & {\cfmt{D}}        &                  &                   &                   \\\hline
 {\hfmt{PGI}}      &                  & {\cfmt{D}}        & {\cfmt{C P L D}} &                   & {\cfmt{C L D}}    \\\hline
@@ -86,7 +86,7 @@ all of them with conditional logic on versions and variants.
 
 Altogether, the initial packaging effort required roughly two months 
 for an experienced build engineer working 20 hours per week.
-As shown in the table, 32 different configurations have been run using Spack
+As shown in the table, 36 different configurations have been run using Spack
 (some of 4 versions on each of 10 architecture-compiler-MPI combinations).
 Prior to using Spack, only Linux/Intel configurations were automated. The ARES 
 team listed a number of key features that enabled the increased automation:
