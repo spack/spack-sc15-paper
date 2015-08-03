@@ -4,23 +4,22 @@
 
 Spack is designed to build a consistent HPC stack for our
 environment, and reproducible builds are one of our design goals.
-Experience at LLNL has shown that it is vexingly difficult to reproduce
-a build manually.
+Experience at LLNL has shown that reproducing a build manually
+is vexingly difficult.
 %
-Many packages have a profusion of build options, and specifying
-them correctly often requires tedious experimentation.  This is due to lack of
+Many packages have a profusion of build options. Specifying
+them correctly often requires tedious experimentation due to lack of
 build standards, as well as the diversity of HPC environments.
 For example, in some packages that depend on the {\tt Silo} library,
-the \verb|--with-silo| parameter takes a path to {\tt Silo}'s installation prefix.
-In others, it takes the {\tt include} and {\tt lib} subdirectories,
+the \verb|--with-silo| parameter takes a path to {\tt Silo}'s installation 
+prefix. In others, it takes the {\tt include} and {\tt lib} subdirectories,
 separated by a comma.
 The {\tt install} method in Spack's packages encodes precise build
 incantations for later reuse.
 
 \subsubsection{Environment isolation}
-In addition to inconsistencies that arise from building manually, we
-frequently encounter errors due to inconsistencies between the package
-installation environment and the environment of the package user.
+Inconsistencies arise not only from building manually but also due to 
+package installation and user environment differences.
 %
 For example, LLNL performance tools use two versions of the {\tt libelf}
 library. One is distributed with RedHat Linux, while the
@@ -40,16 +39,15 @@ with other packages.
 
 \subsubsection{Compiler wrappers and RPATHs}
 Finding dependencies at build time is not the only obstacle to reproducible
-behavior.  As mentioned in Section~\ref{sec:motivation}, it is also important
-for binaries to be able to find dependency libraries at {\it runtime}.
+behavior.  As mentioned in Section~\ref{sec:motivation}, binaries must be 
+able to find dependency libraries at {\it runtime}.
 One of the most common user errors at LLNL is improper library configuration.
-Users frequently do not know what libraries a package was built with, and
-it is difficult for them to construct a suitable {\tt LD\_LIBRARY\_PATH} for
-a package that was built by someone else.  To reduce the number of support calls
-we receive,
-we typically add {\tt RPATHs} to public software installations, so that paths
-to dependencies are embedded in binaries. This way, users do not need to know
-details of dependencies to run installed software correctly.
+Users frequently do not know the libraries with which a package was built, and
+constructing a suitable {\tt LD\_LIBRARY\_PATH} for a package that was built 
+by someone else is difficult. To reduce the number of support calls that we 
+receive, we typically add {\tt RPATHs} to public software installations, so 
+that paths to dependencies are embedded in binaries. Thus, users do not need 
+to know details of dependencies to run installed software correctly.
 
 Spack manages {\tt RPATHs} and other build policies with
 {\it compiler wrappers}.
@@ -67,22 +65,21 @@ These point to the {\tt include} and {\tt lib} directories of dependency
 installations, where needed headers and libraries are located.
 The wrappers invoke the real compiler with the modified arguments.
 
-Spack's compiler wrappers have a number of benefits.  First, they allow
-Spack to transparently switch compilers in most builds.  This is how
-compiler options like {\tt \%gcc} are implemented.  Second, they enforce the
-use of {\tt RPATHs} in
-installed binaries.  This causes applications built by Spack to run correctly
-{\it regardless of the environment}.  Third, because compiler wrappers add
-header and library search paths for dependencies, header and library detection
-tests used by most build systems succeed automatically, without
-the need to use special arguments for nonstandard locations.  {\tt configure}
+Spack's compiler wrappers have several benefits.  First, they allow
+Spack to switch compilers transparently in most builds, which is how we
+implement compiler options like {\tt \%gcc}.  Second, they enforce the
+use of {\tt RPATHs} in installed binaries, which allows applications that 
+Spack builds to run correctly {\it regardless of the environment}.  Third, 
+because compiler wrappers add header and library search paths for dependencies,
+header and library detection tests that most build systems use succeed without
+using special arguments for nonstandard locations.  {\tt configure}
 commands in Spack's {\tt install} function can have fewer arguments, and can
-be written as they would be for system installs.  This reduces complexity
+be written as for system installs, which reduces complexity
 for package maintainers and helps to ensure consistent, reproducible
-build policies across packages.  Finally, because Spack has control over the
+build policies across packages.  Finally, because Spack controls the
 wrappers, package authors can programmatically filter the compiler flags
-used by software build systems, a useful last resort when porting to
-bleeding-edge platforms or new, esoteric compilers.
+used by build systems, which facilitates porting to bleeding-edge platforms 
+or new compilers.
 
 \begin{figure}%{\linewidth}
 	\centering
@@ -107,18 +104,16 @@ Argument parsing and indirection cause Spack's compiler wrappers to incur a smal
 but noticeable performance overhead.  Figure~\ref{fig:build-times} shows
 build times with and without compiler wrappers for seven different packages,
 and Figure~\ref{fig:overhead} shows the corresponding overhead as a percentage
-of the wrapper-less runtime.  {\tt Dyninst} and {\tt LAPACK}
-use CMake to build, and the rest use autotools.  We ran
-each build three times on an Intel Sandy Bridge cluster node, and we
-report the average here.
-In the case of {\tt dyninst}, the overhead is negligible (-0.4\%),
-but it is as high as 12.3\% for shorter builds, like
-{\tt mpileaks}.
+of the wrapper-less runtime.  {\tt Dyninst} and {\tt LAPACK} use CMake to 
+build, and the rest use autotools.  We ran each build three times on an Intel 
+Sandy Bridge cluster node, and we report the average. In the case of 
+{\tt dyninst}, the overhead is negligible (-0.4\%), but it is as high 
+as 12.3\% for shorter builds, like {\tt mpileaks}.
 
-To increase build speed, by default Spack runs each {\tt install}
-method in the default temporary directory. On most cluster nodes,
-this is a fast, locally-mounted file system. In our experience,
-many users build manually in their home directories out of habit.  At most sites, home
+To increase build speed, by default Spack runs each {\tt install} method 
+in the default temporary directory, which is a fast, locally-mounted file 
+system on most cluster nodes. In our experience, many users build manually 
+in their home directories out of habit.  At most sites, home
 directories are remotely mounted volumes (e.g., NFS).  To compare Spack builds
 with {\it typical} manual builds, we timed the same seven builds using
 NFS.  Figure~\ref{fig:overhead} shows that building this way can be as much
@@ -141,5 +136,9 @@ files as well, because it can be used by build systems to find libraries, as wel
 as by dependent packages that do not use {\tt RPATH}.
 %
 Future versions of Spack may also allow the creation of Lmod~\cite{mclay:lmod}
-hierarchies, as discussed in Section~\ref{sec:env-rpath}. Spack's rich
-dependency information would allow such hierarchies to be generated automatically.
+hierarchies.
+%% We discussed Lmod hierarchies generall; we did not discuss using
+%% them with Spack so the statment is misleading and unnecessary
+%%, as discussed in Section~\ref{sec:env-rpath}.
+Spack's rich dependency information would allow automatic generation of 
+such hierarchies.
