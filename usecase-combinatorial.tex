@@ -39,8 +39,9 @@ def install(self, spec, prefix):
 \end{figure}
 
 Spack presented a solution to both problems.  Package administrators can use Spack to
-easily maintain a central install of {\tt gperftools} across combinations of
-compilers and compiler versions.  Spack's {\tt gperftools} package also serves as a central
+maintain a central install of {\tt gperftools} across combinations of
+compilers and compiler versions easily.  Spack's {\tt gperftools} package 
+also serves as a central
 institutional knowledge repository, as its package files encode
 the patches and configure lines required for each platform and compiler combination.
 %
@@ -55,7 +56,7 @@ has an even larger configuration space than {\tt gperftools}.  It must be built
 for different compilers, compiler versions, MPI implementations, and MPI
 versions. As with {\tt gperftools}, we have been able to install many different
 configurations of {\tt mpileaks} using Spack.  Moreover, Spack's virtual dependency
-system allows us to quickly compose a new {\tt mpileaks} build when a new MPI library is
+system allows us to compose a new {\tt mpileaks} build quickly when a new MPI library is
 deployed at LC, {\it without} modifying the {\tt mpileaks} package itself.
 %Though we simplified its dependency structure
 %here, the {\tt callpath} library can be built with three different stack trace libraries:
