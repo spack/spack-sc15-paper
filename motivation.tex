@@ -138,8 +138,8 @@ Many HPC sites address this problem using {\it environment modules}, which
 allow users to ``load'' and ``unload'' such settings dynamically using simple
 commands. Environment modules emerged in 1991, and there are many implementations~\cite{dotkit,furlani+:lisa91,furlani+:lisa96,mclay:lmod,mclay:lmod-tutorial}.
 The most advanced of these, Lmod~\cite{mclay:lmod,mclay:lmod-tutorial},
-provides software hierarchies similar to the naming conventions in
-Table~\ref{tab:naming-conventions}. This allows users to load a software stack
+provides software hierarchies that are similar to the naming conventions in
+Table~\ref{tab:naming-conventions} and allow users to load a software stack
 quickly if they know which one is required.
 
 The alternative to per-user environment settings is to embed library search
@@ -178,7 +178,7 @@ than setting {\tt RPATHs}, it auto-generates module files
 to manage the environment, and it is closely coupled with
 Lmod~\cite{geimer+:hust14}.  EasyBuild groups the compiler, MPI, FFT, and
 BLAS libraries together in a {\it toolchain} that can be used by
-package files. This provides some degree of composability and
+package files. The grouping provides some composability and
 separates compiler flags and MPI concerns from client packages.
 
 HashDist~\cite{hashdist} is a meta-build system and package manager
