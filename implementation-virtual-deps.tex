@@ -33,18 +33,18 @@
 \end{figure*}
 
 
-Many libraries share a common source interface and can be interchanged
-within a build.
-The archetypal example in HPC is the MPI interface, which has a number of
-open source implementations (MPICH, OpenMPI, MVAPICH, etc.) and vendor-specific
-implementations. An application that can be built with one MPI can generally be
+Many libraries share a common interface and can be interchanged within a build.
+The archetypal examples in HPC are MPI libraries, which has several
+open source (e.g., MPICH, OpenMPI, and MVAPICH) and 
+vendor-specific implementations. An application that can be built with 
+one MPI implementation can generally be
 built with another.  Another example is the Basic Linear Algebra
 Subroutines (BLAS), which has many fungible implementations
-(ATLAS, LAPACK-BLAS, MKL, etc.).
+(e.g., ATLAS, LAPACK-BLAS, and MKL).
 
 Neither MPI nor BLAS has a standard ABI, so applications cannot simply be
 re-linked with a new version. They must be recompiled and reinstalled.
-At LLNL, we frequently need to build tools with many versions of MPI to support
+At LLNL, we must frequently build tools with many versions of MPI to support
 the many different applications that run at our center.
 Complicating matters, the MPI interface is versioned, and some
 packages need later versions of MPI to run correctly.  Often, MPI
@@ -53,19 +53,19 @@ interface versions, and determining the right version of
 MPI to pair with an application can be tedious and tricky.
 
 To allow rapid composition of libraries using an interface, Spack supports
-{\it virtual dependencies}.  A virtual dependency is an abstract name
-representing a library interface or capability instead of a library
-implementation.  Packages that need this capability need not depend on
+{\it virtual dependencies}.  A virtual dependency is an abstract name that
+represents a library interface (or capability) instead of a library
+implementation.  Packages that need this interface do need not to depend on
 a specific implementation; they can depend on the virtual name, for which
 the user or Spack can select an implementation at build time.
 Other package managers support the notion of virtual dependencies, but Spack
-adds {\it versioning} to its interfaces.  This allows concepts like MPI
-interface versions and BLAS levels to be represented directly.  Spack
+adds {\it versioning} to its interfaces, which directly supports concepts 
+like MPI versions and BLAS levels.  Spack
 handles the details of managing and checking complex versioning constraints.
 
 Figure~\ref{fig:virtual-deps} shows how packages provide
-virtual interfaces in Spack.  The spec syntax is used to concisely
-associate ranges of {\tt mpi} versions for the {\tt mvapich2} and {\tt mpich} packages.
+virtual interfaces in Spack.  The spec syntax concisely associates ranges 
+of {\tt mpi} versions for the {\tt mvapich2} and {\tt mpich} packages.
 The {\tt mpileaks} package requires {\tt mpi}, but it does not constrain the version.
 Any version of {\tt mvapich2} or {\tt mpich} could be used to to satisfy the {\tt mpi}
 constraint. The Gerris computational fluid dynamics library, however, needs MPI version 2 or higher.  So any
