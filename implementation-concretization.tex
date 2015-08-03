@@ -4,61 +4,61 @@
 \label{sec:concretization}
 
 We have discussed Spack's internal software DAG model, and we have shown
-how the spec syntax can be used to quickly specify a partially constrained
-software DAG.  We say such a DAG is {\it abstract}, as it could potentially
+how the spec syntax can be used to specify a partially constrained
+software DAG.  This DAG is {\it abstract}, as it could potentially
 describe more than one software configuration. Before Spack builds a spec, it
 must ensure the following conditions:
 \begin{enumerate}
-\item No package in the spec DAG is missing dependencies.
-\item No package in the spec DAG is virtual.
+\item No package in the spec DAG is missing dependencies;
+\item No package in the spec DAG is virtual;
 \item All parameters are set for all packages in the DAG.
 \end{enumerate}
-If a spec meets all of these criteria, we say it is {\it concrete}.
+If a spec meets these criteria then it is {\it concrete}.
 {\it Concretization} is the central component of Spack's build
 process that allows it to reduce an unconstrained abstract
 description to a concrete build.
 
-Spack's concretization algorithm is shown in Figure~\ref{fig:concretization}.
+Figure~\ref{fig:concretization} shows Spack's concretization algorithm.
 The process starts when a user invokes {\tt spack install} and requests that a
 spec be built.  Spack converts the spec to an abstract DAG.
 It then builds a {\it separate} spec DAG for any constraints encoded
 by directives in package files.
 %
 Spack intersects the constraints of the two DAGs package by package, and it
-checks each parameter for inconsistencies.  Inconsistencies can arise if, for example,
+checks each parameter for inconsistencies.  Inconsistencies can arise if, 
+for example,
 the user inadvertently requests two versions of the same package, or if a
 package file depends on a different version than the user requested.
 Likewise, if the package and the user specified different compilers, variants,
 or platforms for particular packages, Spack will stop and notify
 the user of the conflict. If the user or package specifies version ranges,
-they are intersected, and if the ranges do not overlap, an error is raised.
+they are intersected, and if the ranges do not overlap, Spack raises an error.
 When the intersection succeeds, Spack has a single DAG with the merged
 constraints of the user and the package files.
 
 The next part of the process is iterative.
 If any node is a virtual dependency, Spack replaces it with a
-suitable interface provider.  It does this by building a reverse
+suitable interface provider by building a reverse
 index from virtual packages to providers using the {\tt provides when}
 directives (Section~\ref{sec:virtual}). If multiple providers
 satisfy the virtual spec's constraints,
 Spack consults site and user policies to select the ``best'' possible
 provider.  The selected provider may {\it itself} have virtual dependencies,
-this process is repeated until there are no more virtual packages in the DAG.
+so this process is repeated until the DAG has no more virtual packages.
 
 With the now non-virtual DAG, Spack again consults site and user preferences for
 variants, compilers, and versions to resolve any remaining abstract nodes.
 Adding a variant like {\tt +mpi} may cause a package to depend on more
 libraries (as in Section~\ref{sec:constraints}). The concretization algorithm
-evaluates conditions from {\tt when} clauses on the DAG, and if there are
+evaluates conditions from {\tt when} clauses on the DAG; if they result in
 new libraries or other changes, the cycle begins again.
 Spack currently avoids an exhaustive search by using a greedy algorithm.
 It will not backtrack to try other options if its first policy choice leads
 to an inconsistency.  Rather, it will raise an error and the user must resolve
-the issue by being more explicit.  The user might toggle a variant, or she might
-force the build to use a {\it particular} MPI implementation
+the issue by being more explicit.  The user might toggle a variant or force 
+the build to use a {\it particular} MPI implementation
 by supplying \verb|^openmpi| or \verb|^mpich|.  We leave automatic constraint
 space exploration for future work.
-
 
 \begin{figure}
 	\centering
@@ -120,11 +120,11 @@ We mentioned in Section~\ref{sec:packages} that each unique configuration is
 guaranteed a unique install prefix. Spack uses the concrete {\it spec}
 to generate a unique path, shown in Table~\ref{tab:naming-conventions}.
 To prevent the directory name from growing too long, Spack uses a SHA hash of
-dependencies' specs as the last directory component.  This
-does {\it not} mean that Spack rebuilds every library for each new configuration.
-If two configurations share a sub-DAG, then the sub-DAG's configuration will
-be reused.  Figure~\ref{fig:reuse} shows how the {\tt dyninst} sub-DAG is used for
-both the {\tt mpich} and {\tt openmpi} builds of {\tt mpileaks}.
+dependencies' specs as the last directory component.  However, Spack
+does {\it not} rebuild every library for each new configuration.
+If two configurations share a sub-DAG, then Spack reuses the sub-DAG's 
+configuration.  Figure~\ref{fig:reuse} shows how the {\tt dyninst} sub-DAG 
+is used for both the {\tt mpich} and {\tt openmpi} builds of {\tt mpileaks}.
 
 
 \subsubsection{Reproducibility}
@@ -133,15 +133,16 @@ both the {\tt mpich} and {\tt openmpi} builds of {\tt mpileaks}.
 For reproducibility, and to preserve provenance, Spack stores a number of
 files in the installation directory that document how the installed package was
 built.  These include the {\tt package.py} file used to build, a build log
-containing output and error messages, and a file containing the complete
+that contains output and error messages, and a file that contains the complete
 concrete spec for the package {\it and} its dependencies. The spec file can be
-used later to reproduce the build, even if concretization preferences have changed.
+used later to reproduce the build, even if concretization preferences have 
+changed.
 
 \subsubsection{Site policies and build complexity}
 
 Our experience with manual installs helped us understand that much of the complexity
 of building HPC software comes from the size of the build parameter space.
-As mentioned, there are only a few parameters that typical users care about.
+As previously mentioned, typical users only care about a few parameters.
 The rest add unneeded complexity.  When building manually, LLNL staff
 tend to make arbitrary choices about the secondary build parameters,
 or they add logic to build scripts to make these choices.
@@ -149,16 +150,16 @@ Manually built software is generally not installed in a consistent manner.
 
 Concretization provides two benefits.  First, it allows users and staff to
 request builds with a minimal spec expression, while still providing a
-mechanism for the site and the user to make consistent, repeatable choices about
-other build parameters.  For example, the site or the user can set default versions
-to use for any library that is not specified explicitly.
+mechanism for the site and the user to make consistent, repeatable choices 
+for other build parameters.  For example, the site or the user can set 
+default versions to use for any library that is not specified explicitly.
 %
 Second, concretization reduces the burden of packaging software, because
-package authors do not have to make these decisions.  There is no
-need for packages to contain complicated checks, or for packages to be overly
-specific about versions.  Other multi-configuration systems like Nix, EasyBuild,
-and HashDist require the package author to write a mostly concrete build spec in advance.
-We believe that this puts undue burden on the package author, and it makes the task
+package authors do not have to make these decisions. Packages do not need 
+to contain complicated checks, or to be overly specific about versions.  
+Other multi-configuration systems like Nix, EasyBuild, and HashDist require 
+the package author to write a mostly concrete build spec in advance.
+This requirement puts undue burden on the package author, and it makes the task
 of changing site policies within a software stack difficult.  Spack
 separates these concerns.
 
