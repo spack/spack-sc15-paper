@@ -32,7 +32,9 @@ The utility libraries handle tasks including logging, I/O, and
 performance measurement. ARES also uses 23 external software packages, 
 including MPI, BLAS, Python, and many other libraries.  Together, these 
 packages are written in a diverse set of languages including C, C++, 
-Fortran, Python and tcl and uses MPI and OpenMP for parallelism.
+Fortran, Python and tcl.
+%% Sense of the following has been lost and seems unnecessary
+%% and uses MPI and OpenMP for parallelism.
 
 We have configured Spack to build ARES with external MPI implementations, 
 depending on the host system. This configuration exploits the vendor- 
@@ -87,14 +89,14 @@ all of them with conditional logic on versions and variants.
 Altogether, the initial packaging effort required roughly two months 
 for an experienced build engineer working 20 hours per week.
 As shown in the table, 36 different configurations have been run using Spack
-(some of 4 versions on each of 10 architecture-compiler-MPI combinations).
+(up to 4 versions on each of 10 architecture-compiler-MPI combinations).
 Prior to using Spack, only Linux/Intel configurations were automated. The ARES 
 team listed a number of key features that enabled the increased automation:
 \begin{enumerate}
 \item Spack's version tracking and optional dependencies were required to
       build the four configurations with correct libraries;
-\item The spec syntax allowed build scripts to concisely test compiler,
-      compiler version, and dependency versions---a necessity
+\item The spec syntax allowed build scripts to test compiler,
+      compiler version, and dependency versions concisely---a necessity
       for handling the different architectures;
 \item Patching packages for particular platforms was
       necessary to build many packages; and
