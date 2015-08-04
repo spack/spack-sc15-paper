@@ -19,38 +19,38 @@ configurations.
 Existing Python package managers either do not support building from
 source~\cite{anaconda,conda}, or they are language-specific~\cite{eby:setuptools}.
 None handles multi-configuration builds.  More glaringly, Python extensions
-are usually installed into the Python interpreter's prefix.
-This makes it impossible to install multiple versions.\footnote{{\tt setuptools}
+are usually installed into the Python interpreter's prefix, which makes it 
+impossible to install multiple versions.\footnote{{\tt setuptools}
 has support for multiple versions via {\tt pkg_resources},
 but this requires modifications to client code.}
 Installing each extension in its own prefix enables combinatorial versioning,
 but it requires users to add packages to the {\tt PYTHONPATH} variable at runtime.
 
-Per Spack's design philosophy, we wanted a way to easily manage many different
-versions, but {\it also} to provide a baseline set of extensions {\it without}
-requiring environment settings.
+Per Spack's design philosophy, we wanted a way to manage many different
+versions easily, but {\it also} to provide a baseline set of extensions 
+{\it without} requiring environment settings.
 %
 To support this mode of operation, we added the concept of {\tt extension} packages
 to Spack. Python modules use the {\tt extends('python')} directive instead of
 {\tt depends\_on('python')}.
 Each module installs into its own prefix like any other package,
 and each module depends on a particular Python installation.
-But extensions can be {\tt activated} or {\tt deactivated}
+However extensions can be {\tt activated} or {\tt deactivated}
 within the dependent Python installation.  The {\tt activate} operation
 symbolically links each file in the extension prefix into the Python
-installation prefix, as though it were installed directly. If any file
+installation prefix, as if it were installed directly. If any file
 conflict would arise from this operation, {\tt activate} fails.
 Similarly, the {\tt deactivate} operation removes the symbolic links and restores
 the Python installation to its  pristine state.
 
-There were additional complications because many Python packages {\it install their own
-package manager} if they do not find one in the Python installation.
-There are also many ways that Python packages add themselves to the
-interpreter's default path, and some of them conflict. We modified
-Spack so that extendable packages, like Python, can supply custom code
-in the package file that that specializes {\tt activate} and {\tt deactivate}
-for the particular package. Python uses this feature to merge conflicting
-files during activation.  The end result is that Python extensions can
+Additional complications arose because many Python packages 
+{\it install their own package manager} if they do not find one in the 
+Python installation. Also, Python packages use a wide range of mechanisms
+to add themselves to the interpreter's default path, some of which conflict. 
+We modified Spack so that extendable packages, like Python, can supply 
+custom code in the package file that specializes {\tt activate} and 
+{\tt deactivate} for the particular package. For Python, this feature 
+merges conflicting files during activation. Overall, Python extensions can
 be installed automatically in their own prefixes, and they can be composed
 with a wide range of bleeding-edge libraries that other package managers do
 not handle.
@@ -61,9 +61,9 @@ not handle.
 
 Spack essentially implements a ``meta package-manager'' for each Python
 instance, which can coexist with Spack's normal installation model.
-This has allowed us to efficiently support our application teams, for whom we can
+This mechanism efficiently supports our application teams, for whom we can
 now rapidly construct custom Python installations.  We have also reduced
-the amount of time that LC staff spend installing Python modules.
+the time that LC staff spend installing Python modules.
 Because Spack packages can extend the activation and deactivation mechanisms,
-we believe the same mechanism could be used with other
-interpreted languages with similar extension models, such as R, Ruby, or Lua.
+the same mechanism could be used with other interpreted languages with 
+similar extension models, such as R, Ruby, or Lua.
