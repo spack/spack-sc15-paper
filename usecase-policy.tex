@@ -4,7 +4,7 @@
 \label{sec:usecase-policy}
 
 Spack makes it easy to create and to organize package installations,
-but it must also be easy for end-users to find and to use packages on an HPC
+but it must also be easy for end-users to find and use packages on an HPC
 system. Different end-users have different expectations about how packages
 should be built and installed, and at LLNL those expectations are shaped
 by years of site policies, personal preferences, and lingering legacy
@@ -38,8 +38,8 @@ automatically for packages that Spack installs.
 Even when modules are available, many users still
 navigate the file system to access packages.
 
-Spack allows the creation of views, which are a symbolic-link based directory 
-layout of packages. Views provide a human-readable directory layout that
+Spack allows the creation of {\it views}, which are symbolic-link based directory 
+layouts of packages. Views provide a human-readable directory layout that
 can be adapted to match legacy directory layouts on which users rely. For 
 example, the above {\tt mpileaks} package may have a view that creates a link 
 in {\tt /opt/mpileaks-1.0-openmpi} to the Spack installation of {\tt mpileaks}.
@@ -64,13 +64,13 @@ For example, the above {\tt mpileaks} symbolic link might have been created by a
 On installation and removal,
 links are automatically created, deleted, or updated according to these rules.
 
-Spack's views are a projection from a point in a high-dimensional space
-(the concretized spec, which fully specifies all parameters) to point
+Spack's views are a projection from points in a high-dimensional space
+(concretized specs, which fully specify all parameters) to points
 in a lower-dimensional space
-(the link name, which may only contain a few parameters).
-Thus, several installations may map to the same link.
+(link names, which may only contain a few parameters).
+Several installations may map to the same link.
 For example, the above {\tt mpileaks} link could point to an {\tt mpileaks} compiled with
-{\tt gcc} or {\tt icc} -- the compiler parameter is not part of the link.
+{\tt gcc} or {\tt icc}---the compiler parameter is not part of the link.
 To keep  package installations consistent and reproducible,
 Spack has a well-defined mechanism for resolving conflicting links;
 it uses a combination of internal default policies and user- or site-defined
@@ -119,6 +119,6 @@ Custom packages can inherit from and replace Spack's default
 packages, so other sites can either tweak or completely replace Spack's
 build recipes. For example, a site can write a local Python class that 
 inherits from Spack's base class. The local class may simply add configure 
-flags to the Spackclass, while leaving the dependencies and most of the 
+flags to Spack's version, while leaving the dependencies and most of the 
 build instructions from its parent class. For reproducibility, Spack also 
 tracks the {\tt Package} class that drove a specific build.

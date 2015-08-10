@@ -12,7 +12,7 @@ features for ensuring consistent compiler flags in a build.
 However, these systems do not provide facilities to manage
 large package repositories or combinatorial versioning.
 
-\paragraph{Traditional package managers}
+\paragraph{Traditional Package Managers}
 Package managers automate the installation of complex sets of software packages.
 {\it Binary package managers} such as RPM, yum, and APT~\cite{foster+:rpm03,silva:apt01,yum} are integrated with most
 OS distributions, and they are used to ensure that dependencies
@@ -48,14 +48,14 @@ machines (VMs)~\cite{barham2003xen,rosenblum1999vmware,smith2005architecture}
 or lightweight virtualization techniques like Linux
 containers~\cite{felter2014updated,merkel2014docker}. This model allows each
  user to have a personalized environment with its own package manager, and it
-has been extremely successful for servers at cloud data centers. VMs typically
+has been very successful for servers at cloud data centers. VMs typically
 have near-native compute performance but low-level HPC network drivers still
 exhibit major performance issues. VMs are not well supported on many
 non-Linux operating systems, an issue for the lightweight
 kernels of bleeding-edge Blue Gene/Q and Cray machines.
 Finally, each VM still uses a traditional package manager,
 so running many configurations still requires a large number of VMs.
-For facilities, this profusion of VMs is a security concern since it
+For facilities, this profusion of VMs is a security concern because it
 complicates mandatory patching. Also, managing  a large number of VM
 environments is tedious for users.
 
@@ -65,12 +65,12 @@ environments is tedious for users.
 Site           & Naming Convention \\
 \hline
 \hline
-LLNL       & {\tt / usr / global / tools / \$arch / \$package / \$version} \\
+LLNL & {\tt / usr / global / tools / \$arch / \$package / \$version} \\
            & {\tt / usr / local~ / tools / \$package-\$compiler-\$build-\$version } \\
 \hline
-Oak Ridge~\cite{jones+:cug08}  & {\tt / \$arch / \$package / \$version / \$build} \\
+ORNL~\cite{jones+:cug08}  & {\tt / \$arch / \$package / \$version / \$build} \\
 \hline
-TACC/Lmod~\cite{mclay:lmod-tutorial}& {\tt / \$compiler-\$comp\_version / \$mpi / \$mpi\_version / \$package / \$version} \\
+TACC / Lmod~\cite{mclay:lmod-tutorial}& {\tt / \$compiler-\$comp\_version / \$mpi / \$mpi\_version / \$package / \$version} \\
 \hline
 \hline
 Spack default                  & {\tt / \$arch / \$compiler-\$comp\_version / \$package-\$version-\$options-\$hash} \\
@@ -174,7 +174,7 @@ file and its dependencies.
 The EasyBuild~\cite{hoste+:pyhpc12} tool is in production use at
 the University of Ghent and the J\"ulich Supercomputing Center.
 It allows multiple versions to be installed at once.  Rather
-than setting {\tt RPATHs}, it auto-generates module files
+than setting {\tt RPATHs}, it generates module files
 to manage the environment, and it is closely coupled with
 Lmod~\cite{geimer+:hust14}.  EasyBuild groups the compiler, MPI, FFT, and
 BLAS libraries together in a {\it toolchain} that can be used by
@@ -187,9 +187,9 @@ Like Nix, it uses cryptographic versioning and stores installations in
 unique directories.
 %
 Both Nix and HashDist use {\tt RPATHs} in their packages to ensure that
-libraries are found correctly.
+libraries are found correctly at runtime.
 
-\paragraph{Gaps in current practice}
+\paragraph{Gaps in Current Practice}
 The flexible cryptographic versioning of Nix and HashDist manages
 the package {\it and} its dependency configuration and can represent any
 configuration. However, users cannot easily navigate or query the installed
@@ -219,7 +219,7 @@ non-trivial modifications to many package files. Indeed, the number of package
 files required for most existing systems scales with the number of version
 {\it combinations}, not the number of packages, which quickly becomes
 unmanageable.  As an example, the EasyBuild system has over 3,300 files for
-several permutations of only 600 packages. A slightly different dependency
+several permutations of around 600 packages. A slightly different dependency
 graph requires an entire new package file hierarchy.  HashDist supports
 composition more robustly but does not have first-class parameters for
 versions, compilers, or versioned interfaces.

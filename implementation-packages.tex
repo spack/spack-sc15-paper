@@ -38,7 +38,7 @@ Each package is a class that extends a generic {\tt Package}
 base class.  {\tt Package} implements the bulk of the build process, but
 subclasses provide their own {\tt install} method to handle the
 specifics of particular packages. The subclass does {\it not} have to
-handle managing the install location.  Rather, Spack passes the {\tt install}
+manage the install location.  Rather, Spack passes the {\tt install}
 method a {\tt prefix} parameter.  The package implementer must ensure that
 the {\tt install} function installs the package {\it into} the {\tt prefix},
 but Spack ensures that {\tt prefix} is computed so that it is

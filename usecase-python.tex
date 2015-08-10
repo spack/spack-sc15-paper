@@ -1,6 +1,6 @@
 %!TEX root = spack-sc15.tex
 
-\subsection{Support for interpreted languages}
+\subsection{Support for Interpreted Languages}
 \label{sec:usecase-python}
 
 Python is becoming increasingly popular for HPC applications,
@@ -31,8 +31,8 @@ versions easily, but {\it also} to provide a baseline set of extensions
 {\it without} requiring environment settings.
 %
 To support this mode of operation, we added the concept of {\tt extension} packages
-to Spack. Python modules use the {\tt extends('python')} directive instead of
-{\tt depends\_on('python')}.
+to Spack. Python modules use the \verb|extends('python')| directive instead of
+\verb|depends_on('python')|.
 Each module installs into its own prefix like any other package,
 and each module depends on a particular Python installation.
 However extensions can be {\tt activated} or {\tt deactivated}
@@ -60,10 +60,10 @@ not handle.
 %without any special environment settings, they can activate it within the Python instance.
 
 Spack essentially implements a ``meta package-manager'' for each Python
-instance, which can coexist with Spack's normal installation model.
-This mechanism efficiently supports our application teams, for whom we can
+instance, which coexists with Spack's normal installation model.
+This mechanism efficiently supports application teams, for whom we can
 now rapidly construct custom Python installations.  We have also reduced
 the time that LC staff spend installing Python modules.
-Because Spack packages can extend the activation and deactivation mechanisms,
-the same mechanism could be used with other interpreted languages with 
-similar extension models, such as R, Ruby, or Lua.
+Because Spack packages can extend activation and deactivation mechanisms,
+this design could also be used with other languages
+with similar extension models, such as R, Ruby, or Lua.

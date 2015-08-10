@@ -11,7 +11,7 @@ chooses an MPI implementation for {\tt P} that depends strictly on
 raises an error and the user must resolve the issue. Our implementation 
 does not backtrack to find an MPI version that does not conflict. These 
 cases have been rare so far. However, we plan to add better constraint
-satisfaction solving to Spack in future work.
+solving to Spack in future work.
 
 While Spack supports different architectures as part of the 
 configuration space, we cannot currently factor common preferences (like 
@@ -44,7 +44,7 @@ at LLNL.  Finally, to support the growing number of
 HPC languages, runtimes, and programming models, we will add
 capabilities to Spack that allow packages to depend on particular
 compiler features.  More and more, our codes are relying
-on advanced compiler capabilities, like {\tt C++11} language features,
+on advanced compiler capabilities, like C++11 language features,
 OpenMP versions, and GPU compute capabilities. Ideally, Spack
 will find suitable compilers and ensure ABI consistency when many
 such features are in use.

@@ -37,17 +37,17 @@ Fortran, Python and tcl.
 %% and uses MPI and OpenMP for parallelism.
 
 We have configured Spack to build ARES with external MPI implementations, 
-depending on the host system. This configuration exploits the vendor- 
-or site-supplied MPI installation that often uses host-specific optimized 
-network drivers. MPI is shown as a virtual dependency in the figure, as 
-the implementation differs according to the host machine.  ARES builds its 
-own Python version in order to run on machines where Python is not well 
-supported, like Blue Gene/Q.  In particular, ARES builds a version of 
-Python 2.7 for Blue Gene/Q, which the native software stack does not support.
+depending on the host system. This configuration exploits vendor- 
+or site-supplied MPI installations that often use host-specific, optimized 
+network drivers. MPI is thus shown as a virtual dependency in the figure.
+ARES builds its own Python version, so that it can run on machines
+where Python is not well supported, like Blue~Gene/Q.  Specifically, for
+Blue~Gene/Q, it builds Python 2.7.9, which the native software stack
+does not support.
 
 Prior to using Spack, ARES managed its software stack with MixDown.
 Thus, the ARES team already had some experience supporting 
-automated builds of dependencies. We developed Spack packages for the LLNL 
+automated builds of dependencies. We developed Spack packages for the 
 packages in Figure~\ref{fig:ares}. Many of the external packages were already 
 available in Spack, but some, such as Python, required modifications to support
 the new platforms and compilers.
@@ -87,7 +87,8 @@ set of dependencies and dependency versions, but one common ARES package support
 all of them with conditional logic on versions and variants.
 
 Altogether, the initial packaging effort required roughly two months 
-for an experienced build engineer working 20 hours per week.
+for an experienced build engineer working 20 hours per week. This includes
+time spent learning to use Spack.
 As shown in the table, 36 different configurations have been run using Spack
 (up to 4 versions on each of 10 architecture-compiler-MPI combinations).
 Prior to using Spack, only Linux/Intel configurations were automated. The ARES 
@@ -115,3 +116,7 @@ software. Second, other LLNL code teams use many libraries that ARES uses.
 The LLNL code teams have begun creating an internal repository of Spack 
 build recipes.  Leveraging this repository will make packaging the next 
 code significantly easier.
+
+
+
+

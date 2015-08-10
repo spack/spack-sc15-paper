@@ -80,7 +80,7 @@ specify the rest. For example, a user may know that a certain version of a libra
 the build will succeed.
 %
 Configuration complexity makes the HPC software ecosystem difficult to manage:
-too many parameters exist to know all of them. However, the known and
+too many parameters exist to specify them all. However, the known and
 important ones often provide detailed build constraints. Thus, we have two
 competing concerns.  We need the ability to specify details
 without having to remember all of them.
@@ -145,9 +145,9 @@ without having to remember all of them.
 \end{table*}
 
 We have developed a syntax for specs that allows users to specify
-only the constraints that matter. Our syntax can represent software
-DAGs concisely enough to use it on the command
-line. The spec syntax is recursively defined to allow users to specify
+only constraints that matter to them. Our syntax can represent
+DAGs concisely enough for command line use.
+The spec syntax is recursively defined to allow users to specify
 parameters on dependencies as well as on the root of the DAG.
 Figure~\ref{fig:grammar} shows the EBNF grammar through which Spack
 flexibly supports constraints.
@@ -270,7 +270,7 @@ or {\tt bgq}.  They are specified per-package. This mechanism allows front-end
 tools to depend on their back-end measurement
 libraries with a {\it different} architecture on cross-compiled machines.
 
-\subsubsection{Constraints in packages}\label{sec:constraints}
+\subsubsection{Constraints in Packages}\label{sec:constraints}
 
 So far, we have shown examples of specs used to request constraints from the
 command line, when {\tt spack install} is invoked.  However, the user is not
@@ -327,7 +327,7 @@ object in the {\tt install} method:
 \end{minted}
 %
 
-\subsubsection{Build specialization}
+\subsubsection{Build Specialization}
 
 In our experience maintaining packages at LLNL, we often must change
 entire package build scripts due to large changes in the way certain packages build.
