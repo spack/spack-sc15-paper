@@ -2,6 +2,11 @@
 import sys
 import yaml
 import numpy as np
+
+from matplotlib import rcParams as rc
+rc['ps.useafm'] = True
+rc['pdf.use14corefonts'] = True
+rc['text.usetex'] = True
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 
@@ -62,7 +67,7 @@ no_wrap_rects = ax.bar(ind+2*width, no_wrap_means, width, color=orig_color)
 
 # add some text for labels, title and axes ticks
 ax.set_xlabel('Libraries', fontsize=fsize)
-ax.set_ylabel('Build time (s)', fontsize=fsize)
+ax.set_ylabel('Build time (seconds)', fontsize=fsize)
 ax.set_xticks(ind+width)
 ax.set_xticklabels(keys, fontsize=(fsize-1))
 
@@ -104,7 +109,7 @@ wrapper_rects = ax.bar(ind+width, wrap_overhead * 100, width, color=wrap_color)
 plt.axhline(y=0, color='k')
 
 ax.set_xlabel('Libraries', fontsize=fsize)
-ax.set_ylabel('Overhead (% time)', fontsize=fsize)
+ax.set_ylabel('Overhead (\% time)', fontsize=fsize)
 ax.set_xticks(ind+width)
 ax.set_xticklabels(keys, fontsize=(fsize-1))
 

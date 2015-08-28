@@ -1,8 +1,13 @@
 #!/usr/bin/env spack-python
 
 from external import yaml
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import rcParams as rc
+rc['ps.useafm'] = True
+rc['pdf.use14corefonts'] = True
+rc['text.usetex'] = True
+import matplotlib.pyplot as plt
+
 
 with open('merl.yaml') as stream:
     timings = yaml.load(stream)
