@@ -18,8 +18,8 @@ class Mpileaks(Package):
     version('1.0', '8838c574b39202a57d7c2d68692718aa')
     version('1.1', '4282eddb08ad8d36df15b06d4be38bcb')
 
-    depends_on("mpi")
-    depends_on("callpath")
+    depends_on('mpi')
+    depends_on('callpath')
 
     def install(self, spec, prefix):
         configure("--prefix=" + prefix,

@@ -19,12 +19,12 @@ builds of {\tt gperftools}, but the maintenance burden soon became too great.
 			   fontsize=\scriptsize,
                frame=lines,
                framesep=2mm]{python}
-patch("patch.gpeftools2.4_xlc", when="@2.4 %xlc")
+patch('patch.gpeftools2.4_xlc', when='@2.4 %xlc')
 
 def install(self, spec, prefix):
-    if spec.architecture == "bgq" and self.compiler.satisfies("xlc"):
+    if spec.architecture == 'bgq' and self.compiler.satisfies('xlc'):
         configure("--prefix=" + prefix,  "LDFLAGS=-qnostaticlink")
-    elif spec.architecture == "bgq":
+    elif spec.architecture == 'bgq':
         configure("--prefix=" + prefix,  "LDFLAGS=-dynamic")
     else:
         configure("--prefix=" + prefix)
